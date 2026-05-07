@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Astrological Sky Map - May 7, 2026</title>
+  <meta name="description" content="Interactive astrology sky map for May 7, 2026, with clickable planet notes and Facebook-ready share copy.">
+  <meta property="og:title" content="Astrological Sky Map - May 7, 2026">
+  <meta property="og:description" content="Pluto retrograde day 2, Mars square Pluto, Venus in Gemini, Moon in Capricorn, and the current sky in one interactive wheel.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="sky-map-social.png">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101012;
+      --panel: #19191d;
+      --panel-2: #222127;
+      --text: #f8f5ec;
+      --muted: #bdb7a8;
+      --soft: #858071;
+      --line: rgba(255, 255, 255, 0.13);
+      --gold: #e7bb66;
+      --coral: #df665d;
+      --teal: #71cfc2;
+      --violet: #a995e8;
+      --blue: #76a9e8;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(231, 187, 102, 0.12), transparent 27rem),
+        radial-gradient(circle at 82% 18%, rgba(113, 207, 194, 0.11), transparent 24rem),
+        linear-gradient(135deg, #101012 0%, #16141a 47%, #111a1a 100%);
+      color: var(--text);
+    }
+
+    main {
+      width: min(1180px, calc(100% - 32px));
+      min-height: 100vh;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(320px, 700px) minmax(280px, 380px);
+      align-items: center;
+      gap: 32px;
+      padding: 28px 0;
+    }
+
+    .map-shell {
+      position: relative;
+      min-width: 0;
+      aspect-ratio: 680 / 700;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(12, 12, 14, 0.68);
+      box-shadow: 0 22px 80px rgba(0, 0, 0, 0.38);
+    }
+
+    .map-shell object {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .side {
+      min-width: 0;
+      display: grid;
+      gap: 18px;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.05rem, 4vw, 4rem);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .lede {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.02rem;
+      line-height: 1.6;
+    }
+
+    .insight {
+      display: grid;
+      gap: 12px;
+      min-height: 184px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(34, 33, 39, 0.92), rgba(25, 25, 29, 0.92));
+    }
+
+    .insight h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      letter-spacing: 0;
+    }
+
+    .insight p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      padding: 6px 10px;
+      font-size: 0.82rem;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    button,
+    a.button {
+      appearance: none;
+      border: 1px solid rgba(231, 187, 102, 0.42);
+      border-radius: 8px;
+      background: #2a2215;
+      color: var(--text);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 14px;
+      text-decoration: none;
+      font: inherit;
+      font-weight: 700;
+    }
+
+    button.secondary,
+    a.secondary {
+      border-color: var(--line);
+      background: rgba(255, 255, 255, 0.055);
+      color: var(--muted);
+    }
+
+    .caption {
+      width: 100%;
+      min-height: 130px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.24);
+      color: var(--text);
+      padding: 14px;
+      font: inherit;
+      line-height: 1.5;
+    }
+
+    .status {
+      min-height: 1.4em;
+      color: var(--teal);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+        align-items: start;
+        padding-top: 18px;
+      }
+
+      .side {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 520px) {
+      main {
+        width: min(100% - 20px, 1180px);
+        gap: 18px;
+      }
+
+      h1 {
+        font-size: 2.3rem;
+      }
+
+      .actions > * {
+        flex: 1 1 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="map-shell" aria-label="Interactive astrology sky map">
+      <object id="skyMap" data="sky-map-interactive.svg" type="image/svg+xml" aria-label="Astrological sky map for May 7, 2026"></object>
+    </section>
+
+    <aside class="side">
+      <div>
+        <div class="eyebrow">May 7, 2026</div>
+        <h1>Astrological Sky Map</h1>
+      </div>
+
+      <p class="lede">Pluto retrograde day 2 with Mars square Pluto, Venus in Gemini, and a Capricorn Moon giving the day its pressure, wit, and traction.</p>
+
+      <section class="insight" aria-live="polite">
+        <div class="tag-row" id="tags">
+          <span class="tag">Pluto retrograde</span>
+          <span class="tag">Mars square Pluto</span>
+          <span class="tag">Venus in Gemini</span>
+        </div>
+        <h2 id="insightTitle">Current Sky</h2>
+        <p id="insightText">Click a planet in the wheel to open its note here. The page is ready for a hosted Facebook link, and the SVG remains usable as a standalone visual.</p>
+      </section>
+
+      <textarea class="caption" id="caption">May 7, 2026 sky map: Pluto retrograde day 2, Mars square Pluto, Venus in Gemini, and the Moon in Capricorn. Click through for the interactive version.</textarea>
+
+      <div class="actions">
+        <button id="copyCaption">Copy Caption</button>
+        <button class="secondary" id="sharePage">Share Link</button>
+        <a class="button secondary" href="sky-map-interactive.svg" download>Download SVG</a>
+      </div>
+      <div class="status" id="status"></div>
+    </aside>
+  </main>
+
+  <script>
+    const notes = {
+      'Tell me more about Mars in Aries and the power struggles right now': {
+        title: 'Mars In Aries',
+        text: 'Direct fire meets pressure from Pluto. This is strong will, quick reactions, and the need to choose clean action over control games.',
+        tags: ['Mars', 'Aries', 'Square']
+      },
+      'Tell me more about Sun in Taurus right now': {
+        title: 'Sun In Taurus',
+        text: 'The Sun in Taurus keeps the day grounded. Bodies, money, loyalty, and tangible progress matter more than theory.',
+        tags: ['Sun', 'Taurus', 'Grounding']
+      },
+      'Tell me more about Mercury in Taurus right now': {
+        title: 'Mercury In Taurus',
+        text: 'Mercury slows the conversation into practical terms. Say what you mean, repeat what matters, and let the useful answer be simple.',
+        tags: ['Mercury', 'Taurus', 'Voice']
+      },
+      'Tell me more about Venus in Gemini and why everyone feels flirty and restless': {
+        title: 'Venus In Gemini',
+        text: 'Venus in Gemini wants sparkle, banter, options, and new language for old attractions. Curiosity is the charm signal.',
+        tags: ['Venus', 'Gemini', 'Connection']
+      },
+      'Tell me more about Jupiter in Cancer and emotional expansion': {
+        title: 'Jupiter In Cancer',
+        text: 'Jupiter in Cancer expands the emotional weather. Protection, memory, food, home, and belonging all take up more room.',
+        tags: ['Jupiter', 'Cancer', 'Growth']
+      },
+      'Tell me more about Saturn in Pisces in 2026': {
+        title: 'Saturn In Pisces',
+        text: 'Saturn in Pisces asks dreams to become containers. Compassion needs structure, and intuition benefits from a schedule.',
+        tags: ['Saturn', 'Pisces', 'Boundaries']
+      },
+      'Tell me more about Neptune in Aries': {
+        title: 'Neptune In Aries',
+        text: 'Neptune in Aries dissolves and remakes the image of courage. The heroic fantasy gets tested against real instinct.',
+        tags: ['Neptune', 'Aries', 'Vision']
+      },
+      'Tell me more about Pluto retrograde in Aquarius and the true colors effect': {
+        title: 'Pluto Retrograde In Aquarius',
+        text: 'Pluto retrograde turns the social x-ray inward. Groups, networks, technology, and ideals reveal where power has been hiding.',
+        tags: ['Pluto Rx', 'Aquarius', 'Revelation']
+      },
+      'Tell me about the Moon in Capricorn today': {
+        title: 'Moon In Capricorn',
+        text: 'The Capricorn Moon favors composure and follow-through. Feelings may be quiet, but they are asking for a plan.',
+        tags: ['Moon', 'Capricorn', 'Discipline']
+      }
+    };
+
+    const title = document.getElementById('insightTitle');
+    const text = document.getElementById('insightText');
+    const tags = document.getElementById('tags');
+    const caption = document.getElementById('caption');
+    const status = document.getElementById('status');
+
+    function setStatus(message) {
+      status.textContent = message;
+      window.clearTimeout(setStatus.timer);
+      setStatus.timer = window.setTimeout(() => status.textContent = '', 2600);
+    }
+
+    function renderNote(prompt) {
+      const note = notes[prompt];
+      if (!note) return;
+      title.textContent = note.title;
+      text.textContent = note.text;
+      tags.replaceChildren(...note.tags.map((tag) => {
+        const item = document.createElement('span');
+        item.className = 'tag';
+        item.textContent = tag;
+        return item;
+      }));
+      caption.value = `May 7, 2026 sky map - ${note.title}: ${note.text}`;
+    }
+
+    window.addEventListener('message', (event) => {
+      if (event.data && event.data.type === 'sky-map-prompt') {
+        renderNote(event.data.prompt);
+      }
+    });
+
+    document.getElementById('copyCaption').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(caption.value);
+        setStatus('Caption copied.');
+      } catch {
+        caption.focus();
+        caption.select();
+        setStatus('Caption selected.');
+      }
+    });
+
+    document.getElementById('sharePage').addEventListener('click', async () => {
+      const shareData = {
+        title: document.title,
+        text: caption.value,
+        url: window.location.href
+      };
+      if (navigator.share && location.protocol !== 'file:') {
+        await navigator.share(shareData);
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        setStatus('Page link copied.');
+      } catch {
+        setStatus('Host this folder, then share the page URL.');
+      }
+    });
+  </script>
+</body>
+</html>
