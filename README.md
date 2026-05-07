@@ -3,7 +3,7 @@
 Files:
 
 - `index.html` - interactive daily transit app for GitHub Pages.
-- `sky-map-social.png` - static preview image for a normal Facebook image post.
+- `sky-map-social.png` - static preview image.
 - `vendor/astronomy.browser.min.js` - vendored Astronomy Engine browser build.
 - `vendor/ASTRONOMY_ENGINE_LICENSE.txt` - upstream MIT license.
 
@@ -15,11 +15,10 @@ What it does:
 - Highlights major aspects and retrograde status.
 - Adds a "Use My Location" option for local altitude/azimuth horizon context.
 
-Facebook notes:
+Publishing notes:
 
-- Facebook will not run custom HTML or SVG scripts inside a native post.
-- To keep the interactivity, upload this folder to a static host such as GitHub Pages, Netlify, Vercel, or your own site, then post the hosted `index.html` URL.
-- For a regular image post, upload `sky-map-social.png` and use the caption from the page.
+- The interactive version runs as a static GitHub Pages site.
+- The preview image is available for places that need a plain image.
 
 Ephemeris source:
 
@@ -27,6 +26,6 @@ Ephemeris source:
 - It is MIT licensed and based on VSOP87 and NOVAS models.
 - I looked at `ryuphi/astrology-api`, but it is a server-side Swiss Ephemeris REST API requiring Node/native dependencies, so it is not a good fit for a static GitHub Pages app.
 
-Suggested post caption:
+Suggested caption:
 
 Daily sky map with live planetary positions, major aspects, retrogrades, and optional local horizon context.
