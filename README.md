@@ -14,6 +14,7 @@ What it does:
 - Calculates Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, and Pluto positions.
 - Highlights major aspects and retrograde status.
 - Adds a "Use My Location" option for local altitude/azimuth horizon context.
+- Includes a local chart-aware chat analyzer that compares user-entered themes against the current tropical chart, approximate sidereal/Vedic positions, nakshatras, and local astronomy context.
 
 Publishing notes:
 
@@ -25,6 +26,7 @@ Ephemeris source:
 - Astronomy Engine by Don Cross / cosinekitty: https://github.com/cosinekitty/astronomy
 - It is MIT licensed and based on VSOP87 and NOVAS models.
 - I looked at `ryuphi/astrology-api`, but it is a server-side Swiss Ephemeris REST API requiring Node/native dependencies, so it is not a good fit for a static GitHub Pages app.
+- The sidereal layer uses an approximate Lahiri-style ayanamsa offset for lightweight browser interpretation, not a full Vedic chart engine.
 
 Suggested caption:
 

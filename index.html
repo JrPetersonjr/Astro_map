@@ -127,6 +127,12 @@
       font: inherit;
     }
 
+    .chat-input {
+      min-height: 78px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
     input[type="range"] {
       padding: 0;
       accent-color: var(--gold);
@@ -212,6 +218,43 @@
       line-height: 1.5;
     }
 
+    .chat-log {
+      display: grid;
+      gap: 10px;
+      max-height: 260px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .bubble {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 11px 12px;
+      background: rgba(255, 255, 255, 0.045);
+      color: var(--muted);
+      line-height: 1.48;
+      font-size: 0.92rem;
+    }
+
+    .bubble.user {
+      border-color: rgba(231, 187, 102, 0.32);
+      background: rgba(231, 187, 102, 0.08);
+      color: var(--text);
+    }
+
+    .bubble strong {
+      color: var(--text);
+    }
+
+    .bubble ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+
+    .bubble li + li {
+      margin-top: 5px;
+    }
+
     .status {
       min-height: 1.35em;
       color: var(--teal);
@@ -289,6 +332,22 @@
         <div class="table" id="planetTable" aria-label="Planet positions"></div>
       </section>
 
+      <section class="panel">
+        <div class="tag-row">
+          <span class="tag">chart-aware chat</span>
+          <span class="tag">western + sidereal</span>
+          <span class="tag">local astronomy</span>
+        </div>
+        <label>What's going on?
+          <textarea class="chat-input" id="chatInput" placeholder="Example: I feel restless, emotional, and like old power dynamics are coming up."></textarea>
+        </label>
+        <div class="actions">
+          <button id="analyzeChat">Analyze Against Sky</button>
+          <button class="secondary" id="clearChat">Clear</button>
+        </div>
+        <div class="chat-log" id="chatLog" aria-live="polite"></div>
+      </section>
+
       <textarea class="caption" id="caption"></textarea>
 
       <div class="actions">
@@ -317,6 +376,8 @@
     const planetTable = document.getElementById('planetTable');
     const caption = document.getElementById('caption');
     const status = document.getElementById('status');
+    const chatInput = document.getElementById('chatInput');
+    const chatLog = document.getElementById('chatLog');
 
     const signs = [
       ['Aries', '♈'], ['Taurus', '♉'], ['Gemini', '♊'], ['Cancer', '♋'],
@@ -345,8 +406,28 @@
       { name: 'Opposition', angle: 180, orb: 6, color: '#e7bb66', dash: '3 4' }
     ];
 
+    const nakshatras = [
+      'Ashwini', 'Bharani', 'Krittika', 'Rohini', 'Mrigashira', 'Ardra', 'Punarvasu', 'Pushya', 'Ashlesha',
+      'Magha', 'Purva Phalguni', 'Uttara Phalguni', 'Hasta', 'Chitra', 'Swati', 'Vishakha', 'Anuradha',
+      'Jyeshtha', 'Mula', 'Purva Ashadha', 'Uttara Ashadha', 'Shravana', 'Dhanishta', 'Shatabhisha',
+      'Purva Bhadrapada', 'Uttara Bhadrapada', 'Revati'
+    ];
+
+    const themeLexicon = [
+      { key: 'pressure', label: 'pressure / conflict', words: ['pressure', 'conflict', 'fight', 'angry', 'anger', 'rage', 'irritated', 'power', 'control', 'intense', 'crisis', 'stuck'], planets: ['Mars', 'Pluto', 'Saturn'], aspects: ['Square', 'Opposition'] },
+      { key: 'restless', label: 'restlessness / mental buzz', words: ['restless', 'wired', 'anxious', 'anxiety', 'scattered', 'busy', 'overthinking', 'talk', 'message', 'text', 'curious', 'bored'], planets: ['Mercury', 'Mars', 'Uranus'], aspects: ['Square', 'Opposition', 'Sextile'] },
+      { key: 'emotional', label: 'emotion / home / sensitivity', words: ['emotional', 'sad', 'cry', 'sensitive', 'home', 'family', 'nostalgic', 'mood', 'heart', 'safe', 'comfort'], planets: ['Moon', 'Venus', 'Jupiter'], aspects: ['Conjunction', 'Trine', 'Opposition'] },
+      { key: 'love', label: 'love / attraction / social weather', words: ['love', 'crush', 'date', 'relationship', 'flirty', 'desire', 'beauty', 'friend', 'social', 'lonely', 'connection'], planets: ['Venus', 'Moon', 'Mars'], aspects: ['Conjunction', 'Sextile', 'Trine', 'Opposition'] },
+      { key: 'work', label: 'work / duty / structure', words: ['work', 'job', 'career', 'deadline', 'responsibility', 'discipline', 'money', 'plan', 'serious', 'tired', 'blocked'], planets: ['Saturn', 'Mercury', 'Sun'], aspects: ['Square', 'Trine', 'Opposition'] },
+      { key: 'spiritual', label: 'dreams / intuition / confusion', words: ['dream', 'dreams', 'spiritual', 'weird', 'foggy', 'confused', 'psychic', 'sign', 'meaning', 'vision', 'escape'], planets: ['Neptune', 'Moon', 'Jupiter'], aspects: ['Conjunction', 'Square', 'Trine'] },
+      { key: 'change', label: 'change / disruption / breakthrough', words: ['change', 'sudden', 'surprise', 'breakthrough', 'freedom', 'chaos', 'technology', 'online', 'future', 'rebellious'], planets: ['Uranus', 'Pluto', 'Mercury'], aspects: ['Square', 'Opposition', 'Sextile'] }
+    ];
+
     let selected = 'Sun';
     let observer = null;
+    let latestData = [];
+    let latestAspects = [];
+    let latestDate = new Date();
 
     function pad(n) { return String(n).padStart(2, '0'); }
     function localDateValue(date) { return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`; }
@@ -362,6 +443,13 @@
       const lon = normalize(longitude);
       const index = Math.floor(lon / 30);
       return { name: signs[index][0], glyph: signs[index][1], degree: lon % 30, index };
+    }
+    function siderealInfo(longitude) {
+      const siderealLongitude = normalize(longitude - 24.2);
+      const sign = signInfo(siderealLongitude);
+      const mansionSize = 360 / 27;
+      const mansion = nakshatras[Math.floor(siderealLongitude / mansionSize)];
+      return { longitude: siderealLongitude, sign, nakshatra: mansion };
     }
     function fmtDegree(deg) {
       const whole = Math.floor(deg);
@@ -426,6 +514,89 @@
         }
       }
       return found.sort((x, y) => x.orb - y.orb).slice(0, 10);
+    }
+    function currentSkySignature(data, aspectData) {
+      const moon = data.find((item) => item.key === 'Moon');
+      const sun = data.find((item) => item.key === 'Sun');
+      const retrogrades = data.filter((item) => item.retrograde).map((item) => item.key);
+      const tight = aspectData.slice(0, 4).map((item) => `${item.a.key} ${item.aspect.name.toLowerCase()} ${item.b.key}`);
+      const moonPhase = normalize(moon.longitude - sun.longitude);
+      const phaseName = moonPhase < 45 ? 'new-to-crescent' : moonPhase < 135 ? 'waxing' : moonPhase < 225 ? 'full-to-disseminating' : 'waning';
+      return { moon, sun, retrogrades, tight, moonPhase, phaseName };
+    }
+    function detectThemes(text) {
+      const lower = text.toLowerCase();
+      return themeLexicon.map((theme) => {
+        const hits = theme.words.filter((word) => new RegExp(`\\b${word}\\b`, 'i').test(lower));
+        return { ...theme, hits, score: hits.length };
+      }).filter((theme) => theme.score > 0).sort((a, b) => b.score - a.score);
+    }
+    function aspectSupportsTheme(theme, aspectData) {
+      return aspectData.filter((item) => {
+        const names = [item.a.key, item.b.key];
+        return names.some((name) => theme.planets.includes(name)) && theme.aspects.includes(item.aspect.name);
+      }).slice(0, 3);
+    }
+    function planetLine(name, data) {
+      const planet = data.find((item) => item.key === name);
+      if (!planet) return '';
+      const sidereal = siderealInfo(planet.longitude);
+      return `${planet.key}: tropical ${fmtDegree(planet.sign.degree)} ${planet.sign.name}; sidereal ${fmtDegree(sidereal.sign.degree)} ${sidereal.sign.name}, ${sidereal.nakshatra}`;
+    }
+    function escapeHtml(text) {
+      return text.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+    }
+    function addChatBubble(html, type = 'app') {
+      const bubble = document.createElement('div');
+      bubble.className = `bubble ${type}`;
+      bubble.innerHTML = html;
+      chatLog.append(bubble);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+    function analyzeAgainstSky(text) {
+      const data = latestData;
+      const aspectData = latestAspects;
+      const signature = currentSkySignature(data, aspectData);
+      const themes = detectThemes(text);
+      const topTheme = themes[0];
+      const moonSidereal = siderealInfo(signature.moon.longitude);
+      const sunSidereal = siderealInfo(signature.sun.longitude);
+      const astronomyNotes = data
+        .filter((item) => item.horizon)
+        .sort((a, b) => b.horizon.altitude - a.horizon.altitude)
+        .slice(0, 2)
+        .map((item) => `${item.key} is ${item.horizon.altitude >= 0 ? 'above' : 'below'} your horizon at ${item.horizon.altitude.toFixed(1)}° altitude`);
+
+      if (!themes.length) {
+        return `
+          <strong>Reading the sky first:</strong>
+          <ul>
+            <li>Western: Moon in ${signature.moon.sign.name}, Sun in ${signature.sun.sign.name}; strongest patterns include ${signature.tight.join(', ') || 'no tight major aspects'}.</li>
+            <li>Eastern/sidereal: Moon in ${moonSidereal.sign.name} / ${moonSidereal.nakshatra}; Sun in ${sunSidereal.sign.name}.</li>
+            <li>Try adding a few plain words for what you feel, like "restless", "emotional", "blocked", "flirty", or "power struggle".</li>
+          </ul>
+        `;
+      }
+
+      const supports = aspectSupportsTheme(topTheme, aspectData);
+      const relatedPlanets = topTheme.planets.map((name) => planetLine(name, data)).filter(Boolean).slice(0, 3);
+      const score = Math.min(95, 38 + topTheme.score * 13 + supports.length * 11 + topTheme.planets.filter((name) => data.find((planet) => planet.key === name)?.retrograde).length * 6);
+      const supportText = supports.length
+        ? supports.map((item) => `${item.a.key} ${item.aspect.name.toLowerCase()} ${item.b.key} (${item.orb.toFixed(1)}° orb)`).join('; ')
+        : 'no tight major aspect directly matches that theme, so this reads more like background weather than a sharp transit signature';
+      const retroText = signature.retrogrades.length ? `${signature.retrogrades.join(', ')} retrograde` : 'no major planet retrograde in this set';
+      const astroText = astronomyNotes.length ? astronomyNotes.join('; ') : 'enable location to compare your words with what is literally above or below the local horizon';
+
+      return `
+        <strong>What tracks: ${topTheme.label} (${score}% resonance)</strong>
+        <ul>
+          <li>Western/tropical: ${supportText}. Moon phase is ${signature.phaseName}, with Moon in ${signature.moon.sign.name}.</li>
+          <li>Eastern/sidereal: Moon maps to ${moonSidereal.sign.name} / ${moonSidereal.nakshatra}; Sun maps to ${sunSidereal.sign.name}. This gives a second-symbol layer without changing the underlying astronomy.</li>
+          <li>Astronomy layer: ${astroText}.</li>
+          <li>Planet anchors: ${relatedPlanets.join(' | ')}.</li>
+          <li>Cross-check: ${retroText}. ${themes.length > 1 ? `Secondary themes detected: ${themes.slice(1, 3).map((theme) => theme.label).join(', ')}.` : 'No strong secondary theme detected from your wording.'}</li>
+        </ul>
+      `;
     }
     function drawWheel(data, aspectData, date) {
       clearSvg();
@@ -536,6 +707,9 @@
       if (Number.isNaN(date.getTime())) return;
       const data = calculate(date);
       const aspectData = calculateAspects(data);
+      latestData = data;
+      latestAspects = aspectData;
+      latestDate = date;
       drawWheel(data, aspectData, date);
       renderTable(data);
       renderInsight(data, aspectData, date);
@@ -587,6 +761,24 @@
         caption.select();
         setStatus('Caption selected.');
       }
+    });
+    document.getElementById('analyzeChat').addEventListener('click', () => {
+      const text = chatInput.value.trim();
+      if (!text) {
+        setStatus('Type what is going on first.');
+        return;
+      }
+      addChatBubble(escapeHtml(text), 'user');
+      addChatBubble(analyzeAgainstSky(text));
+      chatInput.value = '';
+    });
+    chatInput.addEventListener('keydown', (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+        document.getElementById('analyzeChat').click();
+      }
+    });
+    document.getElementById('clearChat').addEventListener('click', () => {
+      chatLog.replaceChildren();
     });
     document.getElementById('sharePage').addEventListener('click', async () => {
       const shareData = { title: document.title, text: caption.value, url: window.location.href };
