@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Daily Astrological Sky Map</title>
+  <title>LuminaSynodic - Daily Astrological Sky Map</title>
   <meta name="description" content="Interactive daily astrology sky map with live ephemeris positions, date controls, aspects, and local horizon context.">
   <meta name="app-version" content="daily-ephemeris-clean-copy">
-  <meta property="og:title" content="Daily Astrological Sky Map">
+  <meta property="og:title" content="LuminaSynodic - Daily Astrological Sky Map">
   <meta property="og:description" content="A live transit wheel using today's date, adjustable time travel, aspects, retrogrades, and optional location context.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="sky-map-social.png">
@@ -290,7 +290,7 @@
   <main>
     <section class="map-shell" aria-label="Live astrological sky map">
       <svg id="chart" viewBox="0 0 720 720" role="img" aria-labelledby="chartTitle chartDesc">
-        <title id="chartTitle">Daily Astrological Sky Map</title>
+        <title id="chartTitle">LuminaSynodic - Daily Astrological Sky Map</title>
         <desc id="chartDesc">Live zodiac wheel with calculated planet positions and major aspects.</desc>
       </svg>
     </section>
@@ -298,7 +298,7 @@
     <aside class="side">
       <div>
         <div class="eyebrow" id="dateEyebrow">Today</div>
-        <h1>Daily Sky Map</h1>
+        <h1>LuminaSynodic</h1>
       </div>
       <p class="lede">Live ephemeris positions with date travel, major aspects, retrogrades, and optional local horizon context.</p>
 
@@ -334,7 +334,7 @@
 
       <section class="panel">
         <div class="tag-row">
-          <span class="tag">life-current scan</span>
+          <span class="tag">life mapping</span>
           <span class="tag">western + sidereal</span>
           <span class="tag">local astronomy</span>
         </div>
@@ -342,7 +342,7 @@
           <textarea class="chat-input" id="chatInput" placeholder="Example: loss, a new relationship, money pressure, job tension, family conflict, a move, or a sudden opportunity."></textarea>
         </label>
         <div class="actions">
-          <button id="analyzeChat">Analyze Against Sky</button>
+          <button id="analyzeChat">Map to Sky</button>
           <button class="secondary" id="clearChat">Clear</button>
         </div>
         <div class="chat-log" id="chatLog" aria-live="polite"></div>
@@ -355,7 +355,7 @@
         <button class="secondary" id="sharePage">Share Link</button>
         <a class="button secondary" href="sky-map-social.png" download>Download Preview</a>
       </div>
-      <p class="source-note">Ephemeris: Astronomy Engine, an MIT-licensed library based on VSOP87 and NOVAS models. Location is used for local horizon altitude/azimuth, not stored or sent anywhere.</p>
+      <p class="source-note">Ephemeris: Astronomy Engine, an MIT-licensed library based on VSOP87 and NOVAS models. Location is used for local horizon altitude/azimuth, not stored or sent anywhere. AI query support is available on Netlify when QUERY_API_KEY is configured.</p>
       <div class="status" id="status"></div>
     </aside>
   </main>
@@ -559,6 +559,44 @@
       bubble.innerHTML = html;
       chatLog.append(bubble);
       chatLog.scrollTop = chatLog.scrollHeight;
+      return bubble;
+    }
+    async function querySkyAssistant(prompt) {
+      const response = await fetch('/.netlify/functions/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data?.error || data?.message || `HTTP ${response.status}`);
+      }
+      const result = data?.data;
+      if (!result) {
+        throw new Error('Unexpected API response');
+      }
+      if (typeof result === 'string') return result;
+      if (typeof result.output === 'string') return result.output;
+      if (Array.isArray(result.output)) {
+        const parts = result.output.flatMap((item) => {
+          if (!item || !item.content) return [];
+          return item.content
+            .filter((block) => block?.type === 'output_text' && block?.text)
+            .map((block) => block.text);
+        });
+        if (parts.length) return parts.join(' ');
+      }
+      if (Array.isArray(result.choices)) {
+        const text = result.choices
+          .map((choice) => {
+            const outputText = choice?.output?.[0]?.content?.find((c) => c.type === 'output_text')?.text;
+            return outputText || '';
+          })
+          .filter(Boolean)
+          .join('\n');
+        if (text) return text;
+      }
+      return JSON.stringify(result);
     }
     function analyzeAgainstSky(text) {
       const data = latestData;
@@ -576,9 +614,10 @@
 
       if (!themes.length) {
         return `
-          <strong>Reading the life-weather against the sky:</strong>
+          <strong>Mapping your life themes against the sky:</strong>
           <ul>
             <li>Western: Moon in ${signature.moon.sign.name}, Sun in ${signature.sun.sign.name}; strongest patterns include ${signature.tight.join(', ') || 'no tight major aspects'}.</li>
+            <li>Moon mapping: Moon is ${signature.moon.sign.name} in a ${signature.phaseName} phase, which highlights emotional and daily rhythm themes.</li>
             <li>Eastern/sidereal: Moon in ${moonSidereal.sign.name} / ${moonSidereal.nakshatra}; Sun in ${sunSidereal.sign.name}.</li>
             <li>Try adding plain life-current words like "loss", "gain", "tension", "new love", "money pressure", "family conflict", "health", "career", or "sudden change".</li>
           </ul>
@@ -595,10 +634,11 @@
       const astroText = astronomyNotes.length ? astronomyNotes.join('; ') : 'enable location to compare your words with what is literally above or below the local horizon';
 
       return `
-        <strong>Life theme that tracks: ${topTheme.label} (${score}% resonance)</strong>
+        <strong>Sky mapping for: ${topTheme.label} (${score}% relevance)</strong>
         <ul>
           <li>Your words matched: ${topTheme.hits.join(', ')}.</li>
           <li>Western/tropical: ${supportText}. Moon phase is ${signature.phaseName}, with Moon in ${signature.moon.sign.name}.</li>
+          <li>Moon-specific mapping: the Moon is ${signature.moon.sign.name} and ${signature.phaseName}, so emotional tone and daily rhythms are part of how this theme connects to the chart.</li>
           <li>Eastern/sidereal: Moon maps to ${moonSidereal.sign.name} / ${moonSidereal.nakshatra}; Sun maps to ${sunSidereal.sign.name}. This gives a second-symbol layer without changing the underlying astronomy.</li>
           <li>Astronomy layer: ${astroText}.</li>
           <li>Planet anchors: ${relatedPlanets.join(' | ')}.</li>
@@ -770,14 +810,21 @@
         setStatus('Caption selected.');
       }
     });
-    document.getElementById('analyzeChat').addEventListener('click', () => {
+    document.getElementById('analyzeChat').addEventListener('click', async () => {
       const text = chatInput.value.trim();
       if (!text) {
         setStatus('Type what is going on first.');
         return;
       }
       addChatBubble(escapeHtml(text), 'user');
-      addChatBubble(analyzeAgainstSky(text));
+      const assistantBubble = addChatBubble('Mapping your words to the sky...', 'app');
+      try {
+        const aiResult = await querySkyAssistant(text);
+        assistantBubble.innerHTML = escapeHtml(aiResult).replace(/\n/g, '<br>');
+      } catch (error) {
+        assistantBubble.innerHTML = analyzeAgainstSky(text);
+        setStatus('AI query unavailable; using local mapping.');
+      }
       chatInput.value = '';
     });
     chatInput.addEventListener('keydown', (event) => {

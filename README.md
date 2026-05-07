@@ -1,4 +1,4 @@
-# Daily Astrological Sky Map
+# LuminaSynodic - Daily Astrological Sky Map
 
 Files:
 
@@ -14,7 +14,8 @@ What it does:
 - Calculates Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, and Pluto positions.
 - Highlights major aspects and retrograde status.
 - Adds a "Use My Location" option for local altitude/azimuth horizon context.
-- Includes a local life-current analyzer for themes like loss, gain, tension, new love, money, career, family/home, health, spiritual confusion, and sudden change. It compares user-entered themes against the current tropical chart, approximate sidereal/Vedic positions, nakshatras, and local astronomy context.
+- Includes a local life mapping analyzer for themes like loss, gain, tension, new love, money, career, family/home, health, spiritual confusion, and sudden change. It maps user-entered life themes to the current tropical chart, approximate sidereal/Vedic positions, nakshatras, Moon context, and local astronomy context.
+- Supports a Netlify function proxy for optional AI query integration. Add `QUERY_API_KEY` as an environment variable in Netlify to keep the secret off the client.
 
 Publishing notes:
 
