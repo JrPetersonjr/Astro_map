@@ -128,7 +128,7 @@
     }
 
     .chat-input {
-      min-height: 78px;
+      min-height: 112px;
       resize: vertical;
       line-height: 1.45;
     }
@@ -334,12 +334,12 @@
 
       <section class="panel">
         <div class="tag-row">
-          <span class="tag">chart-aware chat</span>
+          <span class="tag">life-current scan</span>
           <span class="tag">western + sidereal</span>
           <span class="tag">local astronomy</span>
         </div>
-        <label>What's going on?
-          <textarea class="chat-input" id="chatInput" placeholder="Example: I feel restless, emotional, and like old power dynamics are coming up."></textarea>
+        <label>What's going on in your life?
+          <textarea class="chat-input" id="chatInput" placeholder="Example: loss, a new relationship, money pressure, job tension, family conflict, a move, or a sudden opportunity."></textarea>
         </label>
         <div class="actions">
           <button id="analyzeChat">Analyze Against Sky</button>
@@ -414,13 +414,16 @@
     ];
 
     const themeLexicon = [
-      { key: 'pressure', label: 'pressure / conflict', words: ['pressure', 'conflict', 'fight', 'angry', 'anger', 'rage', 'irritated', 'power', 'control', 'intense', 'crisis', 'stuck'], planets: ['Mars', 'Pluto', 'Saturn'], aspects: ['Square', 'Opposition'] },
-      { key: 'restless', label: 'restlessness / mental buzz', words: ['restless', 'wired', 'anxious', 'anxiety', 'scattered', 'busy', 'overthinking', 'talk', 'message', 'text', 'curious', 'bored'], planets: ['Mercury', 'Mars', 'Uranus'], aspects: ['Square', 'Opposition', 'Sextile'] },
-      { key: 'emotional', label: 'emotion / home / sensitivity', words: ['emotional', 'sad', 'cry', 'sensitive', 'home', 'family', 'nostalgic', 'mood', 'heart', 'safe', 'comfort'], planets: ['Moon', 'Venus', 'Jupiter'], aspects: ['Conjunction', 'Trine', 'Opposition'] },
-      { key: 'love', label: 'love / attraction / social weather', words: ['love', 'crush', 'date', 'relationship', 'flirty', 'desire', 'beauty', 'friend', 'social', 'lonely', 'connection'], planets: ['Venus', 'Moon', 'Mars'], aspects: ['Conjunction', 'Sextile', 'Trine', 'Opposition'] },
-      { key: 'work', label: 'work / duty / structure', words: ['work', 'job', 'career', 'deadline', 'responsibility', 'discipline', 'money', 'plan', 'serious', 'tired', 'blocked'], planets: ['Saturn', 'Mercury', 'Sun'], aspects: ['Square', 'Trine', 'Opposition'] },
-      { key: 'spiritual', label: 'dreams / intuition / confusion', words: ['dream', 'dreams', 'spiritual', 'weird', 'foggy', 'confused', 'psychic', 'sign', 'meaning', 'vision', 'escape'], planets: ['Neptune', 'Moon', 'Jupiter'], aspects: ['Conjunction', 'Square', 'Trine'] },
-      { key: 'change', label: 'change / disruption / breakthrough', words: ['change', 'sudden', 'surprise', 'breakthrough', 'freedom', 'chaos', 'technology', 'online', 'future', 'rebellious'], planets: ['Uranus', 'Pluto', 'Mercury'], aspects: ['Square', 'Opposition', 'Sextile'] }
+      { key: 'loss', label: 'loss / grief / ending', words: ['loss', 'lost', 'grief', 'grieving', 'death', 'breakup', 'ending', 'ended', 'goodbye', 'mourning', 'separation', 'divorce', 'let go'], planets: ['Moon', 'Saturn', 'Pluto', 'Neptune'], aspects: ['Square', 'Opposition', 'Conjunction'] },
+      { key: 'gain', label: 'gain / opportunity / expansion', words: ['gain', 'raise', 'promotion', 'opportunity', 'win', 'success', 'growth', 'expand', 'expansion', 'luck', 'gift', 'new job', 'offer', 'abundance'], planets: ['Jupiter', 'Sun', 'Venus'], aspects: ['Conjunction', 'Trine', 'Sextile'] },
+      { key: 'tension', label: 'tension / conflict / pressure', words: ['tension', 'pressure', 'conflict', 'fight', 'argument', 'angry', 'anger', 'rage', 'irritated', 'power', 'control', 'intense', 'crisis', 'stuck'], planets: ['Mars', 'Pluto', 'Saturn'], aspects: ['Square', 'Opposition'] },
+      { key: 'newLove', label: 'new love / attraction / reconnection', words: ['new love', 'love', 'crush', 'date', 'dating', 'relationship', 'romance', 'flirty', 'desire', 'chemistry', 'attraction', 'reconnect', 'connection', 'partner'], planets: ['Venus', 'Moon', 'Mars', 'Jupiter'], aspects: ['Conjunction', 'Sextile', 'Trine', 'Opposition'] },
+      { key: 'money', label: 'money / resources / material security', words: ['money', 'cash', 'debt', 'bills', 'rent', 'income', 'client', 'sale', 'budget', 'financial', 'finance', 'resources', 'security', 'spending'], planets: ['Venus', 'Jupiter', 'Saturn', 'Mercury'], aspects: ['Conjunction', 'Trine', 'Sextile', 'Square'] },
+      { key: 'career', label: 'career / work / responsibility', words: ['work', 'job', 'career', 'deadline', 'boss', 'business', 'responsibility', 'discipline', 'plan', 'serious', 'tired', 'blocked', 'project', 'school'], planets: ['Saturn', 'Mercury', 'Sun', 'Mars'], aspects: ['Square', 'Trine', 'Opposition', 'Conjunction'] },
+      { key: 'family', label: 'family / home / belonging', words: ['family', 'home', 'mother', 'father', 'parent', 'child', 'children', 'house', 'move', 'moving', 'roommate', 'belonging', 'safe', 'comfort'], planets: ['Moon', 'Jupiter', 'Venus', 'Saturn'], aspects: ['Conjunction', 'Trine', 'Opposition', 'Square'] },
+      { key: 'health', label: 'health / body / burnout', words: ['health', 'body', 'sick', 'ill', 'pain', 'sleep', 'burnout', 'exhausted', 'tired', 'stress', 'healing', 'recover', 'recovery'], planets: ['Moon', 'Saturn', 'Mars', 'Neptune'], aspects: ['Square', 'Opposition', 'Trine'] },
+      { key: 'spiritual', label: 'dreams / intuition / confusion', words: ['dream', 'dreams', 'spiritual', 'weird', 'foggy', 'confused', 'psychic', 'sign', 'meaning', 'vision', 'escape', 'synchronicity'], planets: ['Neptune', 'Moon', 'Jupiter'], aspects: ['Conjunction', 'Square', 'Trine'] },
+      { key: 'change', label: 'change / disruption / breakthrough', words: ['change', 'sudden', 'surprise', 'breakthrough', 'freedom', 'chaos', 'technology', 'online', 'future', 'rebellious', 'unexpected', 'shift'], planets: ['Uranus', 'Pluto', 'Mercury', 'Mars'], aspects: ['Square', 'Opposition', 'Sextile', 'Conjunction'] }
     ];
 
     let selected = 'Sun';
@@ -527,7 +530,11 @@
     function detectThemes(text) {
       const lower = text.toLowerCase();
       return themeLexicon.map((theme) => {
-        const hits = theme.words.filter((word) => new RegExp(`\\b${word}\\b`, 'i').test(lower));
+        const hits = theme.words.filter((word) => {
+          const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const pattern = word.includes(' ') ? escaped : `\\b${escaped}\\b`;
+          return new RegExp(pattern, 'i').test(lower);
+        });
         return { ...theme, hits, score: hits.length };
       }).filter((theme) => theme.score > 0).sort((a, b) => b.score - a.score);
     }
@@ -569,11 +576,11 @@
 
       if (!themes.length) {
         return `
-          <strong>Reading the sky first:</strong>
+          <strong>Reading the life-weather against the sky:</strong>
           <ul>
             <li>Western: Moon in ${signature.moon.sign.name}, Sun in ${signature.sun.sign.name}; strongest patterns include ${signature.tight.join(', ') || 'no tight major aspects'}.</li>
             <li>Eastern/sidereal: Moon in ${moonSidereal.sign.name} / ${moonSidereal.nakshatra}; Sun in ${sunSidereal.sign.name}.</li>
-            <li>Try adding a few plain words for what you feel, like "restless", "emotional", "blocked", "flirty", or "power struggle".</li>
+            <li>Try adding plain life-current words like "loss", "gain", "tension", "new love", "money pressure", "family conflict", "health", "career", or "sudden change".</li>
           </ul>
         `;
       }
@@ -588,8 +595,9 @@
       const astroText = astronomyNotes.length ? astronomyNotes.join('; ') : 'enable location to compare your words with what is literally above or below the local horizon';
 
       return `
-        <strong>What tracks: ${topTheme.label} (${score}% resonance)</strong>
+        <strong>Life theme that tracks: ${topTheme.label} (${score}% resonance)</strong>
         <ul>
+          <li>Your words matched: ${topTheme.hits.join(', ')}.</li>
           <li>Western/tropical: ${supportText}. Moon phase is ${signature.phaseName}, with Moon in ${signature.moon.sign.name}.</li>
           <li>Eastern/sidereal: Moon maps to ${moonSidereal.sign.name} / ${moonSidereal.nakshatra}; Sun maps to ${sunSidereal.sign.name}. This gives a second-symbol layer without changing the underlying astronomy.</li>
           <li>Astronomy layer: ${astroText}.</li>

@@ -14,7 +14,7 @@ What it does:
 - Calculates Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, and Pluto positions.
 - Highlights major aspects and retrograde status.
 - Adds a "Use My Location" option for local altitude/azimuth horizon context.
-- Includes a local chart-aware chat analyzer that compares user-entered themes against the current tropical chart, approximate sidereal/Vedic positions, nakshatras, and local astronomy context.
+- Includes a local life-current analyzer for themes like loss, gain, tension, new love, money, career, family/home, health, spiritual confusion, and sudden change. It compares user-entered themes against the current tropical chart, approximate sidereal/Vedic positions, nakshatras, and local astronomy context.
 
 Publishing notes:
 
