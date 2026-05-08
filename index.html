@@ -142,27 +142,6 @@
       display: grid;
     }
 
-    .profile-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--line);
-      margin-bottom: 16px;
-    }
-
-    .profile-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.85rem;
-    }
-
-    #userName {
-      font-weight: 700;
-      color: var(--gold);
-    }
-
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -254,6 +233,9 @@
 
     .hidden { display: none; }
 
+    .j-label-hint { color: var(--soft); font-weight: 400; }
+    .j-enc-notice { text-align: center; margin-top: 8px; font-size: 0.74rem; }
+
     .j-heading { margin: 0 0 6px; font-size: 1.05rem; }
     .j-subheading { margin: 0 0 12px; font-size: 1rem; }
     .j-note-bottom { margin-bottom: 16px; }
@@ -282,6 +264,60 @@
     .j-actions { margin-top: 0; align-items: center; }
 
     .j-list-area { margin-top: 12px; }
+
+    .j-entry-count {
+      margin: 2px 0 0;
+      font-size: 0.74rem;
+      color: var(--soft);
+    }
+
+    .j-mgmt-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }
+
+    .j-danger-btn {
+      border-color: rgba(223, 102, 93, 0.4);
+      color: #df665d;
+      background: rgba(223, 102, 93, 0.06);
+    }
+
+    .j-danger-btn:hover {
+      background: rgba(223, 102, 93, 0.14);
+    }
+
+    .journal-body {
+      margin: 4px 0 8px;
+      white-space: pre-wrap;
+      font-size: 0.88rem;
+      line-height: 1.55;
+      color: var(--text);
+    }
+
+    .journal-sky-note {
+      margin-top: 6px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.5;
+      white-space: pre-wrap;
+      border-left: 2px solid rgba(231, 187, 102, 0.3);
+      padding-left: 10px;
+    }
+
+    .j-del-btn {
+      margin-top: 6px;
+    }
+
+    .j-empty-note {
+      color: var(--soft);
+      font-size: 0.86rem;
+      text-align: center;
+      padding: 20px 0;
+      margin: 0;
+    }
 
     .planet-tooltip {
       position: fixed;
@@ -500,14 +536,6 @@
     </section>
 
     <aside class="side">
-      <div class="profile-bar">
-        <div class="profile-info">
-          <span id="userAvatar">👤</span>
-          <span id="userName">Guest</span>
-        </div>
-        <button id="loginBtn" class="secondary" style="min-height: 32px; font-size: 0.8rem;">Login</button>
-      </div>
-
       <div>
         <div class="eyebrow" id="dateEyebrow">Today</div>
         <h1>LuminaSynodic</h1>
@@ -542,7 +570,6 @@
         </section>
 
         <section class="panel insight" aria-live="polite">
-          <div class="tag-row" id="tags"></div>
           <h2 id="insightTitle">Current Sky</h2>
           <p id="insightText"></p>
         </section>
@@ -552,11 +579,6 @@
         </section>
 
         <section class="panel">
-          <div class="tag-row">
-            <span class="tag">life mapping</span>
-            <span class="tag">western + sidereal</span>
-            <span class="tag">local astronomy</span>
-          </div>
           <label>What's going on in your life?
             <textarea class="chat-input" id="chatInput" placeholder="Example: loss, a new relationship, money pressure, job tension, family conflict, a move, or a sudden opportunity."></textarea>
           </label>
@@ -591,13 +613,17 @@
               <p class="source-note j-note-bottom" id="journalLockMsg">Encrypted and stored locally on this device.</p>
             </div>
             <div id="journalSetupForm" class="hidden">
-              <label>New password
-                <input type="password" id="journalPwdNew" placeholder="Choose a password (min 6 chars)" autocomplete="new-password">
+              <label>Your name <small class="j-label-hint">(optional — stored encrypted)</small>
+                <input type="text" id="journalDisplayName" placeholder="How should we address you?" autocomplete="name">
+              </label>
+              <label>Password
+                <input type="password" id="journalPwdNew" placeholder="Choose a password (min 8 chars)" autocomplete="new-password">
               </label>
               <label>Confirm password
                 <input type="password" id="journalPwdConfirm" placeholder="Confirm password" autocomplete="new-password">
               </label>
               <button type="button" id="journalSetupBtn" class="j-form-btn">Create Journal</button>
+              <p class="source-note j-enc-notice">All entries are encrypted on your device. Nothing is sent to any server.</p>
             </div>
             <div id="journalUnlockForm" class="hidden">
               <label>Password
@@ -612,9 +638,12 @@
         <div id="journalUnlocked" class="hidden">
           <section class="panel">
             <div class="j-header">
-              <h2>Personal Journal</h2>
+              <div>
+                <h2 id="journalUserHeading">Personal Journal</h2>
+                <p class="j-entry-count" id="journalEntryCount"></p>
+              </div>
               <div class="j-btn-row">
-                <button type="button" class="secondary btn-sm" id="journalChangePwdBtn">Change PW</button>
+                <button type="button" class="secondary btn-sm" id="journalChangePwdBtn">Password</button>
                 <button type="button" class="secondary btn-sm" id="journalLockBtn">Lock</button>
               </div>
             </div>
@@ -625,8 +654,12 @@
               <button type="button" id="journalSaveEntryBtn">Save Entry</button>
               <label class="journal-attach-row">
                 <input type="checkbox" id="journalAttachAnalysis">
-                Attach last sky reading
+                Attach sky reading
               </label>
+            </div>
+            <div class="j-mgmt-row">
+              <button type="button" class="secondary btn-sm" id="journalExportBtn">Export Backup</button>
+              <button type="button" class="secondary btn-sm j-danger-btn" id="journalClearBtn">Clear All</button>
             </div>
             <div class="journal-list j-list-area" id="journalList"></div>
           </section>
@@ -640,6 +673,19 @@
             <div class="actions j-actions">
               <button type="button" id="journalConfirmChangePwdBtn">Update</button>
               <button type="button" class="secondary" id="journalCancelChangePwdBtn">Cancel</button>
+            </div>
+          </section>
+
+          <!-- Clear-all confirmation panel -->
+          <section class="panel hidden" id="journalClearPanel">
+            <h2 class="j-subheading">Clear All Entries</h2>
+            <p class="source-note" id="journalClearWarning">This permanently deletes all journal entries. Type <strong>CLEAR</strong> to confirm.</p>
+            <label>Confirmation word
+              <input type="text" id="journalClearConfirm" placeholder="Type CLEAR" autocomplete="off" spellcheck="false">
+            </label>
+            <div class="actions j-actions">
+              <button type="button" class="j-danger-btn" id="journalConfirmClearBtn">Delete All Entries</button>
+              <button type="button" class="secondary" id="journalCancelClearBtn">Cancel</button>
             </div>
           </section>
         </div>
@@ -670,7 +716,6 @@
     const offsetRange = document.getElementById('offsetRange');
     const offsetLabel = document.getElementById('offsetLabel');
     const dateEyebrow = document.getElementById('dateEyebrow');
-    const tags = document.getElementById('tags');
     const insightTitle = document.getElementById('insightTitle');
     const insightText = document.getElementById('insightText');
     const planetTable = document.getElementById('planetTable');
@@ -1200,14 +1245,6 @@ ${aspectLines || 'none within orb'}`;
         'font-size': 6, 'font-weight': 800, fill: '#101012', 'pointer-events': 'none'
       }, dLbl));
     }
-    function renderTags(items) {
-      tags.replaceChildren(...items.map((item) => {
-        const tag = document.createElement('span');
-        tag.className = 'tag';
-        tag.textContent = item;
-        return tag;
-      }));
-    }
     function renderTable(data) {
       planetTable.replaceChildren(...data.map((planet) => {
         const row = document.createElement('div');
@@ -1229,9 +1266,6 @@ ${aspectLines || 'none within orb'}`;
         : ' No tight major aspect is highlighted for this body at the selected time.';
       insightTitle.textContent = `${planet.key}${planet.retrograde ? ' Retrograde' : ''} in ${planet.sign.name}`;
       insightText.textContent = `${planet.key} is at ${fmtDegree(planet.sign.degree)} ${planet.sign.name}.${localLine} ${aspectLine}`;
-
-      const leading = aspectData.slice(0, 3).map((item) => `${item.a.key} ${item.aspect.name} ${item.b.key}`);
-      renderTags([`${planet.key} ${planet.sign.glyph}`, planet.retrograde ? 'retrograde' : 'direct', ...leading]);
 
       const dateText = date.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
       const aspectText = aspectData.slice(0, 3).map((item) => `${item.a.key} ${item.aspect.name.toLowerCase()} ${item.b.key}`).join(', ');
@@ -1408,35 +1442,7 @@ ${aspectLines || 'none within orb'}`;
       });
     });
 
-    // Login/Profile
-    const userNameEl = document.getElementById('userName');
-    const loginBtn = document.getElementById('loginBtn');
-    
-    function updateProfile() {
-      const storedName = localStorage.getItem('astro_user_name');
-      if (storedName) {
-        userNameEl.textContent = storedName;
-        loginBtn.textContent = 'Logout';
-      } else {
-        userNameEl.textContent = 'Guest';
-        loginBtn.textContent = 'Login';
-      }
-    }
-
-    loginBtn.addEventListener('click', () => {
-      const storedName = localStorage.getItem('astro_user_name');
-      if (storedName) {
-        localStorage.removeItem('astro_user_name');
-        updateProfile();
-      } else {
-        const name = prompt('Enter your name to personalize your journal:');
-        if (name) {
-          localStorage.setItem('astro_user_name', name);
-          updateProfile();
-        }
-      }
-    });
-    updateProfile();
+    // (profile/login removed — identity is managed by the encrypted journal)
 
     // Calendar
     let calDate = new Date();
@@ -1488,11 +1494,16 @@ ${aspectLines || 'none within orb'}`;
       renderCalendar();
     });
 
-    // ── Journal: encrypted local storage ──
+    // ── Journal: AES-GCM-256 encrypted local storage ──
+    // Payload format: { name: string, entries: Entry[] }
+    // Stored format:  { salt: b64, iv: b64, ct: b64 }
     const JOURNAL_STORE = 'astro_journal_enc';
     let journalKey = null;
+    let journalName = '';
     let journalEntries = [];
     let lastAnalysis = null;
+    let journalUnlockAttempts = 0;
+    let journalLockoutUntil = 0;
 
     const journalList = document.getElementById('journalList');
 
@@ -1504,18 +1515,15 @@ ${aspectLines || 'none within orb'}`;
         'raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']
       );
       return crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
-        raw,
-        { name: 'AES-GCM', length: 256 },
-        false,
-        ['encrypt', 'decrypt']
+        { name: 'PBKDF2', salt, iterations: 210000, hash: 'SHA-256' },
+        raw, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']
       );
     }
 
-    async function journalEncrypt(key, data) {
+    async function journalEncrypt(key, payload) {
       const iv = crypto.getRandomValues(new Uint8Array(12));
       const ct = await crypto.subtle.encrypt(
-        { name: 'AES-GCM', iv }, key, new TextEncoder().encode(JSON.stringify(data))
+        { name: 'AES-GCM', iv }, key, new TextEncoder().encode(JSON.stringify(payload))
       );
       return { iv: b64enc(iv), ct: b64enc(ct) };
     }
@@ -1534,33 +1542,64 @@ ${aspectLines || 'none within orb'}`;
 
     async function journalPersist() {
       const stored = journalLoad();
-      const enc = await journalEncrypt(journalKey, journalEntries);
+      const enc = await journalEncrypt(journalKey, { name: journalName, entries: journalEntries });
       localStorage.setItem(JOURNAL_STORE, JSON.stringify({ salt: stored.salt, ...enc }));
     }
 
-    async function journalCreate(password) {
+    async function journalCreate(password, name) {
       const salt = crypto.getRandomValues(new Uint8Array(16));
       journalKey = await journalDeriveKey(password, salt);
+      journalName = name || '';
       journalEntries = [];
-      const enc = await journalEncrypt(journalKey, journalEntries);
+      const enc = await journalEncrypt(journalKey, { name: journalName, entries: journalEntries });
       localStorage.setItem(JOURNAL_STORE, JSON.stringify({ salt: b64enc(salt), ...enc }));
     }
 
     async function journalUnlock(password) {
+      const now = Date.now();
+      if (now < journalLockoutUntil) {
+        const secs = Math.ceil((journalLockoutUntil - now) / 1000);
+        throw new Error(`Too many attempts. Try again in ${secs}s.`);
+      }
       const stored = journalLoad();
       if (!stored) throw new Error('No journal found');
       journalKey = await journalDeriveKey(password, b64dec(stored.salt));
-      journalEntries = await journalDecrypt(journalKey, stored.iv, stored.ct);
+      let payload;
+      try {
+        payload = await journalDecrypt(journalKey, stored.iv, stored.ct);
+      } catch {
+        journalKey = null;
+        journalUnlockAttempts++;
+        if (journalUnlockAttempts >= 5) {
+          journalLockoutUntil = Date.now() + 30000;
+          journalUnlockAttempts = 0;
+        }
+        throw new Error('Wrong password');
+      }
+      journalUnlockAttempts = 0;
+      // Support old format (plain array) and new format ({ name, entries })
+      if (Array.isArray(payload)) {
+        journalName = '';
+        journalEntries = payload;
+      } else {
+        journalName = payload.name || '';
+        journalEntries = payload.entries || [];
+      }
     }
 
     async function journalAddEntry(text, skyNote) {
       journalEntries.unshift({ id: Date.now(), date: new Date().toISOString(), text, skyNote: skyNote || null });
-      if (journalEntries.length > 200) journalEntries.length = 200;
+      if (journalEntries.length > 500) journalEntries.length = 500;
       await journalPersist();
     }
 
     async function journalDeleteEntry(id) {
       journalEntries = journalEntries.filter(e => e.id !== id);
+      await journalPersist();
+    }
+
+    async function journalClearAll() {
+      journalEntries = [];
       await journalPersist();
     }
 
@@ -1570,11 +1609,31 @@ ${aspectLines || 'none within orb'}`;
       await journalDecrypt(testKey, stored.iv, stored.ct); // throws if wrong
       const newSalt = crypto.getRandomValues(new Uint8Array(16));
       journalKey = await journalDeriveKey(newPwd, newSalt);
-      const enc = await journalEncrypt(journalKey, journalEntries);
+      const enc = await journalEncrypt(journalKey, { name: journalName, entries: journalEntries });
       localStorage.setItem(JOURNAL_STORE, JSON.stringify({ salt: b64enc(newSalt), ...enc }));
     }
 
+    function journalExport() {
+      const stored = journalLoad();
+      if (!stored) return;
+      const blob = new Blob([JSON.stringify(stored, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `lumina-journal-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
     // ── Journal UI ──
+    function journalUpdateMeta() {
+      const heading = document.getElementById('journalUserHeading');
+      const count = document.getElementById('journalEntryCount');
+      heading.textContent = journalName ? `${journalName}'s Journal` : 'Personal Journal';
+      const n = journalEntries.length;
+      count.textContent = n === 0 ? 'No entries' : `${n} entr${n === 1 ? 'y' : 'ies'} — encrypted locally`;
+    }
+
     function journalInitView() {
       const stored = journalLoad();
       const locked = document.getElementById('journalLocked');
@@ -1582,6 +1641,7 @@ ${aspectLines || 'none within orb'}`;
       if (journalKey) {
         locked.classList.add('hidden');
         unlocked.classList.remove('hidden');
+        journalUpdateMeta();
         renderJournal();
       } else {
         locked.classList.remove('hidden');
@@ -1592,18 +1652,19 @@ ${aspectLines || 'none within orb'}`;
         if (stored) {
           setupForm.classList.add('hidden');
           unlockForm.classList.remove('hidden');
-          msg.textContent = 'Your journal is encrypted locally. Enter your password to access it.';
+          msg.textContent = 'Your journal is encrypted locally on this device.';
         } else {
           setupForm.classList.remove('hidden');
           unlockForm.classList.add('hidden');
-          msg.textContent = 'Create a password to start your encrypted personal journal.';
+          msg.textContent = 'Create a password to begin your encrypted personal journal.';
         }
       }
     }
 
     function renderJournal() {
+      journalUpdateMeta();
       if (!journalEntries.length) {
-        journalList.innerHTML = '<p class="source-note" style="text-align: center; padding: 20px;">No entries yet. Write your first one above.</p>';
+        journalList.innerHTML = '<p class="source-note j-empty-note">No entries yet. Write your first one above.</p>';
         return;
       }
       journalList.innerHTML = '';
@@ -1614,9 +1675,9 @@ ${aspectLines || 'none within orb'}`;
         const dateStr = `${d.toLocaleDateString()} ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
         div.innerHTML = `
           <div class="journal-date">${dateStr}</div>
-          <div style="line-height: 1.5; white-space: pre-wrap;">${escapeHtml(entry.text)}</div>
-          ${entry.skyNote ? `<details><summary>Sky reading</summary><div style="margin-top: 6px; font-size: 0.82rem; color: var(--muted); line-height: 1.4;">${escapeHtml(entry.skyNote)}</div></details>` : ''}
-          <button type="button" data-del="${entry.id}" class="secondary" style="min-height: 24px; padding: 0 8px; font-size: 0.75rem; margin-top: 6px;">Delete</button>
+          <div class="journal-body">${escapeHtml(entry.text)}</div>
+          ${entry.skyNote ? `<details><summary>Sky reading</summary><div class="journal-sky-note">${escapeHtml(entry.skyNote)}</div></details>` : ''}
+          <button type="button" data-del="${entry.id}" class="secondary btn-sm j-del-btn">Delete</button>
         `;
         journalList.appendChild(div);
       });
@@ -1629,14 +1690,16 @@ ${aspectLines || 'none within orb'}`;
     }
 
     document.getElementById('journalSetupBtn').addEventListener('click', async () => {
+      const name = document.getElementById('journalDisplayName').value.trim();
       const pwd = document.getElementById('journalPwdNew').value;
       const confirm = document.getElementById('journalPwdConfirm').value;
-      if (pwd.length < 6) { setStatus('Password must be at least 6 characters.'); return; }
+      if (pwd.length < 8) { setStatus('Password must be at least 8 characters.'); return; }
       if (pwd !== confirm) { setStatus('Passwords do not match.'); return; }
       try {
-        await journalCreate(pwd);
-        document.getElementById('journalPwdNew').value = '';
-        document.getElementById('journalPwdConfirm').value = '';
+        await journalCreate(pwd, name);
+        ['journalDisplayName', 'journalPwdNew', 'journalPwdConfirm'].forEach(id => {
+          document.getElementById(id).value = '';
+        });
         journalInitView();
       } catch (e) { setStatus('Could not create journal.'); }
     });
@@ -1648,12 +1711,15 @@ ${aspectLines || 'none within orb'}`;
         await journalUnlock(pwd);
         document.getElementById('journalPwd').value = '';
         journalInitView();
-      } catch (e) { setStatus('Wrong password or corrupted journal.'); }
+      } catch (e) { setStatus(e.message || 'Wrong password.'); }
     });
 
     document.getElementById('journalLockBtn').addEventListener('click', () => {
       journalKey = null;
+      journalName = '';
       journalEntries = [];
+      document.getElementById('journalChangePwdPanel').classList.add('hidden');
+      document.getElementById('journalClearPanel').classList.add('hidden');
       journalInitView();
     });
 
@@ -1669,14 +1735,34 @@ ${aspectLines || 'none within orb'}`;
     });
 
     document.getElementById('saveToJournalBtn').addEventListener('click', async () => {
-      if (!journalKey) {
-        setStatus('Unlock your journal in the Journal tab first.');
-        return;
-      }
+      if (!journalKey) { setStatus('Unlock your journal in the Journal tab first.'); return; }
       if (!lastAnalysis) return;
       await journalAddEntry(lastAnalysis.userText, lastAnalysis.skyNote);
       document.getElementById('saveToJournalBtn').textContent = 'Saved';
       setStatus('Saved to journal.');
+    });
+
+    document.getElementById('journalExportBtn').addEventListener('click', journalExport);
+
+    document.getElementById('journalClearBtn').addEventListener('click', () => {
+      document.getElementById('journalClearPanel').classList.remove('hidden');
+      document.getElementById('journalClearConfirm').value = '';
+      document.getElementById('journalClearConfirm').focus();
+    });
+
+    document.getElementById('journalCancelClearBtn').addEventListener('click', () => {
+      document.getElementById('journalClearPanel').classList.add('hidden');
+      document.getElementById('journalClearConfirm').value = '';
+    });
+
+    document.getElementById('journalConfirmClearBtn').addEventListener('click', async () => {
+      const word = document.getElementById('journalClearConfirm').value.trim();
+      if (word !== 'CLEAR') { setStatus('Type CLEAR (all caps) to confirm.'); return; }
+      await journalClearAll();
+      document.getElementById('journalClearPanel').classList.add('hidden');
+      document.getElementById('journalClearConfirm').value = '';
+      renderJournal();
+      setStatus('All entries deleted.');
     });
 
     document.getElementById('journalChangePwdBtn').addEventListener('click', () => {
@@ -1694,7 +1780,7 @@ ${aspectLines || 'none within orb'}`;
       const current = document.getElementById('journalCurrentPwd').value;
       const next = document.getElementById('journalNewPwd').value;
       const confirm = document.getElementById('journalConfirmNewPwd').value;
-      if (next.length < 6) { setStatus('New password must be at least 6 characters.'); return; }
+      if (next.length < 8) { setStatus('New password must be at least 8 characters.'); return; }
       if (next !== confirm) { setStatus('New passwords do not match.'); return; }
       try {
         await journalChangePassword(current, next);
