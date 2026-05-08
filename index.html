@@ -1459,6 +1459,31 @@ ${aspectLines || 'none within orb'}`;
       });
     }
 
+    function drawMoonSphere(cx, cy, R, moonPhaseAngle) {
+      const phase = ((moonPhaseAngle % 360) + 360) % 360;
+      const g = el('g', { 'pointer-events': 'none' });
+      g.append(el('circle', { cx, cy, r: R, fill: '#17151e', stroke: 'rgba(255,255,255,0.07)', 'stroke-width': 0.75 }));
+      if (phase > 1.5 && phase < 358.5) {
+        if (phase > 178.5 && phase < 181.5) {
+          g.append(el('circle', { cx, cy, r: R, fill: '#ece8d8', opacity: 0.92 }));
+        } else {
+          const waxing = phase < 180;
+          const ell = (Math.abs(Math.cos(phase * Math.PI / 180)) * R).toFixed(3);
+          let d;
+          if (waxing) {
+            const ls = phase > 90 ? 1 : 0;
+            d = `M 0 ${-R} A ${R} ${R} 0 0 1 0 ${R} A ${ell} ${R} 0 0 ${ls} 0 ${-R} Z`;
+          } else {
+            const adj = phase - 180;
+            const ls = adj > 90 ? 1 : 0;
+            d = `M 0 ${-R} A ${R} ${R} 0 0 0 0 ${R} A ${ell} ${R} 0 0 ${ls} 0 ${-R} Z`;
+          }
+          g.append(el('path', { d, transform: `translate(${cx},${cy})`, fill: '#ece8d8', opacity: 0.88 }));
+        }
+      }
+      g.append(el('ellipse', { cx: cx - R * 0.28, cy: cy - R * 0.32, rx: R * 0.38, ry: R * 0.3, fill: 'rgba(255,255,255,0.055)' }));
+      return g;
+    }
     function drawWheel(data, aspectData, date) {
       clearSvg();
       const svgRect = chart.getBoundingClientRect();
@@ -1569,10 +1594,11 @@ ${aspectLines || 'none within orb'}`;
 
       const dateText = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
       const timeText = date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+      chart.append(drawMoonSphere(360, 304, 18, A.MoonPhase(date)));
       chart.append(
-        el('text', { x: 360, y: 344, 'text-anchor': 'middle', fill: '#faf9f5', 'font-size': 16, 'font-weight': 800 }, dateText),
-        el('text', { x: 360, y: 366, 'text-anchor': 'middle', fill: '#c2c0b6', 'font-size': 12 }, timeText),
-        el('text', { x: 360, y: 386, 'text-anchor': 'middle', fill: '#9c9a92', 'font-size': 10 }, observer ? 'local horizon enabled' : 'geocentric transit wheel')
+        el('text', { x: 360, y: 346, 'text-anchor': 'middle', fill: '#faf9f5', 'font-size': 15, 'font-weight': 800 }, dateText),
+        el('text', { x: 360, y: 364, 'text-anchor': 'middle', fill: '#c2c0b6', 'font-size': 11 }, timeText),
+        el('text', { x: 360, y: 380, 'text-anchor': 'middle', fill: '#9c9a92', 'font-size': 9 }, observer ? 'local horizon enabled' : 'geocentric transit wheel')
       );
       drawControlRings(date);
     }
@@ -1625,35 +1651,35 @@ ${aspectLines || 'none within orb'}`;
       // ── SEPARATOR ──
       chart.append(el('circle', { cx, cy, r: 327, fill: 'none', stroke: 'rgba(255,255,255,0.06)', 'stroke-width': 0.75 }));
 
-      // ── DATE RING (outer, gold) r=330–348 ──
-      // full 360° = 60 days; today at top (−90°); clockwise = future, ccw = past
+      // ── DATE RING (outer, gold) r=330–348 ── mode-cycling ──
       const DI = 330, DO = 348, DM = 339, DW = 18;
+      const dMode = DATE_MODE_CONF[dateRingMode];
       const todayMid = new Date(today); todayMid.setHours(12, 0, 0, 0);
       const dateMid = new Date(date); dateMid.setHours(12, 0, 0, 0);
-      const dayOff = Math.max(-30, Math.min(30, (dateMid - todayMid) / 86400000));
+      const unitOff = Math.max(-dMode.halfRange, Math.min(dMode.halfRange, (dateMid - todayMid) / dMode.msPerUnit));
 
       chart.append(el('circle', { cx, cy, r: DM, fill: 'none', 'stroke-width': DW, stroke: 'rgba(231,187,102,0.07)' }));
 
-      for (let i = 0; i < 120; i++) {
-        const dCW = i * 0.5; // days clockwise from today
-        const dayEq = dCW <= 30 ? dCW : dCW - 60; // -29.5 to +30
+      for (let i = 0; i < dMode.ticks; i++) {
+        const unitCW = i * dMode.tickStep;
+        const unitEq = unitCW <= dMode.halfRange ? unitCW : unitCW - dMode.halfRange * 2;
         const isToday = i === 0;
-        const is5d = !isToday && Math.round(Math.abs(dayEq) * 10) % 50 === 0;
-        const is1d = !isToday && !is5d && Math.round(dayEq * 10) % 10 === 0;
-        const deg = -90 + i * 3;
+        const isMajor = !isToday && unitEq !== 0 && isMultOf(unitEq, dMode.majorEvery);
+        const isMinor = !isToday && !isMajor && unitEq !== 0 && isMultOf(unitEq, dMode.minorEvery);
+        const deg = -90 + (i / dMode.ticks) * 360;
         const rad = deg * Math.PI / 180;
-        const r1 = isToday ? DI - 6 : is5d ? DI - 3 : is1d ? DI : DI + 3;
-        const r2 = isToday ? DO + 6 : is5d ? DO + 3 : is1d ? DO : DO - 3;
+        const r1 = isToday ? DI - 6 : isMajor ? DI - 3 : isMinor ? DI : DI + 3;
+        const r2 = isToday ? DO + 6 : isMajor ? DO + 3 : isMinor ? DO : DO - 3;
         chart.append(el('line', {
           x1: cx + r1 * Math.cos(rad), y1: cy + r1 * Math.sin(rad),
           x2: cx + r2 * Math.cos(rad), y2: cy + r2 * Math.sin(rad),
-          stroke: isToday ? 'rgba(231,187,102,0.95)' : is5d ? 'rgba(231,187,102,0.5)' : is1d ? 'rgba(231,187,102,0.25)' : 'rgba(231,187,102,0.09)',
-          'stroke-width': isToday ? 2.5 : is5d ? 1.5 : 0.75, 'stroke-linecap': 'round', 'pointer-events': 'none'
+          stroke: isToday ? 'rgba(231,187,102,0.95)' : isMajor ? 'rgba(231,187,102,0.5)' : isMinor ? 'rgba(231,187,102,0.25)' : 'rgba(231,187,102,0.09)',
+          'stroke-width': isToday ? 2.5 : isMajor ? 1.5 : 0.75, 'stroke-linecap': 'round', 'pointer-events': 'none'
         }));
       }
 
-      if (Math.abs(dayOff) > 0.05) {
-        const arcDeg = (dayOff / 30) * 180;
+      if (Math.abs(unitOff) > 0.01) {
+        const arcDeg = (unitOff / dMode.halfRange) * 180;
         const sweep = arcDeg > 0 ? 1 : 0;
         const endRad = (-90 + arcDeg) * Math.PI / 180;
         chart.append(el('path', {
@@ -1663,16 +1689,30 @@ ${aspectLines || 'none within orb'}`;
         }));
       }
 
-      const dAngleDeg = -90 + (dayOff / 30) * 180;
+      const dAngleDeg = -90 + (unitOff / dMode.halfRange) * 180;
       const dRad = dAngleDeg * Math.PI / 180;
       const dx = cx + DM * Math.cos(dRad), dy = cy + DM * Math.sin(dRad);
-      const dLbl = Math.round(Math.abs(dayOff)) === 0 ? '•' : (dayOff > 0 ? `+${Math.round(dayOff)}` : String(Math.round(dayOff)));
+      const dLbl = Math.round(Math.abs(unitOff)) === 0 ? '•' : (unitOff > 0 ? `+${Math.round(unitOff)}` : String(Math.round(unitOff)));
       chart.append(el('circle', { cx: dx, cy: dy, r: 13, fill: 'rgba(231,187,102,0.2)', 'pointer-events': 'none' }));
       chart.append(el('circle', { cx: dx, cy: dy, r: 8, fill: '#e7bb66', stroke: 'rgba(255,255,255,0.75)', 'stroke-width': 1.5, 'pointer-events': 'none' }));
       chart.append(el('text', {
         x: dx, y: dy, 'text-anchor': 'middle', 'dominant-baseline': 'middle',
         'font-size': 6, 'font-weight': 800, fill: '#101012', 'pointer-events': 'none'
       }, dLbl));
+
+      // Mode indicator pill — bottom of date ring, click to cycle scale
+      const modePill = el('g', { 'pointer-events': 'all', style: 'cursor:pointer;' });
+      modePill.append(
+        el('rect', { x: 346, y: 693, width: 28, height: 12, rx: 6, fill: 'rgba(231,187,102,0.18)', stroke: 'rgba(231,187,102,0.55)', 'stroke-width': 0.75 }),
+        el('text', { x: 360, y: 699, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: '#e7bb66', 'font-size': 6.5, 'font-weight': 800 }, dMode.label)
+      );
+      modePill.addEventListener('pointerdown', (e) => e.stopPropagation());
+      modePill.addEventListener('click', () => {
+        const keys = ['days', 'weeks', 'months', 'years'];
+        dateRingMode = keys[(keys.indexOf(dateRingMode) + 1) % keys.length];
+        render();
+      });
+      chart.append(modePill);
     }
     function renderTable(data) {
       planetTable.replaceChildren(...data.map((planet) => {
@@ -1747,11 +1787,19 @@ ${aspectLines || 'none within orb'}`;
 
     // ── Radial dial drag ──
     let dialDrag = null;
+    let dateRingMode = 'days';
+    function isMultOf(v, u) { const r = Math.abs(v) % u; return r < u * 0.012 || (u - r) < u * 0.012; }
+    const DATE_MODE_CONF = {
+      days:   { halfRange: 30, ticks: 120, tickStep: 0.5,  majorEvery: 5,  minorEvery: 1,   msPerUnit: 86400000,          label: 'DAYS' },
+      weeks:  { halfRange: 26, ticks: 104, tickStep: 0.5,  majorEvery: 4,  minorEvery: 1,   msPerUnit: 7 * 86400000,       label: 'WKS'  },
+      months: { halfRange: 24, ticks: 96,  tickStep: 0.5,  majorEvery: 3,  minorEvery: 1,   msPerUnit: 30.44 * 86400000,   label: 'MO'   },
+      years:  { halfRange: 10, ticks: 80,  tickStep: 0.25, majorEvery: 1,  minorEvery: 0.5, msPerUnit: 365.25 * 86400000,  label: 'YR'   }
+    };
     function svgCoords(e) {
       const rect = chart.getBoundingClientRect();
       return {
-        x: (e.clientX - rect.left) * (720 / rect.width) - 360,
-        y: (e.clientY - rect.top) * (720 / rect.height) - 360
+        x: (e.clientX - rect.left) * (860 / rect.width) - 430,
+        y: (e.clientY - rect.top) * (860 / rect.height) - 430
       };
     }
     chart.addEventListener('pointerdown', (e) => {
@@ -1777,8 +1825,9 @@ ${aspectLines || 'none within orb'}`;
       let delta = Math.atan2(y, x) - dialDrag.startAngle;
       if (delta > Math.PI) delta -= 2 * Math.PI;
       if (delta < -Math.PI) delta += 2 * Math.PI;
+      const mode = DATE_MODE_CONF[dateRingMode];
       const msShift = dialDrag.type === 'date'
-        ? (delta / (2 * Math.PI)) * 60 * 86400000   // 360° = 60 days
+        ? (delta / (2 * Math.PI)) * mode.halfRange * 2 * mode.msPerUnit
         : (delta / (2 * Math.PI)) * 24 * 3600000;   // 360° = 24 hours
       setDate(new Date(dialDrag.startMs + msShift));
     });
