@@ -283,6 +283,32 @@
 
     .j-list-area { margin-top: 12px; }
 
+    .planet-tooltip {
+      position: fixed;
+      z-index: 100;
+      display: none;
+      pointer-events: none;
+      background: rgba(16, 16, 18, 0.96);
+      border: 1px solid rgba(231, 187, 102, 0.35);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--text);
+      max-width: 220px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    .planet-tooltip .tip-name {
+      font-weight: 800;
+      color: var(--gold);
+      font-size: 0.88rem;
+    }
+
+    .planet-tooltip .tip-row {
+      color: var(--muted);
+    }
+
     .controls {
       grid-template-columns: 1fr 1fr;
     }
@@ -632,6 +658,8 @@
     </aside>
   </main>
 
+  <div id="planetTooltip" class="planet-tooltip" aria-hidden="true"></div>
+
   <script src="vendor/astronomy.browser.min.js"></script>
   <script>
     const A = window.Astronomy || (typeof module !== 'undefined' ? module.exports : null);
@@ -651,23 +679,25 @@
     const chatInput = document.getElementById('chatInput');
     const chatLog = document.getElementById('chatLog');
 
+    // ︎ = Unicode text variation selector — forces symbol rendering, not emoji
+    const TV = '︎';
     const signs = [
-      ['Aries', '♈'], ['Taurus', '♉'], ['Gemini', '♊'], ['Cancer', '♋'],
-      ['Leo', '♌'], ['Virgo', '♍'], ['Libra', '♎'], ['Scorpio', '♏'],
-      ['Sagittarius', '♐'], ['Capricorn', '♑'], ['Aquarius', '♒'], ['Pisces', '♓']
+      ['Aries', '♈' + TV], ['Taurus', '♉' + TV], ['Gemini', '♊' + TV], ['Cancer', '♋' + TV],
+      ['Leo', '♌' + TV], ['Virgo', '♍' + TV], ['Libra', '♎' + TV], ['Scorpio', '♏' + TV],
+      ['Sagittarius', '♐' + TV], ['Capricorn', '♑' + TV], ['Aquarius', '♒' + TV], ['Pisces', '♓' + TV]
     ];
 
     const planets = [
-      { key: 'Sun', body: A.Body.Sun, glyph: '☉', color: '#fac775' },
-      { key: 'Moon', body: A.Body.Moon, glyph: '☽', color: '#d3d1c7' },
-      { key: 'Mercury', body: A.Body.Mercury, glyph: '☿', color: '#d3d1c7' },
-      { key: 'Venus', body: A.Body.Venus, glyph: '♀', color: '#f4c0d1' },
-      { key: 'Mars', body: A.Body.Mars, glyph: '♂', color: '#f0997b' },
-      { key: 'Jupiter', body: A.Body.Jupiter, glyph: '♃', color: '#9fe1cb' },
-      { key: 'Saturn', body: A.Body.Saturn, glyph: '♄', color: '#b5d4f4' },
-      { key: 'Uranus', body: A.Body.Uranus, glyph: '♅', color: '#8fd6ff' },
-      { key: 'Neptune', body: A.Body.Neptune, glyph: '♆', color: '#b5d4f4' },
-      { key: 'Pluto', body: A.Body.Pluto, glyph: '♇', color: '#cecbee' }
+      { key: 'Sun',     body: A.Body.Sun,     glyph: '☉' + TV, color: '#fac775' },
+      { key: 'Moon',    body: A.Body.Moon,    glyph: '☽' + TV, color: '#d3d1c7' },
+      { key: 'Mercury', body: A.Body.Mercury, glyph: '☿' + TV, color: '#d3d1c7' },
+      { key: 'Venus',   body: A.Body.Venus,   glyph: '♀' + TV, color: '#f4c0d1' },
+      { key: 'Mars',    body: A.Body.Mars,    glyph: '♂' + TV, color: '#f0997b' },
+      { key: 'Jupiter', body: A.Body.Jupiter, glyph: '♃' + TV, color: '#9fe1cb' },
+      { key: 'Saturn',  body: A.Body.Saturn,  glyph: '♄' + TV, color: '#b5d4f4' },
+      { key: 'Uranus',  body: A.Body.Uranus,  glyph: '⛢' + TV, color: '#8fd6ff' },
+      { key: 'Neptune', body: A.Body.Neptune, glyph: '♆' + TV, color: '#b5d4f4' },
+      { key: 'Pluto',   body: A.Body.Pluto,   glyph: '♇' + TV, color: '#cecbee' }
     ];
 
     const aspects = [
@@ -943,26 +973,71 @@ ${aspectLines || 'none within orb'}`;
         </ul>
       `;
     }
+    const tooltip = document.getElementById('planetTooltip');
+    function showTooltip(planet, aspectData, svgRect, svgPt) {
+      const close = aspectData.filter(a => a.a.key === planet.key || a.b.key === planet.key).slice(0, 2);
+      const sid = siderealInfo(planet.longitude);
+      tooltip.innerHTML = `
+        <span class="tip-name">${planet.glyph} ${planet.key}${planet.retrograde ? ' ℞' : ''}</span><br>
+        <span class="tip-row">${fmtDegree(planet.sign.degree)} ${planet.sign.name}</span><br>
+        <span class="tip-row" style="font-size:0.76rem;color:var(--soft);">${sid.sign.name} / ${sid.nakshatra}</span>
+        ${close.map(a => `<br><span class="tip-row" style="font-size:0.76rem;">${a.a.key} ${a.aspect.name.toLowerCase()} ${a.b.key} (${a.orb.toFixed(1)}°)</span>`).join('')}
+      `;
+      const scale = svgRect.width / 720;
+      const cx = svgRect.left + svgPt.x * scale;
+      const cy = svgRect.top + svgPt.y * scale;
+      const left = Math.min(cx + 14, window.innerWidth - 240);
+      const top = Math.max(cy - 10, 8);
+      tooltip.style.left = `${left}px`;
+      tooltip.style.top = `${top}px`;
+      tooltip.style.display = 'block';
+    }
+    function hideTooltip() { tooltip.style.display = 'none'; }
+
     function drawWheel(data, aspectData, date) {
       clearSvg();
+      const svgRect = chart.getBoundingClientRect();
       chart.append(
         el('rect', { x: 0, y: 0, width: 720, height: 720, fill: '#101012' }),
-        el('circle', { cx: 360, cy: 360, r: 304, fill: 'none', stroke: 'rgba(222,220,209,0.18)' }),
-        el('circle', { cx: 360, cy: 360, r: 250, fill: 'none', stroke: 'rgba(222,220,209,0.14)' }),
-        el('circle', { cx: 360, cy: 360, r: 172, fill: 'none', stroke: 'rgba(222,220,209,0.14)', 'stroke-dasharray': '3 5' }),
+        el('circle', { cx: 360, cy: 360, r: 304, fill: 'none', stroke: 'rgba(222,220,209,0.22)' }),
+        el('circle', { cx: 360, cy: 360, r: 270, fill: 'none', stroke: 'rgba(231,187,102,0.1)' }),
+        el('circle', { cx: 360, cy: 360, r: 250, fill: 'none', stroke: 'rgba(222,220,209,0.12)' }),
+        el('circle', { cx: 360, cy: 360, r: 172, fill: 'none', stroke: 'rgba(222,220,209,0.12)', 'stroke-dasharray': '3 5' }),
         el('circle', { cx: 360, cy: 360, r: 92, fill: 'rgba(255,255,255,0.025)', stroke: 'rgba(222,220,209,0.12)' })
       );
 
+      // Zodiac ring — sign divisions, glyphs, star markers
       for (let i = 0; i < 12; i++) {
         const a = i * 30;
         const p1 = point(a, 304);
         const p2 = point(a, 92);
-        const lp = point(a + 15, 282);
-        chart.append(
-          el('line', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, stroke: 'rgba(222,220,209,0.16)' }),
-          el('text', { x: lp.x, y: lp.y - 5, 'text-anchor': 'middle', fill: '#c2c0b6', 'font-size': 20 }, signs[i][1]),
-          el('text', { x: lp.x, y: lp.y + 13, 'text-anchor': 'middle', fill: '#9c9a92', 'font-size': 10 }, signs[i][0])
-        );
+        const lp = point(a + 15, 287);
+        // Dividing line
+        chart.append(el('line', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, stroke: 'rgba(222,220,209,0.15)' }));
+        // Gold glyph — larger, prominent, symbol font
+        chart.append(el('text', {
+          x: lp.x, y: lp.y,
+          'text-anchor': 'middle', 'dominant-baseline': 'middle',
+          fill: '#e7bb66', 'font-size': 22, 'font-weight': 700,
+          'font-family': "'Noto Sans Symbols 2','Segoe UI Symbol',Symbol,sans-serif"
+        }, signs[i][1]));
+        // Sign name — smaller, muted
+        const np = point(a + 15, 266);
+        chart.append(el('text', {
+          x: np.x, y: np.y,
+          'text-anchor': 'middle', 'dominant-baseline': 'middle',
+          fill: '#7a7870', 'font-size': 8.5, 'letter-spacing': '0.5'
+        }, signs[i][0].toUpperCase()));
+        // 4-pointed star at each sign boundary on outer ring
+        const sp = point(a, 304);
+        const sr = 4;
+        chart.append(el('path', {
+          d: `M ${sp.x} ${sp.y - sr} L ${sp.x + sr * 0.3} ${sp.y - sr * 0.3} L ${sp.x + sr} ${sp.y} L ${sp.x + sr * 0.3} ${sp.y + sr * 0.3} L ${sp.x} ${sp.y + sr} L ${sp.x - sr * 0.3} ${sp.y + sr * 0.3} L ${sp.x - sr} ${sp.y} L ${sp.x - sr * 0.3} ${sp.y - sr * 0.3} Z`,
+          fill: 'rgba(231,187,102,0.55)', 'pointer-events': 'none'
+        }));
+        // Small decorative dots midway in outer ring
+        const dp = point(a + 15, 304);
+        chart.append(el('circle', { cx: dp.x, cy: dp.y, r: 1.5, fill: 'rgba(231,187,102,0.25)', 'pointer-events': 'none' }));
       }
 
       aspectData.forEach(({ a, b, aspect }) => {
@@ -975,19 +1050,34 @@ ${aspectLines || 'none within orb'}`;
         }));
       });
 
+      // Planet orbit levels — 4 rings to reduce overlap
+      const orbitR = [210, 224, 238, 224];
       data.forEach((planet, index) => {
-        const p = point(planet.longitude, 218 + (index % 2) * 18);
-        const label = point(planet.longitude, 250 + (index % 2) * 18);
+        const r = orbitR[index % 4];
+        const p = point(planet.longitude, r);
         const group = el('g', { class: 'planet-hit', tabindex: 0, role: 'button', 'aria-label': planet.key });
         group.addEventListener('click', () => { selected = planet.key; render(); });
         group.addEventListener('keydown', (event) => {
           if (event.key === 'Enter' || event.key === ' ') { selected = planet.key; render(); }
         });
+        group.addEventListener('mouseenter', () => showTooltip(planet, aspectData, svgRect, p));
+        group.addEventListener('mouseleave', hideTooltip);
+        group.addEventListener('touchstart', () => showTooltip(planet, aspectData, svgRect, p), { passive: true });
+        group.addEventListener('touchend', hideTooltip, { passive: true });
         group.append(
-          el('circle', { class: 'planet-ring', cx: p.x, cy: p.y, r: planet.key === selected ? 22 : 18, fill: '#202027', stroke: planet.color, 'stroke-width': planet.key === selected ? 2 : 1 }),
-          el('text', { x: p.x, y: p.y + 1, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: planet.color, 'font-size': 18, 'font-weight': 800 }, planet.glyph),
-          el('text', { x: label.x, y: label.y, 'text-anchor': 'middle', fill: '#c2c0b6', 'font-size': 11, 'font-weight': 700 }, planet.key + (planet.retrograde ? ' ℞' : '')),
-          el('text', { x: label.x, y: label.y + 13, 'text-anchor': 'middle', fill: '#9c9a92', 'font-size': 9 }, `${fmtDegree(planet.sign.degree)} ${planet.sign.name.slice(0, 3)}`)
+          el('circle', {
+            class: 'planet-ring', cx: p.x, cy: p.y,
+            r: planet.key === selected ? 21 : 17,
+            fill: '#1a1a20',
+            stroke: planet.color,
+            'stroke-width': planet.key === selected ? 2.5 : 1.2
+          }),
+          el('text', {
+            x: p.x, y: p.y + 1,
+            'text-anchor': 'middle', 'dominant-baseline': 'middle',
+            fill: planet.color, 'font-size': 17, 'font-weight': 800,
+            'font-family': "'Noto Sans Symbols 2','Segoe UI Symbol',Symbol,sans-serif"
+          }, planet.glyph)
         );
         chart.append(group);
       });
