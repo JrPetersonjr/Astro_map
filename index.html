@@ -433,6 +433,8 @@
       background: rgba(223, 102, 93, 0.14);
     }
 
+    .j-settings-divider { margin-top: 16px; }
+
     .journal-body {
       margin: 4px 0 8px;
       white-space: pre-wrap;
@@ -767,7 +769,7 @@
 <body>
   <main>
     <section class="map-shell" aria-label="Live astrological sky map">
-      <svg id="chart" viewBox="0 0 720 720" role="img" aria-labelledby="chartTitle chartDesc">
+      <svg id="chart" viewBox="-70 -70 860 860" role="img" aria-labelledby="chartTitle chartDesc">
         <title id="chartTitle">LuminaSynodic - Daily Astrological Sky Map</title>
         <desc id="chartDesc">Live zodiac wheel with calculated planet positions and major aspects.</desc>
       </svg>
@@ -943,7 +945,11 @@
 
           <!-- Change password panel -->
           <section class="panel hidden" id="journalChangePwdPanel">
-            <h2 class="j-subheading">Change Password</h2>
+            <h2 class="j-subheading">Settings</h2>
+            <label>Display name <small class="j-label-hint">(stored encrypted, optional)</small>
+              <input type="text" id="journalDisplayNameEdit" placeholder="Your name" autocomplete="off">
+            </label>
+            <h2 class="j-subheading j-settings-divider">Change Password</h2>
             <label>Current password <input type="password" id="journalCurrentPwd" autocomplete="current-password"></label>
             <label>New password <input type="password" id="journalNewPwd" autocomplete="new-password"></label>
             <label>Confirm new <input type="password" id="journalConfirmNewPwd" autocomplete="new-password"></label>
@@ -1078,6 +1084,38 @@
       const mansion = nakshatras[Math.floor(siderealLongitude / mansionSize)];
       return { longitude: siderealLongitude, sign, nakshatra: mansion };
     }
+    // ── Vedic Panchanga ──
+    const TITHI_NAMES_S = ['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shashthi','Saptami','Ashtami','Navami','Dashami','Ekadashi','Dwadashi','Trayodashi','Chaturdashi','Purnima'];
+    const TITHI_NAMES_K = ['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shashthi','Saptami','Ashtami','Navami','Dashami','Ekadashi','Dwadashi','Trayodashi','Chaturdashi','Amavasya'];
+    function getTithi(moonLon, sunLon) {
+      const diff = normalize(moonLon - sunLon);
+      const num = Math.floor(diff / 12) + 1;
+      const paksha = num <= 15 ? 'Shukla' : 'Krishna';
+      const idx = Math.min((num <= 15 ? num - 1 : num - 16), 14);
+      return { number: num, name: (num <= 15 ? TITHI_NAMES_S : TITHI_NAMES_K)[idx], paksha };
+    }
+    const YOGA_NAMES = ['Vishkambha','Priti','Ayushman','Saubhagya','Shobhana','Atiganda','Sukarma','Dhriti','Shula','Ganda','Vriddhi','Dhruva','Vyaghata','Harshana','Vajra','Siddhi','Vyatipata','Variyana','Parigha','Shiva','Siddha','Sadhya','Shubha','Shukla','Brahma','Indra','Vaidhriti'];
+    function getYoga(moonLon, sunLon) {
+      return YOGA_NAMES[Math.floor(normalize(moonLon + sunLon) / (360 / 27)) % 27];
+    }
+    const DIGNITY = {
+      Sun:     { exalted: 'Aries',     debilitated: 'Libra',      own: ['Leo'] },
+      Moon:    { exalted: 'Taurus',    debilitated: 'Scorpio',    own: ['Cancer'] },
+      Mars:    { exalted: 'Capricorn', debilitated: 'Cancer',     own: ['Aries','Scorpio'] },
+      Mercury: { exalted: 'Virgo',     debilitated: 'Pisces',     own: ['Gemini','Virgo'] },
+      Jupiter: { exalted: 'Cancer',    debilitated: 'Capricorn',  own: ['Sagittarius','Pisces'] },
+      Venus:   { exalted: 'Pisces',    debilitated: 'Virgo',      own: ['Taurus','Libra'] },
+      Saturn:  { exalted: 'Libra',     debilitated: 'Aries',      own: ['Capricorn','Aquarius'] }
+    };
+    function getPlanetDignity(key, signName) {
+      const d = DIGNITY[key];
+      if (!d) return null;
+      if (d.exalted === signName) return 'exalted';
+      if (d.debilitated === signName) return 'debilitated';
+      if (d.own && d.own.includes(signName)) return 'domicile';
+      return null;
+    }
+
     function fmtDegree(deg) {
       const whole = Math.floor(deg);
       const min = Math.round((deg - whole) * 60);
@@ -1228,18 +1266,24 @@
       if (!data || !data.length) return null;
       const dateStr = date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
       const signature = currentSkySignature(data, aspectData);
+      const moon = signature.moon, sun = signature.sun;
+      const tithi = getTithi(moon.longitude, sun.longitude);
+      const yoga = getYoga(moon.longitude, sun.longitude);
       const planetLines = data.map((planet) => {
         const sidereal = siderealInfo(planet.longitude);
         const retro = planet.retrograde ? ' (retrograde)' : '';
-        return `${planet.key}: tropical ${fmtDegree(planet.sign.degree)} ${planet.sign.name}; sidereal ${fmtDegree(sidereal.sign.degree)} ${sidereal.sign.name}, nakshatra ${sidereal.nakshatra}${retro}`;
+        const dignity = getPlanetDignity(planet.key, planet.sign.name);
+        const digStr = dignity ? ` [${dignity}]` : '';
+        return `${planet.key}: tropical ${fmtDegree(planet.sign.degree)} ${planet.sign.name}${digStr}; sidereal ${fmtDegree(sidereal.sign.degree)} ${sidereal.sign.name}, nakshatra ${sidereal.nakshatra}${retro}`;
       }).join('\n');
-      const moonSidereal = siderealInfo(signature.moon.longitude);
+      const moonSidereal = siderealInfo(moon.longitude);
       const aspectLines = aspectData.slice(0, 6).map((item) =>
         `${item.a.key} ${item.aspect.name} ${item.b.key} (${item.orb.toFixed(1)}° orb)`
       ).join('\n');
       const retroText = signature.retrogrades.length ? signature.retrogrades.join(', ') : 'none';
       return `Sky snapshot: ${dateStr}
-Planetary positions (tropical / sidereal / nakshatra):
+Panchanga: Tithi ${tithi.number} — ${tithi.paksha} ${tithi.name}; Yoga: ${yoga}
+Planetary positions (tropical / sidereal / nakshatra / dignity):
 ${planetLines}
 
 Moon phase: ${signature.phaseName} (${signature.moonPhase.toFixed(0)}° from Sun)
@@ -1338,9 +1382,11 @@ ${aspectLines || 'none within orb'}`;
     function showTooltip(planet, aspectData, svgRect, svgPt) {
       const close = aspectData.filter(a => a.a.key === planet.key || a.b.key === planet.key).slice(0, 2);
       const sid = siderealInfo(planet.longitude);
+      const dign = getPlanetDignity(planet.key, planet.sign.name);
+      const dignColor = dign === 'exalted' ? 'var(--teal)' : dign === 'debilitated' ? 'var(--coral)' : 'var(--gold)';
       tooltip.innerHTML = `
         <span class="tip-name">${planet.glyph} ${planet.key}${planet.retrograde ? ' ℞' : ''}</span><br>
-        <span class="tip-row">${fmtDegree(planet.sign.degree)} ${planet.sign.name}</span><br>
+        <span class="tip-row">${fmtDegree(planet.sign.degree)} ${planet.sign.name}${dign ? ` <span style="color:${dignColor};font-size:0.76rem;">(${dign})</span>` : ''}</span><br>
         <span class="tip-row" style="font-size:0.76rem;color:var(--soft);">${sid.sign.name} / ${sid.nakshatra}</span>
         ${close.map(a => `<br><span class="tip-row" style="font-size:0.76rem;">${a.a.key} ${a.aspect.name.toLowerCase()} ${a.b.key} (${a.orb.toFixed(1)}°)</span>`).join('')}
       `;
@@ -1390,10 +1436,12 @@ ${aspectLines || 'none within orb'}`;
           const dot = point(planet.longitude, 207);
           const sid = siderealInfo(planet.longitude);
           const close = aspectData.filter(a => a.a.key === planet.key || a.b.key === planet.key).slice(0, 2);
+          const dign = getPlanetDignity(planet.key, planet.sign.name);
+          const dignColor = dign === 'exalted' ? 'var(--teal)' : dign === 'debilitated' ? 'var(--coral)' : 'var(--gold)';
           tooltip.innerHTML = `
             <span class="tip-name">${planet.glyph} ${planet.key}${planet.retrograde ? ' ℞' : ''}</span><br>
             <span class="tip-row" style="font-size:0.76rem;color:var(--soft);font-style:italic;margin-bottom:4px;display:block;">${PLANET_DESC[planet.key] || ''}</span>
-            <span class="tip-row">${fmtDegree(planet.sign.degree)} ${planet.sign.name}</span><br>
+            <span class="tip-row">${fmtDegree(planet.sign.degree)} ${planet.sign.name}${dign ? ` <span style="color:${dignColor};">(${dign})</span>` : ''}</span><br>
             <span class="tip-row" style="font-size:0.76rem;color:var(--soft);">${sid.sign.name} / ${sid.nakshatra}</span>
             ${close.map(a => `<br><span class="tip-row" style="font-size:0.76rem;">${a.a.key} ${a.aspect.name.toLowerCase()} ${a.b.key} (${a.orb.toFixed(1)}°)</span>`).join('')}
           `;
@@ -1414,47 +1462,59 @@ ${aspectLines || 'none within orb'}`;
     function drawWheel(data, aspectData, date) {
       clearSvg();
       const svgRect = chart.getBoundingClientRect();
+      // Background covers expanded viewBox
+      chart.append(el('rect', { x: -70, y: -70, width: 860, height: 860, fill: '#101012' }));
+
+      // Inner wheel circles — clean, uncluttered
       chart.append(
-        el('rect', { x: 0, y: 0, width: 720, height: 720, fill: '#101012' }),
-        el('circle', { cx: 360, cy: 360, r: 304, fill: 'none', stroke: 'rgba(222,220,209,0.22)' }),
-        el('circle', { cx: 360, cy: 360, r: 270, fill: 'none', stroke: 'rgba(231,187,102,0.1)' }),
-        el('circle', { cx: 360, cy: 360, r: 250, fill: 'none', stroke: 'rgba(222,220,209,0.12)' }),
-        el('circle', { cx: 360, cy: 360, r: 172, fill: 'none', stroke: 'rgba(222,220,209,0.12)', 'stroke-dasharray': '3 5' }),
-        el('circle', { cx: 360, cy: 360, r: 92, fill: 'rgba(255,255,255,0.025)', stroke: 'rgba(222,220,209,0.12)' })
+        el('circle', { cx: 360, cy: 360, r: 92,  fill: 'rgba(255,255,255,0.025)', stroke: 'rgba(222,220,209,0.12)' }),
+        el('circle', { cx: 360, cy: 360, r: 172, fill: 'none', stroke: 'rgba(222,220,209,0.10)', 'stroke-dasharray': '3 5' }),
+        el('circle', { cx: 360, cy: 360, r: 250, fill: 'none', stroke: 'rgba(222,220,209,0.10)' }),
+        el('circle', { cx: 360, cy: 360, r: 280, fill: 'none', stroke: 'rgba(222,220,209,0.16)' })
       );
 
-      // Zodiac ring — sign divisions, glyphs, star markers
+      // Subtle sign-boundary ticks in the planet area
+      for (let i = 0; i < 12; i++) {
+        const ti = point(i * 30, 274), to = point(i * 30, 282);
+        chart.append(el('line', { x1: ti.x, y1: ti.y, x2: to.x, y2: to.y, stroke: 'rgba(231,187,102,0.35)', 'stroke-width': 1 }));
+      }
+
+      // Outer zodiac ring — sits outside the control rings
+      chart.append(
+        el('circle', { cx: 360, cy: 360, r: 352, fill: 'rgba(231,187,102,0.025)', stroke: 'rgba(231,187,102,0.2)' }),
+        el('circle', { cx: 360, cy: 360, r: 396, fill: 'none', stroke: 'rgba(231,187,102,0.22)' })
+      );
+
       for (let i = 0; i < 12; i++) {
         const a = i * 30;
-        const p1 = point(a, 304);
-        const p2 = point(a, 92);
-        const lp = point(a + 15, 287);
-        // Dividing line
-        chart.append(el('line', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, stroke: 'rgba(222,220,209,0.15)' }));
-        // Gold glyph — larger, prominent, symbol font
+        const p1 = point(a, 396), p2 = point(a, 350);
+        const lp = point(a + 15, 378), np = point(a + 15, 362);
+        const sp = point(a, 353);
+
+        // Division line through zodiac band
+        chart.append(el('line', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, stroke: 'rgba(231,187,102,0.28)', 'stroke-width': 1 }));
+
+        // Gold glyph
         chart.append(el('text', {
           x: lp.x, y: lp.y,
           'text-anchor': 'middle', 'dominant-baseline': 'middle',
-          fill: '#e7bb66', 'font-size': 22, 'font-weight': 700,
+          fill: '#e7bb66', 'font-size': 20, 'font-weight': 700,
           'font-family': "'Noto Sans Symbols 2','Segoe UI Symbol',Symbol,sans-serif"
         }, signs[i][1]));
-        // Sign name — smaller, muted
-        const np = point(a + 15, 266);
+
+        // Sign name
         chart.append(el('text', {
           x: np.x, y: np.y,
           'text-anchor': 'middle', 'dominant-baseline': 'middle',
-          fill: '#7a7870', 'font-size': 8.5, 'letter-spacing': '0.5'
+          fill: '#7a7870', 'font-size': 7.5
         }, signs[i][0].toUpperCase()));
-        // 4-pointed star at each sign boundary on outer ring
-        const sp = point(a, 304);
-        const sr = 4;
+
+        // 4-pointed star at sign boundary
+        const sr = 3;
         chart.append(el('path', {
           d: `M ${sp.x} ${sp.y - sr} L ${sp.x + sr * 0.3} ${sp.y - sr * 0.3} L ${sp.x + sr} ${sp.y} L ${sp.x + sr * 0.3} ${sp.y + sr * 0.3} L ${sp.x} ${sp.y + sr} L ${sp.x - sr * 0.3} ${sp.y + sr * 0.3} L ${sp.x - sr} ${sp.y} L ${sp.x - sr * 0.3} ${sp.y - sr * 0.3} Z`,
-          fill: 'rgba(231,187,102,0.55)', 'pointer-events': 'none'
+          fill: 'rgba(231,187,102,0.5)', 'pointer-events': 'none'
         }));
-        // Small decorative dots midway in outer ring
-        const dp = point(a + 15, 304);
-        chart.append(el('circle', { cx: dp.x, cy: dp.y, r: 1.5, fill: 'rgba(231,187,102,0.25)', 'pointer-events': 'none' }));
       }
 
       aspectData.forEach(({ a, b, aspect }) => {
@@ -1619,7 +1679,9 @@ ${aspectLines || 'none within orb'}`;
         const row = document.createElement('div');
         row.className = 'row';
         const horizon = planet.horizon ? `${planet.horizon.altitude >= 0 ? 'up' : 'below'} ${planet.horizon.altitude.toFixed(0)}°` : 'geo';
-        row.innerHTML = `<strong>${planet.glyph} ${planet.key}</strong><span>${fmtDegree(planet.sign.degree)} ${planet.sign.name}${planet.retrograde ? ' ℞' : ''}</span><span>${horizon}</span>`;
+        const dignity = getPlanetDignity(planet.key, planet.sign.name);
+        const dignityMark = dignity === 'exalted' ? ' ↑' : dignity === 'debilitated' ? ' ↓' : dignity === 'domicile' ? ' ●' : '';
+        row.innerHTML = `<strong>${planet.glyph} ${planet.key}</strong><span>${fmtDegree(planet.sign.degree)} ${planet.sign.name}${planet.retrograde ? ' ℞' : ''}${dignityMark ? `<em style="color:var(--${dignity === 'exalted' ? 'teal' : dignity === 'debilitated' ? 'coral' : 'gold'});font-style:normal;font-size:0.8em;"> ${dignityMark.trim()}</em>` : ''}</span><span>${horizon}</span>`;
         row.addEventListener('click', () => { selected = planet.key; render(); });
         return row;
       }));
@@ -1633,8 +1695,19 @@ ${aspectLines || 'none within orb'}`;
       const aspectLine = closeAspects.length
         ? ` Key aspect: ${closeAspects.map((item) => `${item.a.key} ${item.aspect.name.toLowerCase()} ${item.b.key} (${item.orb.toFixed(1)}° orb)`).join('; ')}.`
         : ' No tight major aspect is highlighted for this body at the selected time.';
-      insightTitle.textContent = `${planet.key}${planet.retrograde ? ' Retrograde' : ''} in ${planet.sign.name}`;
-      insightText.textContent = `${planet.key} is at ${fmtDegree(planet.sign.degree)} ${planet.sign.name}.${localLine} ${aspectLine}`;
+      const dignity = getPlanetDignity(planet.key, planet.sign.name);
+      const dignityStr = dignity ? ` (${dignity})` : '';
+      insightTitle.textContent = `${planet.key}${planet.retrograde ? ' Retrograde' : ''} in ${planet.sign.name}${dignityStr}`;
+
+      const moon = data.find(p => p.key === 'Moon');
+      const sun = data.find(p => p.key === 'Sun');
+      let panchaStr = '';
+      if (moon && sun) {
+        const tithi = getTithi(moon.longitude, sun.longitude);
+        const yoga = getYoga(moon.longitude, sun.longitude);
+        panchaStr = ` Tithi: ${tithi.paksha} ${tithi.name} (${tithi.number}). Yoga: ${yoga}.`;
+      }
+      insightText.textContent = `${planet.key} is at ${fmtDegree(planet.sign.degree)} ${planet.sign.name}.${localLine}${panchaStr} ${aspectLine}`;
 
       const dateText = date.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
       const aspectText = aspectData.slice(0, 3).map((item) => `${item.a.key} ${item.aspect.name.toLowerCase()} ${item.b.key}`).join(', ');
@@ -2239,6 +2312,7 @@ ${aspectLines || 'none within orb'}`;
 
     document.getElementById('journalChangePwdBtn').addEventListener('click', () => {
       document.getElementById('journalChangePwdPanel').classList.remove('hidden');
+      document.getElementById('journalDisplayNameEdit').value = journalName;
     });
 
     document.getElementById('journalCancelChangePwdBtn').addEventListener('click', () => {
@@ -2252,15 +2326,29 @@ ${aspectLines || 'none within orb'}`;
       const current = document.getElementById('journalCurrentPwd').value;
       const next = document.getElementById('journalNewPwd').value;
       const confirm = document.getElementById('journalConfirmNewPwd').value;
+      const newName = document.getElementById('journalDisplayNameEdit').value.trim();
+
+      // Allow saving name even if password fields are empty (name-only update)
+      if (!current && !next && !confirm) {
+        journalName = newName;
+        await journalPersist();
+        document.getElementById('journalChangePwdPanel').classList.add('hidden');
+        journalUpdateMeta();
+        setStatus('Name updated.');
+        return;
+      }
+
       if (next.length < 8) { setStatus('New password must be at least 8 characters.'); return; }
       if (next !== confirm) { setStatus('New passwords do not match.'); return; }
       try {
+        journalName = newName;
         await journalChangePassword(current, next);
         document.getElementById('journalChangePwdPanel').classList.add('hidden');
         ['journalCurrentPwd', 'journalNewPwd', 'journalConfirmNewPwd'].forEach(id => {
           document.getElementById(id).value = '';
         });
-        setStatus('Password updated.');
+        journalUpdateMeta();
+        setStatus('Settings saved.');
       } catch (e) { setStatus('Current password is incorrect.'); }
     });
 
