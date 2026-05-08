@@ -47,12 +47,15 @@
       margin: 0 auto;
       display: grid;
       grid-template-columns: minmax(340px, 720px) minmax(310px, 420px);
-      align-items: center;
+      grid-template-rows: auto auto;
+      align-items: start;
       gap: 30px;
       padding: 28px 0;
     }
 
     .map-shell {
+      grid-column: 1;
+      grid-row: 1;
       min-width: 0;
       aspect-ratio: 1;
       border: 1px solid var(--line);
@@ -60,6 +63,55 @@
       overflow: hidden;
       background: rgba(12, 12, 14, 0.72);
       box-shadow: 0 22px 80px rgba(0, 0, 0, 0.38);
+    }
+
+    .side {
+      grid-column: 2;
+      grid-row: 1 / 3;
+      align-self: start;
+    }
+
+    .planet-legend {
+      grid-column: 1;
+      grid-row: 2;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 10px 0;
+    }
+
+    .legend-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 9px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      cursor: default;
+      transition: background 0.15s;
+      font-size: 0.78rem;
+    }
+
+    .legend-badge:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    .legend-glyph {
+      font-size: 1rem;
+      line-height: 1;
+      font-family: 'Noto Sans Symbols 2', 'Segoe UI Symbol', Symbol, sans-serif;
+    }
+
+    .legend-name {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .legend-pos {
+      color: var(--soft);
+      font-size: 0.72rem;
     }
 
     svg {
@@ -620,6 +672,8 @@
       </svg>
     </section>
 
+    <div id="planetLegend" class="planet-legend"></div>
+
     <aside class="side">
       <div>
         <div class="eyebrow" id="dateEyebrow">Today</div>
@@ -1164,6 +1218,57 @@ ${aspectLines || 'none within orb'}`;
     }
     function hideTooltip() { tooltip.style.display = 'none'; }
 
+    const PLANET_DESC = {
+      Sun:     'Core identity, vitality, and life force. The planet you orbit your life around.',
+      Moon:    'Emotions, instinct, memory, and daily rhythm. How you feel before you think.',
+      Mercury: 'Mind, communication, and movement. How you process, speak, and connect.',
+      Venus:   'Attraction, beauty, values, and pleasure. What you love and how you love.',
+      Mars:    'Drive, will, and action. Where you push, fight, or initiate.',
+      Jupiter: 'Expansion, luck, and wisdom. Where life opens up and offers more.',
+      Saturn:  'Structure, discipline, and limits. Where the work is, and the mastery.',
+      Uranus:  'Disruption, liberation, and the unexpected. Where patterns break open.',
+      Neptune: 'Dreams, fog, and transcendence. Where intuition and illusion blur.',
+      Pluto:   'Transformation, power, and deep change. What cannot stay the same.'
+    };
+
+    function renderPlanetLegend(data, aspectData) {
+      const legend = document.getElementById('planetLegend');
+      if (!legend) return;
+      legend.innerHTML = '';
+      const svgRect = chart.getBoundingClientRect();
+      data.forEach(planet => {
+        const badge = document.createElement('div');
+        badge.className = 'legend-badge';
+        badge.innerHTML = `
+          <span class="legend-glyph" style="color:${planet.color};">${planet.glyph}</span>
+          <span class="legend-name" style="color:${planet.color};">${planet.key}${planet.retrograde ? ' ℞' : ''}</span>
+          <span class="legend-pos">${fmtDegree(planet.sign.degree)} ${planet.sign.name}</span>
+        `;
+        badge.addEventListener('mouseenter', () => {
+          const dot = point(planet.longitude, 207);
+          const sid = siderealInfo(planet.longitude);
+          const close = aspectData.filter(a => a.a.key === planet.key || a.b.key === planet.key).slice(0, 2);
+          tooltip.innerHTML = `
+            <span class="tip-name">${planet.glyph} ${planet.key}${planet.retrograde ? ' ℞' : ''}</span><br>
+            <span class="tip-row" style="font-size:0.76rem;color:var(--soft);font-style:italic;margin-bottom:4px;display:block;">${PLANET_DESC[planet.key] || ''}</span>
+            <span class="tip-row">${fmtDegree(planet.sign.degree)} ${planet.sign.name}</span><br>
+            <span class="tip-row" style="font-size:0.76rem;color:var(--soft);">${sid.sign.name} / ${sid.nakshatra}</span>
+            ${close.map(a => `<br><span class="tip-row" style="font-size:0.76rem;">${a.a.key} ${a.aspect.name.toLowerCase()} ${a.b.key} (${a.orb.toFixed(1)}°)</span>`).join('')}
+          `;
+          const rect = badge.getBoundingClientRect();
+          tooltip.style.left = `${Math.min(rect.left, window.innerWidth - 248)}px`;
+          tooltip.style.top = `${rect.top - 10}px`;
+          tooltip.style.transform = 'translateY(-100%)';
+          tooltip.style.display = 'block';
+        });
+        badge.addEventListener('mouseleave', () => {
+          hideTooltip();
+          tooltip.style.transform = '';
+        });
+        legend.appendChild(badge);
+      });
+    }
+
     function drawWheel(data, aspectData, date) {
       clearSvg();
       const svgRect = chart.getBoundingClientRect();
@@ -1220,37 +1325,45 @@ ${aspectLines || 'none within orb'}`;
         }));
       });
 
-      // Planet orbit levels — 4 rings to reduce overlap
-      const orbitR = [210, 224, 238, 224];
-      data.forEach((planet, index) => {
-        const r = orbitR[index % 4];
-        const p = point(planet.longitude, r);
+      // Planet position markers — tick + dot at degree, legend outside wheel
+      data.forEach((planet) => {
+        const inner = point(planet.longitude, 168);
+        const outer = point(planet.longitude, 246);
+        const dot = point(planet.longitude, 207);
+        const isSelected = planet.key === selected;
+
+        // Radial tick line from inner orbit band outward
+        chart.append(el('line', {
+          x1: inner.x, y1: inner.y, x2: outer.x, y2: outer.y,
+          stroke: planet.color, 'stroke-width': isSelected ? 2 : 1,
+          opacity: isSelected ? 0.9 : 0.45
+        }));
+
+        // Position dot + transparent hit circle
         const group = el('g', { class: 'planet-hit', tabindex: 0, role: 'button', 'aria-label': planet.key });
         group.addEventListener('click', () => { selected = planet.key; render(); });
         group.addEventListener('keydown', (event) => {
           if (event.key === 'Enter' || event.key === ' ') { selected = planet.key; render(); }
         });
-        group.addEventListener('mouseenter', () => showTooltip(planet, aspectData, svgRect, p));
+        group.addEventListener('mouseenter', () => showTooltip(planet, aspectData, svgRect, dot));
         group.addEventListener('mouseleave', hideTooltip);
-        group.addEventListener('touchstart', () => showTooltip(planet, aspectData, svgRect, p), { passive: true });
+        group.addEventListener('touchstart', () => showTooltip(planet, aspectData, svgRect, dot), { passive: true });
         group.addEventListener('touchend', hideTooltip, { passive: true });
         group.append(
+          el('circle', { cx: dot.x, cy: dot.y, r: 14, fill: 'transparent' }),
           el('circle', {
-            class: 'planet-ring', cx: p.x, cy: p.y,
-            r: planet.key === selected ? 21 : 17,
-            fill: '#1a1a20',
-            stroke: planet.color,
-            'stroke-width': planet.key === selected ? 2.5 : 1.2
-          }),
-          el('text', {
-            x: p.x, y: p.y + 1,
-            'text-anchor': 'middle', 'dominant-baseline': 'middle',
-            fill: planet.color, 'font-size': 17, 'font-weight': 800,
-            'font-family': "'Noto Sans Symbols 2','Segoe UI Symbol',Symbol,sans-serif"
-          }, planet.glyph)
+            cx: dot.x, cy: dot.y,
+            r: isSelected ? 7 : 5,
+            fill: planet.color,
+            stroke: isSelected ? '#fff' : 'none',
+            'stroke-width': isSelected ? 1.5 : 0,
+            opacity: isSelected ? 1 : 0.85
+          })
         );
         chart.append(group);
       });
+
+      renderPlanetLegend(data, aspectData);
 
       const dateText = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
       const timeText = date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
