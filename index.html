@@ -380,6 +380,18 @@
     .j-enc-notice.privacy { text-align: left; line-height: 1.6; }
     .j-enc-notice.privacy strong { color: var(--gold); display: block; margin-bottom: 4px; }
 
+    .logo-header { display: flex; flex-direction: column; gap: 4px; }
+    .logo-svg { display: block; width: 100%; max-width: 280px; height: auto; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+    .j-unlock-welcome {
+      font-size: 0.88rem;
+      color: var(--muted);
+      text-align: center;
+      padding: 4px 0 10px;
+    }
+    .j-unlock-welcome strong { color: var(--text); }
+
     .j-heading { margin: 0 0 6px; font-size: 1.05rem; }
     .j-subheading { margin: 0 0 12px; font-size: 1rem; }
     .j-note-bottom { margin-bottom: 16px; }
@@ -618,6 +630,11 @@
       accent-color: var(--gold);
     }
 
+    input[readonly] {
+      opacity: 0.6;
+      cursor: default;
+    }
+
     .wide { grid-column: 1 / -1; }
 
     .actions, .jump-row, .tag-row {
@@ -778,9 +795,48 @@
     <div id="planetLegend" class="planet-legend"></div>
 
     <aside class="side">
-      <div>
+      <div class="logo-header">
+        <svg class="logo-svg" viewBox="0 0 220 178" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <radialGradient id="lsSunGrad" cx="38%" cy="34%" r="62%">
+              <stop offset="0%" stop-color="#f5d98a"/>
+              <stop offset="55%" stop-color="#e7bb66"/>
+              <stop offset="100%" stop-color="#b8892a"/>
+            </radialGradient>
+            <linearGradient id="lsCrGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#2a5888"/>
+              <stop offset="100%" stop-color="#4a84b8"/>
+            </linearGradient>
+          </defs>
+          <!-- Orbital ring — drawn first so crescent covers the back portion -->
+          <ellipse cx="110" cy="80" rx="74" ry="25" fill="none"
+                   stroke="#4a84b8" stroke-width="2.2" opacity="0.88"
+                   transform="rotate(-35, 110, 80)"/>
+          <!-- Large crescent moon -->
+          <path d="M 132.75 33.24 A 52 52 0 1 0 132.75 126.76 A 47 47 0 1 1 132.75 33.24 Z"
+                fill="url(#lsCrGrad)"/>
+          <!-- Gold sun -->
+          <circle cx="123" cy="80" r="24" fill="url(#lsSunGrad)"/>
+          <!-- Main sparkle — upper right of orbit -->
+          <path d="M 164 36 L 166.24 41.76 L 172 44 L 166.24 46.24 L 164 52 L 161.76 46.24 L 156 44 L 161.76 41.76 Z"
+                fill="#c5eef5"/>
+          <!-- Secondary sparkle — right side -->
+          <path d="M 174 80 L 175.4 83.4 L 178.8 84.6 L 175.4 85.8 L 174 89.2 L 172.6 85.8 L 169.2 84.6 L 172.6 83.4 Z"
+                fill="#8dcfe8" opacity="0.9"/>
+          <!-- Bottom sparkle — below crescent on orbit path -->
+          <path d="M 103 130 L 105.1 135.4 L 110.5 137.2 L 105.1 139 L 103 144.4 L 100.9 139 L 95.5 137.2 L 100.9 135.4 Z"
+                fill="#9ee8e0" opacity="0.85"/>
+          <!-- Small crescent moon — lower left of orbit -->
+          <path d="M 59.86 108.26 A 10 10 0 1 0 59.86 125.74 A 9 9 0 1 1 59.86 108.26 Z"
+                fill="#4a84b8"/>
+          <!-- Wordmark -->
+          <text x="110" y="169" text-anchor="middle"
+                fill="#f8f5ec" font-size="20" font-weight="700"
+                font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                letter-spacing="-0.2">LuminaSynodic</text>
+        </svg>
+        <h1 class="sr-only">LuminaSynodic</h1>
         <div class="eyebrow" id="dateEyebrow">Today</div>
-        <h1>LuminaSynodic</h1>
       </div>
       <p class="lede">Live ephemeris positions with date travel, major aspects, retrogrades, and optional local horizon context.</p>
 
@@ -871,6 +927,10 @@
               </div>
             </div>
             <div id="journalUnlockForm" class="hidden">
+              <p class="j-unlock-welcome hidden" id="journalUnlockWelcome">Welcome back, <strong id="journalWelcomeName"></strong></p>
+              <label>Display name
+                <input type="text" id="journalUnlockNameDisplay" placeholder="—" readonly autocomplete="off">
+              </label>
               <label>Password
                 <input type="password" id="journalPwd" placeholder="Enter your journal password" autocomplete="current-password">
               </label>
@@ -2066,6 +2126,8 @@ ${aspectLines || 'none within orb'}`;
       journalEntries = [];
       const enc = await journalEncrypt(journalKey, { name: journalName, entries: journalEntries });
       localStorage.setItem(JOURNAL_STORE, JSON.stringify({ salt: b64enc(salt), ...enc }));
+      if (journalName) localStorage.setItem('astro_journal_dname', journalName);
+      else localStorage.removeItem('astro_journal_dname');
     }
 
     async function journalUnlock(password) {
@@ -2175,6 +2237,18 @@ ${aspectLines || 'none within orb'}`;
           setupForm.classList.add('hidden');
           unlockForm.classList.remove('hidden');
           msg.textContent = 'Your journal is encrypted locally on this device.';
+          const storedName = localStorage.getItem('astro_journal_dname');
+          const nameDisplay = document.getElementById('journalUnlockNameDisplay');
+          const welcome = document.getElementById('journalUnlockWelcome');
+          const welcomeName = document.getElementById('journalWelcomeName');
+          if (storedName && nameDisplay) {
+            nameDisplay.value = storedName;
+            welcomeName.textContent = storedName;
+            welcome.classList.remove('hidden');
+          } else if (nameDisplay) {
+            nameDisplay.value = '';
+            welcome.classList.add('hidden');
+          }
         } else {
           setupForm.classList.remove('hidden');
           unlockForm.classList.add('hidden');
@@ -2353,6 +2427,7 @@ ${aspectLines || 'none within orb'}`;
       const word = document.getElementById('journalClearConfirm').value.trim();
       if (word !== 'CLEAR') { setStatus('Type CLEAR (all caps) to confirm.'); return; }
       await journalClearAll();
+      localStorage.removeItem('astro_journal_dname');
       document.getElementById('journalClearPanel').classList.add('hidden');
       document.getElementById('journalClearConfirm').value = '';
       renderJournal();
@@ -2381,6 +2456,8 @@ ${aspectLines || 'none within orb'}`;
       if (!current && !next && !confirm) {
         journalName = newName;
         await journalPersist();
+        if (newName) localStorage.setItem('astro_journal_dname', newName);
+        else localStorage.removeItem('astro_journal_dname');
         document.getElementById('journalChangePwdPanel').classList.add('hidden');
         journalUpdateMeta();
         setStatus('Name updated.');
@@ -2392,6 +2469,8 @@ ${aspectLines || 'none within orb'}`;
       try {
         journalName = newName;
         await journalChangePassword(current, next);
+        if (newName) localStorage.setItem('astro_journal_dname', newName);
+        else localStorage.removeItem('astro_journal_dname');
         document.getElementById('journalChangePwdPanel').classList.add('hidden');
         ['journalCurrentPwd', 'journalNewPwd', 'journalConfirmNewPwd'].forEach(id => {
           document.getElementById(id).value = '';
