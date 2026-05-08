@@ -98,6 +98,11 @@
       border-color: rgba(255, 255, 255, 0.22);
     }
 
+    .legend-badge--active {
+      background: rgba(231, 187, 102, 0.12);
+      border-color: rgba(231, 187, 102, 0.5);
+    }
+
     .legend-glyph {
       font-size: 1rem;
       line-height: 1;
@@ -372,6 +377,8 @@
 
     .j-label-hint { color: var(--soft); font-weight: 400; }
     .j-enc-notice { text-align: center; margin-top: 8px; font-size: 0.74rem; }
+    .j-enc-notice.privacy { text-align: left; line-height: 1.6; }
+    .j-enc-notice.privacy strong { color: var(--gold); display: block; margin-bottom: 4px; }
 
     .j-heading { margin: 0 0 6px; font-size: 1.05rem; }
     .j-subheading { margin: 0 0 12px; font-size: 1rem; }
@@ -454,6 +461,100 @@
       text-align: center;
       padding: 20px 0;
       margin: 0;
+    }
+
+    .j-entry-tabs {
+      display: flex;
+      gap: 3px;
+      background: rgba(0, 0, 0, 0.22);
+      border-radius: 8px;
+      padding: 3px;
+      margin-bottom: 10px;
+    }
+
+    .j-entry-tab {
+      flex: 1;
+      background: none;
+      border: none;
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 5px 4px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      font-family: inherit;
+    }
+
+    .j-entry-tab.active {
+      background: rgba(255, 255, 255, 0.09);
+      color: var(--text);
+    }
+
+    .j-entry-tab:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .dream-badge {
+      font-size: 0.68rem;
+      padding: 1px 6px;
+      border-radius: 10px;
+      background: rgba(170, 151, 232, 0.15);
+      border: 1px solid rgba(170, 151, 232, 0.3);
+      color: var(--violet);
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .j-chat-log {
+      min-height: 80px;
+      max-height: 340px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 4px 0 8px;
+    }
+
+    .j-bubble {
+      border-radius: 8px;
+      padding: 8px 11px;
+      font-size: 0.86rem;
+      line-height: 1.55;
+    }
+
+    .j-bubble.user {
+      background: rgba(231, 187, 102, 0.08);
+      border: 1px solid rgba(231, 187, 102, 0.22);
+      color: var(--text);
+      align-self: flex-end;
+      max-width: 90%;
+    }
+
+    .j-bubble.ai {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .j-bubble.ai strong { color: var(--text); }
+
+    .j-chat-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 6px;
+      align-items: end;
+    }
+
+    .j-chat-input {
+      min-height: 56px;
+      resize: vertical;
+    }
+
+    .j-chat-panel {
+      margin-top: 10px;
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
     }
 
     .planet-tooltip {
@@ -682,9 +783,9 @@
       <p class="lede">Live ephemeris positions with date travel, major aspects, retrogrades, and optional local horizon context.</p>
 
       <div class="tabs">
-        <button class="tab-btn active" data-tab="sky">Sky</button>
-        <button class="tab-btn" data-tab="calendar">Calendar</button>
-        <button class="tab-btn" data-tab="journal">Journal</button>
+        <button type="button" class="tab-btn active" data-tab="sky">Sky</button>
+        <button type="button" class="tab-btn" data-tab="calendar">Calendar</button>
+        <button type="button" class="tab-btn" data-tab="journal">Journal</button>
       </div>
 
       <div id="skyTab" class="tab-content active">
@@ -699,12 +800,12 @@
             <input id="offsetRange" type="range" min="-30" max="30" value="0">
           </label>
           <div class="jump-row wide">
-            <button class="secondary" data-shift="-7">-7d</button>
-            <button class="secondary" data-shift="-1">-1d</button>
-            <button id="todayBtn">Today</button>
-            <button class="secondary" data-shift="1">+1d</button>
-            <button class="secondary" data-shift="7">+7d</button>
-            <button class="secondary" id="locationBtn">Use My Location</button>
+            <button type="button" class="secondary" data-shift="-7">-7d</button>
+            <button type="button" class="secondary" data-shift="-1">-1d</button>
+            <button type="button" id="todayBtn">Today</button>
+            <button type="button" class="secondary" data-shift="1">+1d</button>
+            <button type="button" class="secondary" data-shift="7">+7d</button>
+            <button type="button" class="secondary" id="locationBtn">Use My Location</button>
           </div>
         </section>
 
@@ -762,13 +863,17 @@
                 <input type="password" id="journalPwdConfirm" placeholder="Confirm password" autocomplete="new-password">
               </label>
               <button type="button" id="journalSetupBtn" class="j-form-btn">Create Journal</button>
-              <p class="source-note j-enc-notice">All entries are encrypted on your device. Nothing is sent to any server.</p>
+              <div class="source-note j-enc-notice privacy">
+                <strong>🔐 Privacy notice</strong>
+                Your journal is encrypted on your device using AES-256. <strong>Your password cannot be recovered</strong> — there is no reset option, no backup link, and no way to access your entries without it. No one — including the app developer — can read your entries. They never leave your device. Save your password somewhere safe before continuing.
+              </div>
             </div>
             <div id="journalUnlockForm" class="hidden">
               <label>Password
                 <input type="password" id="journalPwd" placeholder="Enter your journal password" autocomplete="current-password">
               </label>
               <button type="button" id="journalUnlockBtn" class="j-form-btn">Unlock</button>
+              <p class="source-note j-enc-notice">Journal is AES-256 encrypted locally. Password is not recoverable.</p>
             </div>
           </section>
         </div>
@@ -786,15 +891,31 @@
                 <button type="button" class="secondary btn-sm" id="journalLockBtn">Lock</button>
               </div>
             </div>
-            <label>New entry
-              <textarea id="journalEntryInput" placeholder="Write your thoughts..."></textarea>
-            </label>
-            <div class="actions j-actions">
-              <button type="button" id="journalSaveEntryBtn">Save Entry</button>
-              <label class="journal-attach-row">
-                <input type="checkbox" id="journalAttachAnalysis">
-                Attach sky reading
+            <div class="j-entry-tabs">
+              <button type="button" class="j-entry-tab active" data-entry="journal">Journal Entry</button>
+              <button type="button" class="j-entry-tab" data-entry="dream">🌙 Dream Log</button>
+            </div>
+
+            <div id="journalEntrySection">
+              <label>New entry
+                <textarea id="journalEntryInput" placeholder="Write your thoughts..."></textarea>
               </label>
+              <div class="actions j-actions">
+                <button type="button" id="journalSaveEntryBtn">Save Entry</button>
+                <label class="journal-attach-row">
+                  <input type="checkbox" id="journalAttachAnalysis">
+                  Attach sky reading
+                </label>
+              </div>
+            </div>
+
+            <div id="dreamEntrySection" class="hidden">
+              <label>Dream log
+                <textarea id="dreamEntryInput" placeholder="Describe your dream — symbols, emotions, people, colors, what stood out..."></textarea>
+              </label>
+              <div class="actions j-actions">
+                <button type="button" id="dreamSaveBtn">Save &amp; Interpret</button>
+              </div>
             </div>
             <div class="j-mgmt-row">
               <button type="button" class="secondary btn-sm" id="journalExportBtn">Export Backup</button>
@@ -802,6 +923,22 @@
             </div>
             <div id="journalPatternStats" class="pattern-stats hidden"></div>
             <div class="journal-list j-list-area" id="journalList"></div>
+          </section>
+
+          <!-- Journal AI Chat -->
+          <section class="panel j-chat-panel">
+            <div class="j-header">
+              <div>
+                <h2>Sky Reflection</h2>
+                <p class="j-entry-count">Ask about your entries, patterns, or dreams</p>
+              </div>
+              <button type="button" class="secondary btn-sm" id="journalClearChatBtn">Clear</button>
+            </div>
+            <div id="journalChatLog" class="j-chat-log"></div>
+            <div class="j-chat-row">
+              <textarea id="journalChatInput" class="j-chat-input" placeholder="What patterns do you see in my recent entries? What does this dream mean?"></textarea>
+              <button type="button" id="journalChatSendBtn">Ask</button>
+            </div>
           </section>
 
           <!-- Change password panel -->
@@ -832,11 +969,11 @@
 
       </div>
 
-      <textarea class="caption" id="caption"></textarea>
+      <textarea class="caption" id="caption" aria-label="Sky caption"></textarea>
 
       <div class="actions">
-        <button id="copyCaption">Copy Caption</button>
-        <button class="secondary" id="sharePage">Share Link</button>
+        <button type="button" id="copyCaption">Copy Caption</button>
+        <button type="button" class="secondary" id="sharePage">Share Link</button>
         <a class="button secondary" href="sky-map-social.png" download>Download Preview</a>
       </div>
       <p class="source-note">Ephemeris: Astronomy Engine, an MIT-licensed library based on VSOP87 and NOVAS models. Location is used for local horizon altitude/azimuth, not stored or sent anywhere. AI query support is available on Netlify when QUERY_API_KEY is configured.</p>
@@ -1238,12 +1375,17 @@ ${aspectLines || 'none within orb'}`;
       const svgRect = chart.getBoundingClientRect();
       data.forEach(planet => {
         const badge = document.createElement('div');
-        badge.className = 'legend-badge';
+        badge.className = planet.key === selected ? 'legend-badge legend-badge--active' : 'legend-badge';
         badge.innerHTML = `
           <span class="legend-glyph" style="color:${planet.color};">${planet.glyph}</span>
           <span class="legend-name" style="color:${planet.color};">${planet.key}${planet.retrograde ? ' ℞' : ''}</span>
           <span class="legend-pos">${fmtDegree(planet.sign.degree)} ${planet.sign.name}</span>
         `;
+        badge.addEventListener('click', () => {
+          selected = selected === planet.key ? null : planet.key;
+          render();
+        });
+        badge.style.cursor = 'pointer';
         badge.addEventListener('mouseenter', () => {
           const dot = point(planet.longitude, 207);
           const sid = siderealInfo(planet.longitude);
@@ -1836,14 +1978,15 @@ ${aspectLines || 'none within orb'}`;
       }
     }
 
-    async function journalAddEntry(text, skyNote, alignment, moonPhase) {
+    async function journalAddEntry(text, skyNote, alignment, moonPhase, entryType) {
       journalEntries.unshift({
         id: Date.now(),
         date: new Date().toISOString(),
         text,
         skyNote: skyNote || null,
         alignment: alignment ?? null,
-        moonPhase: moonPhase || getMoonPhaseName(new Date())
+        moonPhase: moonPhase || getMoonPhaseName(new Date()),
+        entryType: entryType || 'journal'
       });
       if (journalEntries.length > 500) journalEntries.length = 500;
       await journalPersist();
@@ -1995,8 +2138,9 @@ ${aspectLines || 'none within orb'}`;
         const moonBadge = entry.moonPhase
           ? `<span style="font-size:0.7rem;color:var(--soft);margin-left:6px;">${entry.moonPhase}</span>`
           : '';
+        const dreamBadge = entry.entryType === 'dream' ? `<span class="dream-badge">🌙 dream</span>` : '';
         div.innerHTML = `
-          <div class="journal-date">${dateStr}${moonBadge}${alignBadge}</div>
+          <div class="journal-date">${dateStr}${moonBadge}${dreamBadge}${alignBadge}</div>
           <div class="journal-body">${escapeHtml(entry.text)}</div>
           ${entry.skyNote ? `<details><summary>Sky reading</summary><div class="journal-sky-note">${escapeHtml(entry.skyNote)}</div></details>` : ''}
           <button type="button" data-del="${entry.id}" class="secondary btn-sm j-del-btn">Delete</button>
@@ -2129,6 +2273,108 @@ ${aspectLines || 'none within orb'}`;
           (stored ? document.getElementById('journalUnlockBtn') : document.getElementById('journalSetupBtn')).click();
         }
       });
+    });
+
+    // ── Journal entry type tabs (Journal / Dream) ──
+    document.querySelectorAll('.j-entry-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.j-entry-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const mode = btn.dataset.entry;
+        document.getElementById('journalEntrySection').classList.toggle('hidden', mode !== 'journal');
+        document.getElementById('dreamEntrySection').classList.toggle('hidden', mode !== 'dream');
+      });
+    });
+
+    // ── Dream save + interpret ──
+    function buildJournalContext(question) {
+      const recent = journalEntries.slice(0, 5);
+      const dreams = journalEntries.filter(e => e.entryType === 'dream').slice(0, 3);
+      const scored = journalEntries.filter(e => e.alignment !== null);
+      const avgAlign = scored.length ? Math.round(scored.reduce((s, e) => s + e.alignment, 0) / scored.length) : null;
+
+      const entryLines = recent.map(e => {
+        const d = new Date(e.date).toLocaleDateString();
+        const tag = e.entryType === 'dream' ? '[Dream] ' : '';
+        const align = e.alignment != null ? ` (${e.alignment}% alignment, ${e.moonPhase})` : '';
+        return `${d}${align} — ${tag}${e.text.slice(0, 280)}${e.text.length > 280 ? '...' : ''}`;
+      }).join('\n');
+
+      return [
+        `The user has ${journalEntries.length} encrypted journal entries.`,
+        avgAlign != null ? `Average sky alignment across ${scored.length} scored entries: ${avgAlign}%.` : '',
+        recent.length ? `\nRecent entries:\n${entryLines}` : '',
+        `\nUser's question: ${question}`
+      ].filter(Boolean).join(' ');
+    }
+
+    function journalAddChatBubble(html, type) {
+      const chatLog = document.getElementById('journalChatLog');
+      const div = document.createElement('div');
+      div.className = `j-bubble ${type}`;
+      div.innerHTML = html;
+      chatLog.appendChild(div);
+      chatLog.scrollTop = chatLog.scrollHeight;
+      return div;
+    }
+
+    document.getElementById('dreamSaveBtn').addEventListener('click', async () => {
+      if (!journalKey) { setStatus('Unlock your journal first.'); return; }
+      const input = document.getElementById('dreamEntryInput');
+      const text = input.value.trim();
+      if (!text) { setStatus('Describe your dream first.'); return; }
+
+      await journalAddEntry(text, null, null, getMoonPhaseName(new Date()), 'dream');
+      input.value = '';
+      renderJournal();
+      renderPatternStats();
+      setStatus('Dream logged.');
+
+      // Auto-interpret in the chat panel
+      const prompt = `Dream interpretation request:\n\n${text}`;
+      journalAddChatBubble(`<em>🌙 Dream logged — interpreting...</em>`, 'ai');
+      try {
+        const skyContext = buildSkyContext(latestData, latestAspects, latestDate);
+        const fullPrompt = buildJournalContext(prompt);
+        const response = await querySkyAssistant(fullPrompt, skyContext);
+        const chatLog = document.getElementById('journalChatLog');
+        chatLog.lastElementChild.innerHTML = formatSkyReading(response);
+        chatLog.scrollTop = chatLog.scrollHeight;
+      } catch {
+        const chatLog = document.getElementById('journalChatLog');
+        chatLog.lastElementChild.innerHTML = 'Dream logged. AI interpretation unavailable — check connection.';
+      }
+    });
+
+    // ── Journal AI Chat ──
+    async function sendJournalChat() {
+      if (!journalKey) { setStatus('Unlock your journal first.'); return; }
+      const input = document.getElementById('journalChatInput');
+      const question = input.value.trim();
+      if (!question) return;
+
+      journalAddChatBubble(escapeHtml(question), 'user');
+      input.value = '';
+      const thinking = journalAddChatBubble('Reading your entries...', 'ai');
+
+      try {
+        const skyContext = buildSkyContext(latestData, latestAspects, latestDate);
+        const fullPrompt = buildJournalContext(question);
+        const response = await querySkyAssistant(fullPrompt, skyContext);
+        thinking.innerHTML = formatSkyReading(response);
+      } catch {
+        thinking.innerHTML = 'Unable to reach AI. Check your connection.';
+      }
+      document.getElementById('journalChatLog').scrollTop = Infinity;
+    }
+
+    document.getElementById('journalChatSendBtn').addEventListener('click', sendJournalChat);
+    document.getElementById('journalChatInput').addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') sendJournalChat();
+    });
+
+    document.getElementById('journalClearChatBtn').addEventListener('click', () => {
+      document.getElementById('journalChatLog').innerHTML = '';
     });
 
   </script>
