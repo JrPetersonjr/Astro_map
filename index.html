@@ -852,6 +852,17 @@
       const sidereal = siderealInfo(planet.longitude);
       return `${planet.key}: tropical ${fmtDegree(planet.sign.degree)} ${planet.sign.name}; sidereal ${fmtDegree(sidereal.sign.degree)} ${sidereal.sign.name}, ${sidereal.nakshatra}`;
     }
+    function formatSkyReading(text) {
+      const lines = text.split('\n');
+      const firstLine = lines[0].trim();
+      const alignMatch = firstLine.match(/^Alignment:\s*(\d+)%/i);
+      if (alignMatch) {
+        const pct = alignMatch[1];
+        const rest = lines.slice(1).join('\n').trim();
+        return `<div style="font-size:0.78rem;font-weight:800;letter-spacing:0.05em;color:var(--gold);margin-bottom:8px;text-transform:uppercase;">Alignment: ${pct}%<span style="display:inline-block;width:${pct}%;max-width:100%;height:2px;background:var(--gold);opacity:0.5;vertical-align:middle;margin-left:8px;border-radius:2px;"></span></div>${escapeHtml(rest).replace(/\n\n/g, '</p><p style="margin:8px 0 0;">').replace(/\n/g, '<br>')}`;
+      }
+      return escapeHtml(text).replace(/\n\n/g, '</p><p style="margin:8px 0 0;">').replace(/\n/g, '<br>');
+    }
     function escapeHtml(text) {
       return text.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
     }
@@ -1349,7 +1360,7 @@ ${aspectLines || 'none within orb'}`;
         const skyContext = buildSkyContext(latestData, latestAspects, latestDate);
         const aiResult = await querySkyAssistant(text, skyContext);
         finalAnalysis = aiResult;
-        assistantBubble.innerHTML = escapeHtml(aiResult).replace(/\n/g, '<br>');
+        assistantBubble.innerHTML = formatSkyReading(aiResult);
       } catch (error) {
         finalAnalysis = analyzeAgainstSky(text);
         assistantBubble.innerHTML = finalAnalysis;
