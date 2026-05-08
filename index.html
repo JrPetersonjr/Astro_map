@@ -196,7 +196,7 @@
     .journal-list {
       display: grid;
       gap: 8px;
-      max-height: 300px;
+      max-height: 420px;
       overflow-y: auto;
     }
 
@@ -208,11 +208,80 @@
       font-size: 0.88rem;
     }
 
+    .journal-entry details summary {
+      font-size: 0.78rem;
+      color: var(--soft);
+      cursor: pointer;
+      -webkit-user-select: none;
+      user-select: none;
+      margin-top: 6px;
+    }
+
     .journal-date {
       font-size: 0.72rem;
       color: var(--soft);
       margin-bottom: 4px;
     }
+
+    .journal-lock-area {
+      text-align: center;
+      padding: 12px 0 8px;
+    }
+
+    .journal-lock-icon {
+      font-size: 1.6rem;
+      letter-spacing: -2px;
+      color: var(--gold);
+      opacity: 0.7;
+      margin-bottom: 8px;
+    }
+
+    .journal-attach-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .journal-attach-row input[type="checkbox"] {
+      width: auto;
+      min-height: 0;
+      padding: 0;
+      accent-color: var(--gold);
+    }
+
+    .hidden { display: none; }
+
+    .j-heading { margin: 0 0 6px; font-size: 1.05rem; }
+    .j-subheading { margin: 0 0 12px; font-size: 1rem; }
+    .j-note-bottom { margin-bottom: 16px; }
+    .j-form-btn { width: 100%; margin-top: 4px; }
+
+    .j-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .j-header h2 { margin: 0; font-size: 1.05rem; }
+
+    .j-btn-row { display: flex; gap: 6px; }
+
+    .btn-sm {
+      min-height: 28px;
+      font-size: 0.76rem;
+      padding: 0 10px;
+    }
+
+    .btn-compact { min-height: 32px; }
+
+    #journalEntryInput { min-height: 76px; resize: vertical; }
+
+    .j-actions { margin-top: 0; align-items: center; }
+
+    .j-list-area { margin-top: 12px; }
 
     .controls {
       grid-template-columns: 1fr 1fr;
@@ -466,8 +535,9 @@
             <textarea class="chat-input" id="chatInput" placeholder="Example: loss, a new relationship, money pressure, job tension, family conflict, a move, or a sudden opportunity."></textarea>
           </label>
           <div class="actions">
-            <button id="analyzeChat">Map to Sky</button>
-            <button class="secondary" id="clearChat">Clear</button>
+            <button type="button" id="analyzeChat">Map to Sky</button>
+            <button type="button" class="secondary" id="clearChat">Clear</button>
+            <button type="button" class="secondary hidden" id="saveToJournalBtn">Save to Journal</button>
           </div>
           <div class="chat-log" id="chatLog" aria-live="polite"></div>
         </section>
@@ -475,22 +545,79 @@
 
       <div id="calendarTab" class="tab-content">
         <section class="panel">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <button class="secondary" id="prevMonth" style="min-height: 32px;">&lt;</button>
-            <h2 id="calendarMonth" style="margin: 0; font-size: 1.1rem;">May 2026</h2>
-            <button class="secondary" id="nextMonth" style="min-height: 32px;">&gt;</button>
+          <div class="j-header">
+            <button type="button" class="secondary btn-compact" id="prevMonth">&lt;</button>
+            <h2 id="calendarMonth">May 2026</h2>
+            <button type="button" class="secondary btn-compact" id="nextMonth">&gt;</button>
           </div>
           <div class="calendar-grid" id="calendarGrid"></div>
         </section>
       </div>
 
       <div id="journalTab" class="tab-content">
-        <section class="panel">
-          <h2 style="margin: 0 0 12px; font-size: 1.1rem;">Personal Journal</h2>
-          <div class="journal-list" id="journalList">
-            <p class="source-note" style="text-align: center; padding: 20px;">No journal entries yet. Your "Map to Sky" analyses will be saved here.</p>
-          </div>
-        </section>
+
+        <!-- Locked state -->
+        <div id="journalLocked">
+          <section class="panel">
+            <div class="journal-lock-area">
+              <div class="journal-lock-icon">&#9954;</div>
+              <h2 class="j-heading">Personal Journal</h2>
+              <p class="source-note j-note-bottom" id="journalLockMsg">Encrypted and stored locally on this device.</p>
+            </div>
+            <div id="journalSetupForm" class="hidden">
+              <label>New password
+                <input type="password" id="journalPwdNew" placeholder="Choose a password (min 6 chars)" autocomplete="new-password">
+              </label>
+              <label>Confirm password
+                <input type="password" id="journalPwdConfirm" placeholder="Confirm password" autocomplete="new-password">
+              </label>
+              <button type="button" id="journalSetupBtn" class="j-form-btn">Create Journal</button>
+            </div>
+            <div id="journalUnlockForm" class="hidden">
+              <label>Password
+                <input type="password" id="journalPwd" placeholder="Enter your journal password" autocomplete="current-password">
+              </label>
+              <button type="button" id="journalUnlockBtn" class="j-form-btn">Unlock</button>
+            </div>
+          </section>
+        </div>
+
+        <!-- Unlocked state -->
+        <div id="journalUnlocked" class="hidden">
+          <section class="panel">
+            <div class="j-header">
+              <h2>Personal Journal</h2>
+              <div class="j-btn-row">
+                <button type="button" class="secondary btn-sm" id="journalChangePwdBtn">Change PW</button>
+                <button type="button" class="secondary btn-sm" id="journalLockBtn">Lock</button>
+              </div>
+            </div>
+            <label>New entry
+              <textarea id="journalEntryInput" placeholder="Write your thoughts..."></textarea>
+            </label>
+            <div class="actions j-actions">
+              <button type="button" id="journalSaveEntryBtn">Save Entry</button>
+              <label class="journal-attach-row">
+                <input type="checkbox" id="journalAttachAnalysis">
+                Attach last sky reading
+              </label>
+            </div>
+            <div class="journal-list j-list-area" id="journalList"></div>
+          </section>
+
+          <!-- Change password panel -->
+          <section class="panel hidden" id="journalChangePwdPanel">
+            <h2 class="j-subheading">Change Password</h2>
+            <label>Current password <input type="password" id="journalCurrentPwd" autocomplete="current-password"></label>
+            <label>New password <input type="password" id="journalNewPwd" autocomplete="new-password"></label>
+            <label>Confirm new <input type="password" id="journalConfirmNewPwd" autocomplete="new-password"></label>
+            <div class="actions j-actions">
+              <button type="button" id="journalConfirmChangePwdBtn">Update</button>
+              <button type="button" class="secondary" id="journalCancelChangePwdBtn">Cancel</button>
+            </div>
+          </section>
+        </div>
+
       </div>
 
       <textarea class="caption" id="caption"></textarea>
@@ -1138,7 +1265,10 @@ ${aspectLines || 'none within orb'}`;
         assistantBubble.innerHTML = finalAnalysis;
         setStatus('AI query unavailable; using local mapping.');
       }
-      saveToJournal(text, finalAnalysis);
+      lastAnalysis = { userText: text, skyNote: typeof finalAnalysis === 'string' ? finalAnalysis : finalAnalysis.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim() };
+      const saveBtn = document.getElementById('saveToJournalBtn');
+      saveBtn.classList.remove('hidden');
+      saveBtn.textContent = 'Save to Journal';
       chatInput.value = '';
     });
     chatInput.addEventListener('keydown', (event) => {
@@ -1173,7 +1303,7 @@ ${aspectLines || 'none within orb'}`;
         btn.classList.add('active');
         document.getElementById(`${btn.dataset.tab}Tab`).classList.add('active');
         if (btn.dataset.tab === 'calendar') renderCalendar();
-        if (btn.dataset.tab === 'journal') renderJournal();
+        if (btn.dataset.tab === 'journal') journalInitView();
       });
     });
 
@@ -1257,38 +1387,234 @@ ${aspectLines || 'none within orb'}`;
       renderCalendar();
     });
 
-    // Journal
+    // ── Journal: encrypted local storage ──
+    const JOURNAL_STORE = 'astro_journal_enc';
+    let journalKey = null;
+    let journalEntries = [];
+    let lastAnalysis = null;
+
     const journalList = document.getElementById('journalList');
 
-    function saveToJournal(text, analysis) {
-      const entries = JSON.parse(localStorage.getItem('astro_journal') || '[]');
-      entries.unshift({
-        date: new Date().toISOString(),
-        text,
-        analysis
-      });
-      localStorage.setItem('astro_journal', JSON.stringify(entries.slice(0, 50)));
+    function b64enc(buf) { return btoa(String.fromCharCode(...new Uint8Array(buf))); }
+    function b64dec(str) { return Uint8Array.from(atob(str), c => c.charCodeAt(0)); }
+
+    async function journalDeriveKey(password, salt) {
+      const raw = await crypto.subtle.importKey(
+        'raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']
+      );
+      return crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
+        raw,
+        { name: 'AES-GCM', length: 256 },
+        false,
+        ['encrypt', 'decrypt']
+      );
+    }
+
+    async function journalEncrypt(key, data) {
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const ct = await crypto.subtle.encrypt(
+        { name: 'AES-GCM', iv }, key, new TextEncoder().encode(JSON.stringify(data))
+      );
+      return { iv: b64enc(iv), ct: b64enc(ct) };
+    }
+
+    async function journalDecrypt(key, iv, ct) {
+      const pt = await crypto.subtle.decrypt(
+        { name: 'AES-GCM', iv: b64dec(iv) }, key, b64dec(ct)
+      );
+      return JSON.parse(new TextDecoder().decode(pt));
+    }
+
+    function journalLoad() {
+      const raw = localStorage.getItem(JOURNAL_STORE);
+      return raw ? JSON.parse(raw) : null;
+    }
+
+    async function journalPersist() {
+      const stored = journalLoad();
+      const enc = await journalEncrypt(journalKey, journalEntries);
+      localStorage.setItem(JOURNAL_STORE, JSON.stringify({ salt: stored.salt, ...enc }));
+    }
+
+    async function journalCreate(password) {
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      journalKey = await journalDeriveKey(password, salt);
+      journalEntries = [];
+      const enc = await journalEncrypt(journalKey, journalEntries);
+      localStorage.setItem(JOURNAL_STORE, JSON.stringify({ salt: b64enc(salt), ...enc }));
+    }
+
+    async function journalUnlock(password) {
+      const stored = journalLoad();
+      if (!stored) throw new Error('No journal found');
+      journalKey = await journalDeriveKey(password, b64dec(stored.salt));
+      journalEntries = await journalDecrypt(journalKey, stored.iv, stored.ct);
+    }
+
+    async function journalAddEntry(text, skyNote) {
+      journalEntries.unshift({ id: Date.now(), date: new Date().toISOString(), text, skyNote: skyNote || null });
+      if (journalEntries.length > 200) journalEntries.length = 200;
+      await journalPersist();
+    }
+
+    async function journalDeleteEntry(id) {
+      journalEntries = journalEntries.filter(e => e.id !== id);
+      await journalPersist();
+    }
+
+    async function journalChangePassword(currentPwd, newPwd) {
+      const stored = journalLoad();
+      const testKey = await journalDeriveKey(currentPwd, b64dec(stored.salt));
+      await journalDecrypt(testKey, stored.iv, stored.ct); // throws if wrong
+      const newSalt = crypto.getRandomValues(new Uint8Array(16));
+      journalKey = await journalDeriveKey(newPwd, newSalt);
+      const enc = await journalEncrypt(journalKey, journalEntries);
+      localStorage.setItem(JOURNAL_STORE, JSON.stringify({ salt: b64enc(newSalt), ...enc }));
+    }
+
+    // ── Journal UI ──
+    function journalInitView() {
+      const stored = journalLoad();
+      const locked = document.getElementById('journalLocked');
+      const unlocked = document.getElementById('journalUnlocked');
+      if (journalKey) {
+        locked.classList.add('hidden');
+        unlocked.classList.remove('hidden');
+        renderJournal();
+      } else {
+        locked.classList.remove('hidden');
+        unlocked.classList.add('hidden');
+        const setupForm = document.getElementById('journalSetupForm');
+        const unlockForm = document.getElementById('journalUnlockForm');
+        const msg = document.getElementById('journalLockMsg');
+        if (stored) {
+          setupForm.classList.add('hidden');
+          unlockForm.classList.remove('hidden');
+          msg.textContent = 'Your journal is encrypted locally. Enter your password to access it.';
+        } else {
+          setupForm.classList.remove('hidden');
+          unlockForm.classList.add('hidden');
+          msg.textContent = 'Create a password to start your encrypted personal journal.';
+        }
+      }
     }
 
     function renderJournal() {
-      const entries = JSON.parse(localStorage.getItem('astro_journal') || '[]');
-      if (entries.length === 0) {
-        journalList.innerHTML = '<p class="source-note" style="text-align: center; padding: 20px;">No journal entries yet. Your "Map to Sky" analyses will be saved here.</p>';
+      if (!journalEntries.length) {
+        journalList.innerHTML = '<p class="source-note" style="text-align: center; padding: 20px;">No entries yet. Write your first one above.</p>';
         return;
       }
       journalList.innerHTML = '';
-      entries.forEach(entry => {
-        const el = document.createElement('div');
-        el.className = 'journal-entry';
+      journalEntries.forEach(entry => {
+        const div = document.createElement('div');
+        div.className = 'journal-entry';
         const d = new Date(entry.date);
-        el.innerHTML = `
-          <div class="journal-date">${d.toLocaleDateString()} ${d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
-          <div style="font-weight: 700; margin-bottom: 4px;">"${entry.text}"</div>
-          <div style="color: var(--muted); font-size: 0.82rem; line-height: 1.4;">${entry.analysis}</div>
+        const dateStr = `${d.toLocaleDateString()} ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        div.innerHTML = `
+          <div class="journal-date">${dateStr}</div>
+          <div style="line-height: 1.5; white-space: pre-wrap;">${escapeHtml(entry.text)}</div>
+          ${entry.skyNote ? `<details><summary>Sky reading</summary><div style="margin-top: 6px; font-size: 0.82rem; color: var(--muted); line-height: 1.4;">${escapeHtml(entry.skyNote)}</div></details>` : ''}
+          <button type="button" data-del="${entry.id}" class="secondary" style="min-height: 24px; padding: 0 8px; font-size: 0.75rem; margin-top: 6px;">Delete</button>
         `;
-        journalList.appendChild(el);
+        journalList.appendChild(div);
+      });
+      journalList.querySelectorAll('[data-del]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          await journalDeleteEntry(Number(btn.dataset.del));
+          renderJournal();
+        });
       });
     }
+
+    document.getElementById('journalSetupBtn').addEventListener('click', async () => {
+      const pwd = document.getElementById('journalPwdNew').value;
+      const confirm = document.getElementById('journalPwdConfirm').value;
+      if (pwd.length < 6) { setStatus('Password must be at least 6 characters.'); return; }
+      if (pwd !== confirm) { setStatus('Passwords do not match.'); return; }
+      try {
+        await journalCreate(pwd);
+        document.getElementById('journalPwdNew').value = '';
+        document.getElementById('journalPwdConfirm').value = '';
+        journalInitView();
+      } catch (e) { setStatus('Could not create journal.'); }
+    });
+
+    document.getElementById('journalUnlockBtn').addEventListener('click', async () => {
+      const pwd = document.getElementById('journalPwd').value;
+      if (!pwd) { setStatus('Enter your password.'); return; }
+      try {
+        await journalUnlock(pwd);
+        document.getElementById('journalPwd').value = '';
+        journalInitView();
+      } catch (e) { setStatus('Wrong password or corrupted journal.'); }
+    });
+
+    document.getElementById('journalLockBtn').addEventListener('click', () => {
+      journalKey = null;
+      journalEntries = [];
+      journalInitView();
+    });
+
+    document.getElementById('journalSaveEntryBtn').addEventListener('click', async () => {
+      if (!journalKey) { setStatus('Unlock your journal first.'); return; }
+      const text = document.getElementById('journalEntryInput').value.trim();
+      if (!text) { setStatus('Write something first.'); return; }
+      const attach = document.getElementById('journalAttachAnalysis').checked;
+      await journalAddEntry(text, attach && lastAnalysis ? lastAnalysis.skyNote : null);
+      document.getElementById('journalEntryInput').value = '';
+      renderJournal();
+      setStatus('Entry saved.');
+    });
+
+    document.getElementById('saveToJournalBtn').addEventListener('click', async () => {
+      if (!journalKey) {
+        setStatus('Unlock your journal in the Journal tab first.');
+        return;
+      }
+      if (!lastAnalysis) return;
+      await journalAddEntry(lastAnalysis.userText, lastAnalysis.skyNote);
+      document.getElementById('saveToJournalBtn').textContent = 'Saved';
+      setStatus('Saved to journal.');
+    });
+
+    document.getElementById('journalChangePwdBtn').addEventListener('click', () => {
+      document.getElementById('journalChangePwdPanel').classList.remove('hidden');
+    });
+
+    document.getElementById('journalCancelChangePwdBtn').addEventListener('click', () => {
+      document.getElementById('journalChangePwdPanel').classList.add('hidden');
+      ['journalCurrentPwd', 'journalNewPwd', 'journalConfirmNewPwd'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+    });
+
+    document.getElementById('journalConfirmChangePwdBtn').addEventListener('click', async () => {
+      const current = document.getElementById('journalCurrentPwd').value;
+      const next = document.getElementById('journalNewPwd').value;
+      const confirm = document.getElementById('journalConfirmNewPwd').value;
+      if (next.length < 6) { setStatus('New password must be at least 6 characters.'); return; }
+      if (next !== confirm) { setStatus('New passwords do not match.'); return; }
+      try {
+        await journalChangePassword(current, next);
+        document.getElementById('journalChangePwdPanel').classList.add('hidden');
+        ['journalCurrentPwd', 'journalNewPwd', 'journalConfirmNewPwd'].forEach(id => {
+          document.getElementById(id).value = '';
+        });
+        setStatus('Password updated.');
+      } catch (e) { setStatus('Current password is incorrect.'); }
+    });
+
+    [document.getElementById('journalPwd'),
+     document.getElementById('journalPwdNew'),
+     document.getElementById('journalPwdConfirm')].forEach(input => {
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          const stored = journalLoad();
+          (stored ? document.getElementById('journalUnlockBtn') : document.getElementById('journalSetupBtn')).click();
+        }
+      });
+    });
 
   </script>
 </body>
