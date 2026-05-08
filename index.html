@@ -150,15 +150,21 @@
     }
 
     .cal-day {
-      padding: 8px 4px;
+      padding: 4px 2px;
       font-size: 0.75rem;
       border: 1px solid transparent;
       border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 52px;
     }
 
     .cal-day.header {
       font-weight: 800;
       color: var(--soft);
+      min-height: unset;
+      padding: 6px 2px;
     }
 
     .cal-day.active {
@@ -171,6 +177,85 @@
       background: rgba(255, 255, 255, 0.05);
       cursor: pointer;
     }
+
+    .cal-num { line-height: 1.6; }
+
+    .cal-moon {
+      font-size: 0.65rem;
+      line-height: 1;
+      opacity: 0.55;
+    }
+
+    .cal-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      margin: 2px 0;
+    }
+
+    .cal-dot.align-high { background: var(--teal); }
+    .cal-dot.align-mid  { background: var(--gold); }
+    .cal-dot.align-low  { background: var(--soft); opacity: 0.6; }
+
+    .cal-day-count {
+      font-size: 0.58rem;
+      color: var(--soft);
+      line-height: 1;
+    }
+
+    .pattern-stats {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .pattern-stats h3 {
+      margin: 0 0 10px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gold);
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .stat-value {
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .sparkline-wrap {
+      margin: 8px 0;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+      margin-top: 10px;
+    }
+
+    .phase-cell {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 3px;
+      text-align: center;
+    }
+
+    .phase-icon { font-size: 0.9rem; }
+    .phase-name { font-size: 0.6rem; color: var(--soft); margin: 2px 0; }
+    .phase-avg  { font-size: 0.72rem; font-weight: 700; color: var(--gold); }
+    .phase-avg.dim { color: var(--soft); }
 
     .journal-list {
       display: grid;
@@ -661,6 +746,7 @@
               <button type="button" class="secondary btn-sm" id="journalExportBtn">Export Backup</button>
               <button type="button" class="secondary btn-sm j-danger-btn" id="journalClearBtn">Clear All</button>
             </div>
+            <div id="journalPatternStats" class="pattern-stats hidden"></div>
             <div class="journal-list j-list-area" id="journalList"></div>
           </section>
 
@@ -897,6 +983,34 @@
       const sidereal = siderealInfo(planet.longitude);
       return `${planet.key}: tropical ${fmtDegree(planet.sign.degree)} ${planet.sign.name}; sidereal ${fmtDegree(sidereal.sign.degree)} ${sidereal.sign.name}, ${sidereal.nakshatra}`;
     }
+    function parseAlignment(text) {
+      const m = (text || '').match(/^Alignment:\s*(\d+)%/im);
+      return m ? Math.min(100, Math.max(0, parseInt(m[1], 10))) : null;
+    }
+
+    function getMoonPhaseName(date) {
+      const angle = A.MoonPhase(date);
+      if (angle < 22.5 || angle >= 337.5) return 'New Moon';
+      if (angle < 67.5)  return 'Waxing Crescent';
+      if (angle < 112.5) return 'First Quarter';
+      if (angle < 157.5) return 'Waxing Gibbous';
+      if (angle < 202.5) return 'Full Moon';
+      if (angle < 247.5) return 'Waning Gibbous';
+      if (angle < 292.5) return 'Last Quarter';
+      return 'Waning Crescent';
+    }
+
+    function moonPhaseGlyph(angle) {
+      if (angle < 22.5 || angle >= 337.5) return '🌑';
+      if (angle < 67.5)  return '🌒';
+      if (angle < 112.5) return '🌓';
+      if (angle < 157.5) return '🌔';
+      if (angle < 202.5) return '🌕';
+      if (angle < 247.5) return '🌖';
+      if (angle < 292.5) return '🌗';
+      return '🌘';
+    }
+
     function formatSkyReading(text) {
       const lines = text.split('\n');
       const firstLine = lines[0].trim();
@@ -1400,7 +1514,8 @@ ${aspectLines || 'none within orb'}`;
         assistantBubble.innerHTML = finalAnalysis;
         setStatus('AI query unavailable; using local mapping.');
       }
-      lastAnalysis = { userText: text, skyNote: typeof finalAnalysis === 'string' ? finalAnalysis : finalAnalysis.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim() };
+      const rawNote = typeof finalAnalysis === 'string' ? finalAnalysis : finalAnalysis.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+      lastAnalysis = { userText: text, skyNote: rawNote, alignment: parseAlignment(rawNote), moonPhase: getMoonPhaseName(new Date()) };
       const saveBtn = document.getElementById('saveToJournalBtn');
       saveBtn.classList.remove('hidden');
       saveBtn.textContent = 'Save to Journal';
@@ -1452,7 +1567,16 @@ ${aspectLines || 'none within orb'}`;
     function renderCalendar() {
       calendarGrid.innerHTML = '';
       calendarMonth.textContent = calDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-      
+
+      // Build alignment lookup keyed by 'Y-M-D' (local)
+      const alignByDate = {};
+      journalEntries.forEach(entry => {
+        const d = new Date(entry.date);
+        const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+        if (!alignByDate[key]) alignByDate[key] = [];
+        alignByDate[key].push(entry.alignment);
+      });
+
       const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
       days.forEach(d => {
         const el = document.createElement('div');
@@ -1472,10 +1596,22 @@ ${aspectLines || 'none within orb'}`;
       for (let d = 1; d <= lastDate; d++) {
         const el = document.createElement('div');
         el.className = 'cal-day';
-        if (d === today.getDate() && calDate.getMonth() === today.getMonth() && calDate.getFullYear() === today.getFullYear()) {
-          el.classList.add('active');
-        }
-        el.textContent = d;
+        const isToday = d === today.getDate() && calDate.getMonth() === today.getMonth() && calDate.getFullYear() === today.getFullYear();
+        if (isToday) el.classList.add('active');
+
+        const key = `${calDate.getFullYear()}-${calDate.getMonth()}-${d}`;
+        const dayAligns = alignByDate[key] || [];
+        const scored = dayAligns.filter(a => a !== null);
+        const count = dayAligns.length;
+        const avg = scored.length ? Math.round(scored.reduce((s, a) => s + a, 0) / scored.length) : null;
+
+        const dayDate = new Date(calDate.getFullYear(), calDate.getMonth(), d);
+        const moonAngle = A.MoonPhase(dayDate);
+        const glyph = moonPhaseGlyph(moonAngle);
+
+        const dotClass = avg !== null ? (avg >= 66 ? 'align-high' : avg >= 41 ? 'align-mid' : 'align-low') : '';
+        el.innerHTML = `<span class="cal-num">${d}</span><span class="cal-moon">${glyph}</span>${dotClass ? `<span class="cal-dot ${dotClass}"></span><span class="cal-day-count">${count}</span>` : ''}`;
+
         el.addEventListener('click', () => {
           const selectedDate = new Date(calDate.getFullYear(), calDate.getMonth(), d);
           setDate(selectedDate);
@@ -1587,8 +1723,15 @@ ${aspectLines || 'none within orb'}`;
       }
     }
 
-    async function journalAddEntry(text, skyNote) {
-      journalEntries.unshift({ id: Date.now(), date: new Date().toISOString(), text, skyNote: skyNote || null });
+    async function journalAddEntry(text, skyNote, alignment, moonPhase) {
+      journalEntries.unshift({
+        id: Date.now(),
+        date: new Date().toISOString(),
+        text,
+        skyNote: skyNote || null,
+        alignment: alignment ?? null,
+        moonPhase: moonPhase || getMoonPhaseName(new Date())
+      });
       if (journalEntries.length > 500) journalEntries.length = 500;
       await journalPersist();
     }
@@ -1643,6 +1786,7 @@ ${aspectLines || 'none within orb'}`;
         unlocked.classList.remove('hidden');
         journalUpdateMeta();
         renderJournal();
+        renderPatternStats();
       } else {
         locked.classList.remove('hidden');
         unlocked.classList.add('hidden');
@@ -1661,10 +1805,69 @@ ${aspectLines || 'none within orb'}`;
       }
     }
 
+    function renderPatternStats() {
+      const statsEl = document.getElementById('journalPatternStats');
+      const scored = journalEntries.filter(e => e.alignment !== null && e.alignment !== undefined);
+      if (scored.length < 2) { statsEl.classList.add('hidden'); return; }
+      statsEl.classList.remove('hidden');
+
+      const avg = Math.round(scored.reduce((s, e) => s + e.alignment, 0) / scored.length);
+      const recent30 = scored.slice(0, 30).reverse(); // oldest first for chart
+
+      // Trend: compare first half vs second half of all scored entries
+      const half = Math.floor(scored.length / 2);
+      const recentHalf = scored.slice(0, half);
+      const olderHalf = scored.slice(half);
+      const recentAvg = recentHalf.reduce((s, e) => s + e.alignment, 0) / recentHalf.length;
+      const olderAvg = olderHalf.reduce((s, e) => s + e.alignment, 0) / olderHalf.length;
+      const trend = recentAvg > olderAvg + 3 ? '↑' : recentAvg < olderAvg - 3 ? '↓' : '→';
+      const trendColor = trend === '↑' ? 'var(--teal)' : trend === '↓' ? 'var(--coral)' : 'var(--gold)';
+
+      // Sparkline SVG
+      const w = 240, h = 32, pad = 2;
+      const maxA = Math.max(...recent30.map(e => e.alignment));
+      const minA = Math.min(...recent30.map(e => e.alignment));
+      const range = Math.max(maxA - minA, 10);
+      const pts = recent30.map((e, i) => {
+        const x = pad + (i / Math.max(recent30.length - 1, 1)) * (w - pad * 2);
+        const y = h - pad - ((e.alignment - minA) / range) * (h - pad * 2);
+        return `${x},${y}`;
+      }).join(' ');
+      const sparkline = `<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" xmlns="http://www.w3.org/2000/svg" style="display:block"><polyline points="${pts}" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linejoin="round" opacity="0.7"/>${recent30.map((e, i) => {
+        const x = pad + (i / Math.max(recent30.length - 1, 1)) * (w - pad * 2);
+        const y = h - pad - ((e.alignment - minA) / range) * (h - pad * 2);
+        return `<circle cx="${x}" cy="${y}" r="2" fill="var(--gold)" opacity="0.9"/>`;
+      }).join('')}</svg>`;
+
+      // Moon phase breakdown
+      const phases = ['New Moon','Waxing Crescent','First Quarter','Waxing Gibbous','Full Moon','Waning Gibbous','Last Quarter','Waning Crescent'];
+      const phaseIcons = { 'New Moon':'🌑','Waxing Crescent':'🌒','First Quarter':'🌓','Waxing Gibbous':'🌔','Full Moon':'🌕','Waning Gibbous':'🌖','Last Quarter':'🌗','Waning Crescent':'🌘' };
+      const phaseGroups = {};
+      scored.forEach(e => {
+        const ph = e.moonPhase || 'Unknown';
+        if (!phaseGroups[ph]) phaseGroups[ph] = [];
+        phaseGroups[ph].push(e.alignment);
+      });
+      const phaseHTML = phases.filter(p => phaseGroups[p]).map(p => {
+        const arr = phaseGroups[p];
+        const phaseAvg = Math.round(arr.reduce((s, a) => s + a, 0) / arr.length);
+        return `<div class="phase-cell"><div class="phase-icon">${phaseIcons[p]}</div><div class="phase-name">${p.replace(' Moon','').replace('ing ','g. ')}</div><div class="phase-avg ${phaseAvg >= 60 ? '' : 'dim'}">${phaseAvg}%</div></div>`;
+      }).join('');
+
+      statsEl.innerHTML = `
+        <h3>Pattern Tracking</h3>
+        <div class="stat-row"><span>Readings scored</span><span class="stat-value">${scored.length}</span></div>
+        <div class="stat-row"><span>Average alignment</span><span class="stat-value">${avg}% <span style="color:${trendColor};font-size:1rem;">${trend}</span></span></div>
+        <div class="sparkline-wrap">${sparkline}</div>
+        ${phaseHTML ? `<div class="phase-grid">${phaseHTML}</div>` : ''}
+      `;
+    }
+
     function renderJournal() {
       journalUpdateMeta();
       if (!journalEntries.length) {
         journalList.innerHTML = '<p class="source-note j-empty-note">No entries yet. Write your first one above.</p>';
+        renderPatternStats();
         return;
       }
       journalList.innerHTML = '';
@@ -1673,8 +1876,14 @@ ${aspectLines || 'none within orb'}`;
         div.className = 'journal-entry';
         const d = new Date(entry.date);
         const dateStr = `${d.toLocaleDateString()} ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        const alignBadge = entry.alignment !== null && entry.alignment !== undefined
+          ? `<span style="float:right;font-size:0.7rem;font-weight:800;color:var(--gold);opacity:0.8;">${entry.alignment}%</span>`
+          : '';
+        const moonBadge = entry.moonPhase
+          ? `<span style="font-size:0.7rem;color:var(--soft);margin-left:6px;">${entry.moonPhase}</span>`
+          : '';
         div.innerHTML = `
-          <div class="journal-date">${dateStr}</div>
+          <div class="journal-date">${dateStr}${moonBadge}${alignBadge}</div>
           <div class="journal-body">${escapeHtml(entry.text)}</div>
           ${entry.skyNote ? `<details><summary>Sky reading</summary><div class="journal-sky-note">${escapeHtml(entry.skyNote)}</div></details>` : ''}
           <button type="button" data-del="${entry.id}" class="secondary btn-sm j-del-btn">Delete</button>
@@ -1685,8 +1894,10 @@ ${aspectLines || 'none within orb'}`;
         btn.addEventListener('click', async () => {
           await journalDeleteEntry(Number(btn.dataset.del));
           renderJournal();
+          renderPatternStats();
         });
       });
+      renderPatternStats();
     }
 
     document.getElementById('journalSetupBtn').addEventListener('click', async () => {
@@ -1728,17 +1939,21 @@ ${aspectLines || 'none within orb'}`;
       const text = document.getElementById('journalEntryInput').value.trim();
       if (!text) { setStatus('Write something first.'); return; }
       const attach = document.getElementById('journalAttachAnalysis').checked;
-      await journalAddEntry(text, attach && lastAnalysis ? lastAnalysis.skyNote : null);
+      const attachedNote = attach && lastAnalysis ? lastAnalysis.skyNote : null;
+      const attachedAlign = attach && lastAnalysis ? lastAnalysis.alignment : null;
+      await journalAddEntry(text, attachedNote, attachedAlign, getMoonPhaseName(new Date()));
       document.getElementById('journalEntryInput').value = '';
       renderJournal();
+      renderPatternStats();
       setStatus('Entry saved.');
     });
 
     document.getElementById('saveToJournalBtn').addEventListener('click', async () => {
       if (!journalKey) { setStatus('Unlock your journal in the Journal tab first.'); return; }
       if (!lastAnalysis) return;
-      await journalAddEntry(lastAnalysis.userText, lastAnalysis.skyNote);
+      await journalAddEntry(lastAnalysis.userText, lastAnalysis.skyNote, lastAnalysis.alignment, lastAnalysis.moonPhase);
       document.getElementById('saveToJournalBtn').textContent = 'Saved';
+      renderPatternStats();
       setStatus('Saved to journal.');
     });
 
