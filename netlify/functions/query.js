@@ -20,13 +20,29 @@ export async function handler(event) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Request must include a "prompt" string' }) };
   }
 
-  const apiUrl = process.env.QUERY_API_URL || 'https://api.openai.com/v1/responses';
-  const model = process.env.QUERY_MODEL || 'gpt-4o-mini';
+  const skyContext = typeof requestBody.skyContext === 'string' ? requestBody.skyContext : null;
+
+  const apiUrl = process.env.QUERY_API_URL || 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
+  const model = process.env.QUERY_MODEL || 'gemini-2.0-flash-lite';
+
+  const systemPrompt = skyContext
+    ? `You are a compassionate astrology-aware journal companion who reads life experiences through both Western/tropical and Eastern/Vedic (sidereal + nakshatra) lenses.
+
+The user has shared a journal entry. You have the current live sky data below. Use it to give a grounded, specific interpretation — reference actual planetary positions, active aspects, and moon context rather than speaking in vague generalities. Cross-reference the Western and Vedic layers when relevant.
+
+Be warm, insightful, and concise. Prioritize the 1-2 most resonant astrological patterns for what the user is experiencing. Keep your response under 250 words.
+
+${skyContext}`
+    : `You are a compassionate astrology-aware journal companion. Respond to what the user shares with empathy, context, and insight. Keep responses under 200 words.`;
 
   const payload = {
     model,
-    input: prompt,
-    max_output_tokens: 500,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: prompt }
+    ],
+    max_tokens: 600,
+    temperature: 0.7
   };
 
   try {
@@ -41,11 +57,14 @@ export async function handler(event) {
 
     const data = await response.json();
     if (!response.ok) {
+      console.error('API Error:', { status: response.status, error: data });
       return { statusCode: 502, body: JSON.stringify({ error: data?.error?.message || 'API request failed', details: data }) };
     }
 
-    return { statusCode: 200, body: JSON.stringify({ data }) };
+    const text = data?.choices?.[0]?.message?.content || data?.output || JSON.stringify(data);
+    return { statusCode: 200, body: JSON.stringify({ data: text }) };
   } catch (error) {
+    console.error('Fetch Error:', error.message);
     return { statusCode: 500, body: JSON.stringify({ error: error.message || 'Query call failed' }) };
   }
 }

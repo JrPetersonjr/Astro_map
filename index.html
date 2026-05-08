@@ -105,6 +105,115 @@
       background: linear-gradient(180deg, rgba(35, 34, 41, 0.92), rgba(25, 25, 29, 0.92));
     }
 
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: -1px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .tab-btn {
+      appearance: none;
+      background: rgba(25, 25, 29, 0.8);
+      border: 1px solid var(--line);
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 8px 16px;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--panel);
+      color: var(--gold);
+      border-color: var(--line);
+      padding-bottom: 9px;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: grid;
+    }
+
+    .profile-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 16px;
+    }
+
+    .profile-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+    }
+
+    #userName {
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      text-align: center;
+    }
+
+    .cal-day {
+      padding: 8px 4px;
+      font-size: 0.75rem;
+      border: 1px solid transparent;
+      border-radius: 4px;
+    }
+
+    .cal-day.header {
+      font-weight: 800;
+      color: var(--soft);
+    }
+
+    .cal-day.active {
+      background: rgba(231, 187, 102, 0.15);
+      border-color: rgba(231, 187, 102, 0.3);
+      color: var(--gold);
+    }
+
+    .cal-day:not(.header):hover {
+      background: rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+    }
+
+    .journal-list {
+      display: grid;
+      gap: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .journal-entry {
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font-size: 0.88rem;
+    }
+
+    .journal-date {
+      font-size: 0.72rem;
+      color: var(--soft);
+      margin-bottom: 4px;
+    }
+
     .controls {
       grid-template-columns: 1fr 1fr;
     }
@@ -296,57 +405,93 @@
     </section>
 
     <aside class="side">
+      <div class="profile-bar">
+        <div class="profile-info">
+          <span id="userAvatar">👤</span>
+          <span id="userName">Guest</span>
+        </div>
+        <button id="loginBtn" class="secondary" style="min-height: 32px; font-size: 0.8rem;">Login</button>
+      </div>
+
       <div>
         <div class="eyebrow" id="dateEyebrow">Today</div>
         <h1>LuminaSynodic</h1>
       </div>
       <p class="lede">Live ephemeris positions with date travel, major aspects, retrogrades, and optional local horizon context.</p>
 
-      <section class="panel controls">
-        <label>Date
-          <input id="dateInput" type="date">
-        </label>
-        <label>Time
-          <input id="timeInput" type="time" step="60">
-        </label>
-        <label class="wide">Shift from today: <span id="offsetLabel">0 days</span>
-          <input id="offsetRange" type="range" min="-30" max="30" value="0">
-        </label>
-        <div class="jump-row wide">
-          <button class="secondary" data-shift="-7">-7d</button>
-          <button class="secondary" data-shift="-1">-1d</button>
-          <button id="todayBtn">Today</button>
-          <button class="secondary" data-shift="1">+1d</button>
-          <button class="secondary" data-shift="7">+7d</button>
-          <button class="secondary" id="locationBtn">Use My Location</button>
-        </div>
-      </section>
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="sky">Sky</button>
+        <button class="tab-btn" data-tab="calendar">Calendar</button>
+        <button class="tab-btn" data-tab="journal">Journal</button>
+      </div>
 
-      <section class="panel insight" aria-live="polite">
-        <div class="tag-row" id="tags"></div>
-        <h2 id="insightTitle">Current Sky</h2>
-        <p id="insightText"></p>
-      </section>
+      <div id="skyTab" class="tab-content active">
+        <section class="panel controls">
+          <label>Date
+            <input id="dateInput" type="date">
+          </label>
+          <label>Time
+            <input id="timeInput" type="time" step="60">
+          </label>
+          <label class="wide">Shift from today: <span id="offsetLabel">0 days</span>
+            <input id="offsetRange" type="range" min="-30" max="30" value="0">
+          </label>
+          <div class="jump-row wide">
+            <button class="secondary" data-shift="-7">-7d</button>
+            <button class="secondary" data-shift="-1">-1d</button>
+            <button id="todayBtn">Today</button>
+            <button class="secondary" data-shift="1">+1d</button>
+            <button class="secondary" data-shift="7">+7d</button>
+            <button class="secondary" id="locationBtn">Use My Location</button>
+          </div>
+        </section>
 
-      <section class="panel">
-        <div class="table" id="planetTable" aria-label="Planet positions"></div>
-      </section>
+        <section class="panel insight" aria-live="polite">
+          <div class="tag-row" id="tags"></div>
+          <h2 id="insightTitle">Current Sky</h2>
+          <p id="insightText"></p>
+        </section>
 
-      <section class="panel">
-        <div class="tag-row">
-          <span class="tag">life mapping</span>
-          <span class="tag">western + sidereal</span>
-          <span class="tag">local astronomy</span>
-        </div>
-        <label>What's going on in your life?
-          <textarea class="chat-input" id="chatInput" placeholder="Example: loss, a new relationship, money pressure, job tension, family conflict, a move, or a sudden opportunity."></textarea>
-        </label>
-        <div class="actions">
-          <button id="analyzeChat">Map to Sky</button>
-          <button class="secondary" id="clearChat">Clear</button>
-        </div>
-        <div class="chat-log" id="chatLog" aria-live="polite"></div>
-      </section>
+        <section class="panel">
+          <div class="table" id="planetTable" aria-label="Planet positions"></div>
+        </section>
+
+        <section class="panel">
+          <div class="tag-row">
+            <span class="tag">life mapping</span>
+            <span class="tag">western + sidereal</span>
+            <span class="tag">local astronomy</span>
+          </div>
+          <label>What's going on in your life?
+            <textarea class="chat-input" id="chatInput" placeholder="Example: loss, a new relationship, money pressure, job tension, family conflict, a move, or a sudden opportunity."></textarea>
+          </label>
+          <div class="actions">
+            <button id="analyzeChat">Map to Sky</button>
+            <button class="secondary" id="clearChat">Clear</button>
+          </div>
+          <div class="chat-log" id="chatLog" aria-live="polite"></div>
+        </section>
+      </div>
+
+      <div id="calendarTab" class="tab-content">
+        <section class="panel">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <button class="secondary" id="prevMonth" style="min-height: 32px;">&lt;</button>
+            <h2 id="calendarMonth" style="margin: 0; font-size: 1.1rem;">May 2026</h2>
+            <button class="secondary" id="nextMonth" style="min-height: 32px;">&gt;</button>
+          </div>
+          <div class="calendar-grid" id="calendarGrid"></div>
+        </section>
+      </div>
+
+      <div id="journalTab" class="tab-content">
+        <section class="panel">
+          <h2 style="margin: 0 0 12px; font-size: 1.1rem;">Personal Journal</h2>
+          <div class="journal-list" id="journalList">
+            <p class="source-note" style="text-align: center; padding: 20px;">No journal entries yet. Your "Map to Sky" analyses will be saved here.</p>
+          </div>
+        </section>
+      </div>
 
       <textarea class="caption" id="caption"></textarea>
 
@@ -561,11 +706,36 @@
       chatLog.scrollTop = chatLog.scrollHeight;
       return bubble;
     }
-    async function querySkyAssistant(prompt) {
+    function buildSkyContext(data, aspectData, date) {
+      if (!data || !data.length) return null;
+      const dateStr = date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      const signature = currentSkySignature(data, aspectData);
+      const planetLines = data.map((planet) => {
+        const sidereal = siderealInfo(planet.longitude);
+        const retro = planet.retrograde ? ' (retrograde)' : '';
+        return `${planet.key}: tropical ${fmtDegree(planet.sign.degree)} ${planet.sign.name}; sidereal ${fmtDegree(sidereal.sign.degree)} ${sidereal.sign.name}, nakshatra ${sidereal.nakshatra}${retro}`;
+      }).join('\n');
+      const moonSidereal = siderealInfo(signature.moon.longitude);
+      const aspectLines = aspectData.slice(0, 6).map((item) =>
+        `${item.a.key} ${item.aspect.name} ${item.b.key} (${item.orb.toFixed(1)}° orb)`
+      ).join('\n');
+      const retroText = signature.retrogrades.length ? signature.retrogrades.join(', ') : 'none';
+      return `Sky snapshot: ${dateStr}
+Planetary positions (tropical / sidereal / nakshatra):
+${planetLines}
+
+Moon phase: ${signature.phaseName} (${signature.moonPhase.toFixed(0)}° from Sun)
+Moon nakshatra: ${moonSidereal.nakshatra}
+Retrogrades: ${retroText}
+
+Active aspects (tightest first):
+${aspectLines || 'none within orb'}`;
+    }
+    async function querySkyAssistant(prompt, skyContext) {
       const response = await fetch('/.netlify/functions/query', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt })
+        body: JSON.stringify({ prompt, skyContext: skyContext || null })
       });
       const data = await response.json();
       if (!response.ok) {
@@ -702,6 +872,105 @@
         el('text', { x: 360, y: 366, 'text-anchor': 'middle', fill: '#c2c0b6', 'font-size': 12 }, timeText),
         el('text', { x: 360, y: 386, 'text-anchor': 'middle', fill: '#9c9a92', 'font-size': 10 }, observer ? 'local horizon enabled' : 'geocentric transit wheel')
       );
+      drawControlRings(date);
+    }
+    function drawControlRings(date) {
+      const cx = 360, cy = 360;
+      const today = new Date();
+
+      // ── TIME RING (inner, teal) r=308–324 ──
+      const TI = 308, TO = 324, TM = 316, TW = 16;
+      const hours = date.getHours() + date.getMinutes() / 60;
+      const timeAngleDeg = (hours / 24) * 360; // 0°=midnight=top, clockwise
+
+      chart.append(el('circle', { cx, cy, r: TM, fill: 'none', 'stroke-width': TW, stroke: 'rgba(112,206,194,0.07)' }));
+
+      for (let i = 0; i < 120; i++) {
+        const deg = i * 3;
+        const hEquiv = (deg / 360) * 24;
+        const is6h = hEquiv % 6 === 0;
+        const is1h = Number.isInteger(hEquiv) && !is6h;
+        const rad = (deg - 90) * Math.PI / 180;
+        const r1 = is6h ? TI - 4 : is1h ? TI - 1 : TI + 3;
+        const r2 = is6h ? TO + 4 : is1h ? TO + 1 : TO - 3;
+        chart.append(el('line', {
+          x1: cx + r1 * Math.cos(rad), y1: cy + r1 * Math.sin(rad),
+          x2: cx + r2 * Math.cos(rad), y2: cy + r2 * Math.sin(rad),
+          stroke: is6h ? 'rgba(112,206,194,0.6)' : is1h ? 'rgba(112,206,194,0.28)' : 'rgba(112,206,194,0.1)',
+          'stroke-width': is6h ? 1.5 : 0.75, 'stroke-linecap': 'round', 'pointer-events': 'none'
+        }));
+      }
+
+      if (hours > 0.08) {
+        const arcDeg = (hours / 24) * 360;
+        const endRad = (arcDeg - 90) * Math.PI / 180;
+        chart.append(el('path', {
+          d: `M ${cx} ${cy - TM} A ${TM} ${TM} 0 ${arcDeg > 180 ? 1 : 0} 1 ${cx + TM * Math.cos(endRad)} ${cy + TM * Math.sin(endRad)}`,
+          fill: 'none', stroke: '#70cec2', 'stroke-width': TW - 7, opacity: 0.5,
+          'stroke-linecap': 'round', 'pointer-events': 'none'
+        }));
+      }
+
+      const tRad = (timeAngleDeg - 90) * Math.PI / 180;
+      const tx = cx + TM * Math.cos(tRad), ty = cy + TM * Math.sin(tRad);
+      chart.append(el('circle', { cx: tx, cy: ty, r: 12, fill: 'rgba(112,206,194,0.18)', 'pointer-events': 'none' }));
+      chart.append(el('circle', { cx: tx, cy: ty, r: 8, fill: '#70cec2', stroke: 'rgba(255,255,255,0.75)', 'stroke-width': 1.5, 'pointer-events': 'none' }));
+      chart.append(el('text', {
+        x: tx, y: ty, 'text-anchor': 'middle', 'dominant-baseline': 'middle',
+        'font-size': 6, 'font-weight': 800, fill: '#101012', 'pointer-events': 'none'
+      }, String(date.getHours()).padStart(2, '0')));
+
+      // ── SEPARATOR ──
+      chart.append(el('circle', { cx, cy, r: 327, fill: 'none', stroke: 'rgba(255,255,255,0.06)', 'stroke-width': 0.75 }));
+
+      // ── DATE RING (outer, gold) r=330–348 ──
+      // full 360° = 60 days; today at top (−90°); clockwise = future, ccw = past
+      const DI = 330, DO = 348, DM = 339, DW = 18;
+      const todayMid = new Date(today); todayMid.setHours(12, 0, 0, 0);
+      const dateMid = new Date(date); dateMid.setHours(12, 0, 0, 0);
+      const dayOff = Math.max(-30, Math.min(30, (dateMid - todayMid) / 86400000));
+
+      chart.append(el('circle', { cx, cy, r: DM, fill: 'none', 'stroke-width': DW, stroke: 'rgba(231,187,102,0.07)' }));
+
+      for (let i = 0; i < 120; i++) {
+        const dCW = i * 0.5; // days clockwise from today
+        const dayEq = dCW <= 30 ? dCW : dCW - 60; // -29.5 to +30
+        const isToday = i === 0;
+        const is5d = !isToday && Math.round(Math.abs(dayEq) * 10) % 50 === 0;
+        const is1d = !isToday && !is5d && Math.round(dayEq * 10) % 10 === 0;
+        const deg = -90 + i * 3;
+        const rad = deg * Math.PI / 180;
+        const r1 = isToday ? DI - 6 : is5d ? DI - 3 : is1d ? DI : DI + 3;
+        const r2 = isToday ? DO + 6 : is5d ? DO + 3 : is1d ? DO : DO - 3;
+        chart.append(el('line', {
+          x1: cx + r1 * Math.cos(rad), y1: cy + r1 * Math.sin(rad),
+          x2: cx + r2 * Math.cos(rad), y2: cy + r2 * Math.sin(rad),
+          stroke: isToday ? 'rgba(231,187,102,0.95)' : is5d ? 'rgba(231,187,102,0.5)' : is1d ? 'rgba(231,187,102,0.25)' : 'rgba(231,187,102,0.09)',
+          'stroke-width': isToday ? 2.5 : is5d ? 1.5 : 0.75, 'stroke-linecap': 'round', 'pointer-events': 'none'
+        }));
+      }
+
+      if (Math.abs(dayOff) > 0.05) {
+        const arcDeg = (dayOff / 30) * 180;
+        const sweep = arcDeg > 0 ? 1 : 0;
+        const endRad = (-90 + arcDeg) * Math.PI / 180;
+        chart.append(el('path', {
+          d: `M ${cx} ${cy - DM} A ${DM} ${DM} 0 ${Math.abs(arcDeg) > 180 ? 1 : 0} ${sweep} ${cx + DM * Math.cos(endRad)} ${cy + DM * Math.sin(endRad)}`,
+          fill: 'none', stroke: '#e7bb66', 'stroke-width': DW - 7, opacity: 0.55,
+          'stroke-linecap': 'round', 'pointer-events': 'none'
+        }));
+      }
+
+      const dAngleDeg = -90 + (dayOff / 30) * 180;
+      const dRad = dAngleDeg * Math.PI / 180;
+      const dx = cx + DM * Math.cos(dRad), dy = cy + DM * Math.sin(dRad);
+      const dLbl = Math.round(Math.abs(dayOff)) === 0 ? '•' : (dayOff > 0 ? `+${Math.round(dayOff)}` : String(Math.round(dayOff)));
+      chart.append(el('circle', { cx: dx, cy: dy, r: 13, fill: 'rgba(231,187,102,0.2)', 'pointer-events': 'none' }));
+      chart.append(el('circle', { cx: dx, cy: dy, r: 8, fill: '#e7bb66', stroke: 'rgba(255,255,255,0.75)', 'stroke-width': 1.5, 'pointer-events': 'none' }));
+      chart.append(el('text', {
+        x: dx, y: dy, 'text-anchor': 'middle', 'dominant-baseline': 'middle',
+        'font-size': 6, 'font-weight': 800, fill: '#101012', 'pointer-events': 'none'
+      }, dLbl));
     }
     function renderTags(items) {
       tags.replaceChildren(...items.map((item) => {
@@ -772,6 +1041,46 @@
     const now = new Date();
     setDate(now);
 
+    // ── Radial dial drag ──
+    let dialDrag = null;
+    function svgCoords(e) {
+      const rect = chart.getBoundingClientRect();
+      return {
+        x: (e.clientX - rect.left) * (720 / rect.width) - 360,
+        y: (e.clientY - rect.top) * (720 / rect.height) - 360
+      };
+    }
+    chart.addEventListener('pointerdown', (e) => {
+      const { x, y } = svgCoords(e);
+      const r = Math.hypot(x, y);
+      if (r >= 308 && r <= 324) {
+        dialDrag = { type: 'time', startAngle: Math.atan2(y, x), startMs: latestDate.getTime() };
+        chart.setPointerCapture(e.pointerId);
+        e.preventDefault();
+      } else if (r >= 330 && r <= 348) {
+        dialDrag = { type: 'date', startAngle: Math.atan2(y, x), startMs: latestDate.getTime() };
+        chart.setPointerCapture(e.pointerId);
+        e.preventDefault();
+      }
+    });
+    chart.addEventListener('pointermove', (e) => {
+      const { x, y } = svgCoords(e);
+      const r = Math.hypot(x, y);
+      if (!dialDrag) {
+        chart.style.cursor = (r >= 308 && r <= 324) || (r >= 330 && r <= 348) ? 'grab' : '';
+        return;
+      }
+      let delta = Math.atan2(y, x) - dialDrag.startAngle;
+      if (delta > Math.PI) delta -= 2 * Math.PI;
+      if (delta < -Math.PI) delta += 2 * Math.PI;
+      const msShift = dialDrag.type === 'date'
+        ? (delta / (2 * Math.PI)) * 60 * 86400000   // 360° = 60 days
+        : (delta / (2 * Math.PI)) * 24 * 3600000;   // 360° = 24 hours
+      setDate(new Date(dialDrag.startMs + msShift));
+    });
+    chart.addEventListener('pointerup', () => { dialDrag = null; chart.style.cursor = ''; });
+    chart.addEventListener('pointercancel', () => { dialDrag = null; chart.style.cursor = ''; });
+
     dateInput.addEventListener('input', render);
     timeInput.addEventListener('input', render);
     offsetRange.addEventListener('input', () => {
@@ -818,13 +1127,18 @@
       }
       addChatBubble(escapeHtml(text), 'user');
       const assistantBubble = addChatBubble('Mapping your words to the sky...', 'app');
+      let finalAnalysis = '';
       try {
-        const aiResult = await querySkyAssistant(text);
+        const skyContext = buildSkyContext(latestData, latestAspects, latestDate);
+        const aiResult = await querySkyAssistant(text, skyContext);
+        finalAnalysis = aiResult;
         assistantBubble.innerHTML = escapeHtml(aiResult).replace(/\n/g, '<br>');
       } catch (error) {
-        assistantBubble.innerHTML = analyzeAgainstSky(text);
+        finalAnalysis = analyzeAgainstSky(text);
+        assistantBubble.innerHTML = finalAnalysis;
         setStatus('AI query unavailable; using local mapping.');
       }
+      saveToJournal(text, finalAnalysis);
       chatInput.value = '';
     });
     chatInput.addEventListener('keydown', (event) => {
@@ -848,6 +1162,134 @@
         setStatus('Copy the browser URL to share this page.');
       }
     });
+
+    // --- New Functionality: Tabs, Login, Calendar, Journal ---
+
+    // Tabs
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(`${btn.dataset.tab}Tab`).classList.add('active');
+        if (btn.dataset.tab === 'calendar') renderCalendar();
+        if (btn.dataset.tab === 'journal') renderJournal();
+      });
+    });
+
+    // Login/Profile
+    const userNameEl = document.getElementById('userName');
+    const loginBtn = document.getElementById('loginBtn');
+    
+    function updateProfile() {
+      const storedName = localStorage.getItem('astro_user_name');
+      if (storedName) {
+        userNameEl.textContent = storedName;
+        loginBtn.textContent = 'Logout';
+      } else {
+        userNameEl.textContent = 'Guest';
+        loginBtn.textContent = 'Login';
+      }
+    }
+
+    loginBtn.addEventListener('click', () => {
+      const storedName = localStorage.getItem('astro_user_name');
+      if (storedName) {
+        localStorage.removeItem('astro_user_name');
+        updateProfile();
+      } else {
+        const name = prompt('Enter your name to personalize your journal:');
+        if (name) {
+          localStorage.setItem('astro_user_name', name);
+          updateProfile();
+        }
+      }
+    });
+    updateProfile();
+
+    // Calendar
+    let calDate = new Date();
+    const calendarGrid = document.getElementById('calendarGrid');
+    const calendarMonth = document.getElementById('calendarMonth');
+
+    function renderCalendar() {
+      calendarGrid.innerHTML = '';
+      calendarMonth.textContent = calDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+      
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      days.forEach(d => {
+        const el = document.createElement('div');
+        el.className = 'cal-day header';
+        el.textContent = d;
+        calendarGrid.appendChild(el);
+      });
+
+      const firstDay = new Date(calDate.getFullYear(), calDate.getMonth(), 1).getDay();
+      const lastDate = new Date(calDate.getFullYear(), calDate.getMonth() + 1, 0).getDate();
+      const today = new Date();
+
+      for (let i = 0; i < firstDay; i++) {
+        calendarGrid.appendChild(document.createElement('div'));
+      }
+
+      for (let d = 1; d <= lastDate; d++) {
+        const el = document.createElement('div');
+        el.className = 'cal-day';
+        if (d === today.getDate() && calDate.getMonth() === today.getMonth() && calDate.getFullYear() === today.getFullYear()) {
+          el.classList.add('active');
+        }
+        el.textContent = d;
+        el.addEventListener('click', () => {
+          const selectedDate = new Date(calDate.getFullYear(), calDate.getMonth(), d);
+          setDate(selectedDate);
+          document.querySelector('[data-tab="sky"]').click();
+        });
+        calendarGrid.appendChild(el);
+      }
+    }
+
+    document.getElementById('prevMonth').addEventListener('click', () => {
+      calDate.setMonth(calDate.getMonth() - 1);
+      renderCalendar();
+    });
+    document.getElementById('nextMonth').addEventListener('click', () => {
+      calDate.setMonth(calDate.getMonth() + 1);
+      renderCalendar();
+    });
+
+    // Journal
+    const journalList = document.getElementById('journalList');
+
+    function saveToJournal(text, analysis) {
+      const entries = JSON.parse(localStorage.getItem('astro_journal') || '[]');
+      entries.unshift({
+        date: new Date().toISOString(),
+        text,
+        analysis
+      });
+      localStorage.setItem('astro_journal', JSON.stringify(entries.slice(0, 50)));
+    }
+
+    function renderJournal() {
+      const entries = JSON.parse(localStorage.getItem('astro_journal') || '[]');
+      if (entries.length === 0) {
+        journalList.innerHTML = '<p class="source-note" style="text-align: center; padding: 20px;">No journal entries yet. Your "Map to Sky" analyses will be saved here.</p>';
+        return;
+      }
+      journalList.innerHTML = '';
+      entries.forEach(entry => {
+        const el = document.createElement('div');
+        el.className = 'journal-entry';
+        const d = new Date(entry.date);
+        el.innerHTML = `
+          <div class="journal-date">${d.toLocaleDateString()} ${d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+          <div style="font-weight: 700; margin-bottom: 4px;">"${entry.text}"</div>
+          <div style="color: var(--muted); font-size: 0.82rem; line-height: 1.4;">${entry.analysis}</div>
+        `;
+        journalList.appendChild(el);
+      });
+    }
+
   </script>
 </body>
 </html>
