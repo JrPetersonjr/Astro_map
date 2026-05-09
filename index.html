@@ -1159,6 +1159,7 @@
     let selected = 'Sun';
     let observer = null;
     let latestData = [];
+    let wheelScale = 1.0;
     let latestAspects = [];
     let latestDate = new Date();
 
@@ -1931,7 +1932,6 @@ ${aspectLines || 'none within orb'}`;
     // ── Radial dial drag ──
     let dialDrag = null;
     let dateRingMode = 'days';
-    let wheelScale = 1.0;
     function isMultOf(v, u) { const r = Math.abs(v) % u; return r < u * 0.012 || (u - r) < u * 0.012; }
     const DATE_MODE_CONF = {
       days:   { halfRange: 30, ticks: 120, tickStep: 0.5,  majorEvery: 5,  minorEvery: 1,   msPerUnit: 86400000,          label: 'DAYS' },
