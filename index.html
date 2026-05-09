@@ -382,6 +382,11 @@
 
     .logo-header { display: flex; flex-direction: column; gap: 4px; }
     .logo-svg { display: block; width: 100%; max-width: 280px; height: auto; }
+    .logo-defs { margin: 2px 0 0; display: flex; flex-direction: column; gap: 3px; }
+    .logo-def { font-size: 0.63rem; color: var(--soft); line-height: 1.35; letter-spacing: 0.01em; }
+    .logo-def .def-word { color: var(--muted); font-weight: 600; letter-spacing: 0.04em; }
+    .logo-def .def-pron { font-style: italic; margin: 0 0.3em; }
+    .logo-def .def-pos { font-size: 0.58rem; color: var(--soft); opacity: 0.75; margin-right: 0.35em; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
 
     .j-unlock-welcome {
@@ -860,6 +865,10 @@
                 letter-spacing="-0.2">LuminaSynodic</text>
         </svg>
         <h1 class="sr-only">LuminaSynodic</h1>
+        <div class="logo-defs">
+          <div class="logo-def"><span class="def-word">lu·mi·na</span> <span class="def-pron">/ˈlo͞o·mə·nə/</span> <span class="def-pos">n.</span> plural of lumen; the SI unit of luminous flux — also (Latin) lights; the eyes as organs of sight</div>
+          <div class="logo-def"><span class="def-word">syn·od·ic</span> <span class="def-pron">/si·ˈnä·dik/</span> <span class="def-pos">adj.</span> of or relating to the period between two successive conjunctions of the same celestial bodies</div>
+        </div>
         <div class="eyebrow" id="dateEyebrow">Today</div>
       </div>
       <p class="lede">Live ephemeris positions with date travel, major aspects, retrogrades, and optional local horizon context.</p>
