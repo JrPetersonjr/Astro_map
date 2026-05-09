@@ -1590,8 +1590,11 @@ ${aspectLines || 'none within orb'}`;
       // Background covers expanded viewBox
       chart.append(el('rect', { x: -70, y: -70, width: 860, height: 860, fill: '#101012' }));
 
-      // Inner wheel circles — clean, uncluttered
-      chart.append(
+      // Scaleable wheel group — transforms centered at (360,360)
+      const wg = el('g', { transform: `translate(360,360) scale(${wheelScale}) translate(-360,-360)` });
+
+      // Inner wheel circles
+      wg.append(
         el('circle', { cx: 360, cy: 360, r: 92,  fill: 'rgba(255,255,255,0.025)', stroke: 'rgba(222,220,209,0.12)' }),
         el('circle', { cx: 360, cy: 360, r: 172, fill: 'none', stroke: 'rgba(222,220,209,0.10)', 'stroke-dasharray': '3 5' }),
         el('circle', { cx: 360, cy: 360, r: 250, fill: 'none', stroke: 'rgba(222,220,209,0.10)' }),
@@ -1601,11 +1604,11 @@ ${aspectLines || 'none within orb'}`;
       // Subtle sign-boundary ticks in the planet area
       for (let i = 0; i < 12; i++) {
         const ti = point(i * 30, 274), to = point(i * 30, 282);
-        chart.append(el('line', { x1: ti.x, y1: ti.y, x2: to.x, y2: to.y, stroke: 'rgba(231,187,102,0.35)', 'stroke-width': 1 }));
+        wg.append(el('line', { x1: ti.x, y1: ti.y, x2: to.x, y2: to.y, stroke: 'rgba(231,187,102,0.35)', 'stroke-width': 1 }));
       }
 
-      // Outer zodiac ring — sits outside the control rings
-      chart.append(
+      // Outer zodiac ring
+      wg.append(
         el('circle', { cx: 360, cy: 360, r: 352, fill: 'rgba(231,187,102,0.025)', stroke: 'rgba(231,187,102,0.2)' }),
         el('circle', { cx: 360, cy: 360, r: 396, fill: 'none', stroke: 'rgba(231,187,102,0.22)' })
       );
@@ -1616,27 +1619,23 @@ ${aspectLines || 'none within orb'}`;
         const lp = point(a + 15, 378), np = point(a + 15, 362);
         const sp = point(a, 353);
 
-        // Division line through zodiac band
-        chart.append(el('line', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, stroke: 'rgba(231,187,102,0.28)', 'stroke-width': 1 }));
+        wg.append(el('line', { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y, stroke: 'rgba(231,187,102,0.28)', 'stroke-width': 1 }));
 
-        // Gold glyph
-        chart.append(el('text', {
+        wg.append(el('text', {
           x: lp.x, y: lp.y,
           'text-anchor': 'middle', 'dominant-baseline': 'middle',
           fill: '#e7bb66', 'font-size': 20, 'font-weight': 700,
           'font-family': "'Noto Sans Symbols 2','Segoe UI Symbol',Symbol,sans-serif"
         }, signs[i][1]));
 
-        // Sign name
-        chart.append(el('text', {
+        wg.append(el('text', {
           x: np.x, y: np.y,
           'text-anchor': 'middle', 'dominant-baseline': 'middle',
           fill: '#7a7870', 'font-size': 7.5
         }, signs[i][0].toUpperCase()));
 
-        // 4-pointed star at sign boundary
         const sr = 3;
-        chart.append(el('path', {
+        wg.append(el('path', {
           d: `M ${sp.x} ${sp.y - sr} L ${sp.x + sr * 0.3} ${sp.y - sr * 0.3} L ${sp.x + sr} ${sp.y} L ${sp.x + sr * 0.3} ${sp.y + sr * 0.3} L ${sp.x} ${sp.y + sr} L ${sp.x - sr * 0.3} ${sp.y + sr * 0.3} L ${sp.x - sr} ${sp.y} L ${sp.x - sr * 0.3} ${sp.y - sr * 0.3} Z`,
           fill: 'rgba(231,187,102,0.5)', 'pointer-events': 'none'
         }));
@@ -1645,28 +1644,26 @@ ${aspectLines || 'none within orb'}`;
       aspectData.forEach(({ a, b, aspect }) => {
         const p1 = point(a.longitude, 178);
         const p2 = point(b.longitude, 178);
-        chart.append(el('line', {
+        wg.append(el('line', {
           x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
           stroke: aspect.color, 'stroke-width': 1.5, opacity: 0.62,
           'stroke-dasharray': aspect.dash
         }));
       });
 
-      // Planet position markers — tick + dot at degree, legend outside wheel
+      // Planet position markers
       data.forEach((planet) => {
         const inner = point(planet.longitude, 168);
         const outer = point(planet.longitude, 246);
         const dot = point(planet.longitude, 207);
         const isSelected = planet.key === selected;
 
-        // Radial tick line from inner orbit band outward
-        chart.append(el('line', {
+        wg.append(el('line', {
           x1: inner.x, y1: inner.y, x2: outer.x, y2: outer.y,
           stroke: planet.color, 'stroke-width': isSelected ? 2 : 1,
           opacity: isSelected ? 0.9 : 0.45
         }));
 
-        // Position dot + transparent hit circle
         const group = el('g', { class: 'planet-hit', tabindex: 0, role: 'button', 'aria-label': planet.key });
         group.addEventListener('click', () => { selected = planet.key; render(); });
         group.addEventListener('keydown', (event) => {
@@ -1687,19 +1684,20 @@ ${aspectLines || 'none within orb'}`;
             opacity: isSelected ? 1 : 0.85
           })
         );
-        chart.append(group);
+        wg.append(group);
       });
 
       renderPlanetLegend(data, aspectData);
 
       const dateText = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
       const timeText = date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
-      chart.append(drawMoonSphere(360, 304, 18, A.MoonPhase(date)));
-      chart.append(
+      wg.append(drawMoonSphere(360, 304, 18, A.MoonPhase(date)));
+      wg.append(
         el('text', { x: 360, y: 346, 'text-anchor': 'middle', fill: '#faf9f5', 'font-size': 15, 'font-weight': 800 }, dateText),
         el('text', { x: 360, y: 364, 'text-anchor': 'middle', fill: '#c2c0b6', 'font-size': 11 }, timeText),
         el('text', { x: 360, y: 380, 'text-anchor': 'middle', fill: '#9c9a92', 'font-size': 9 }, observer ? 'local horizon enabled' : 'geocentric transit wheel')
       );
+      chart.append(wg);
       drawControlRings(date);
     }
     function drawControlRings(date) {
@@ -1800,11 +1798,11 @@ ${aspectLines || 'none within orb'}`;
         'font-size': 6, 'font-weight': 800, fill: '#101012', 'pointer-events': 'none'
       }, dLbl));
 
-      // Mode indicator pill — bottom of date ring, click to cycle scale
+      // Mode indicator pill — bottom of date ring (enlarged for readability)
       const modePill = el('g', { 'pointer-events': 'all', style: 'cursor:pointer;' });
       modePill.append(
-        el('rect', { x: 346, y: 693, width: 28, height: 12, rx: 6, fill: 'rgba(231,187,102,0.18)', stroke: 'rgba(231,187,102,0.55)', 'stroke-width': 0.75 }),
-        el('text', { x: 360, y: 699, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: '#e7bb66', 'font-size': 6.5, 'font-weight': 800 }, dMode.label)
+        el('rect', { x: 326, y: 714, width: 68, height: 26, rx: 13, fill: 'rgba(231,187,102,0.18)', stroke: 'rgba(231,187,102,0.55)', 'stroke-width': 1 }),
+        el('text', { x: 360, y: 727, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: '#e7bb66', 'font-size': 13, 'font-weight': 800, 'letter-spacing': 1 }, dMode.label)
       );
       modePill.addEventListener('pointerdown', (e) => e.stopPropagation());
       modePill.addEventListener('click', () => {
@@ -1813,6 +1811,51 @@ ${aspectLines || 'none within orb'}`;
         render();
       });
       chart.append(modePill);
+
+      // ── SCALE ARC (left quarter, r=415, deg 225→315) ──
+      const SA_R = 415, SA_MIN = 225, SA_MAX = 315, SC_LO = 0.5, SC_HI = 1.5;
+      const saA = point(SA_MIN, SA_R), saB = point(SA_MAX, SA_R);
+      const thumbDeg = SA_MIN + ((wheelScale - SC_LO) / (SC_HI - SC_LO)) * (SA_MAX - SA_MIN);
+      const saThumb = point(thumbDeg, SA_R);
+
+      // Track
+      chart.append(el('path', {
+        d: `M ${saA.x} ${saA.y} A ${SA_R} ${SA_R} 0 0 0 ${saB.x} ${saB.y}`,
+        fill: 'none', stroke: 'rgba(255,255,255,0.1)', 'stroke-width': 16, 'stroke-linecap': 'round', 'pointer-events': 'none'
+      }));
+
+      // Active fill
+      if (thumbDeg > SA_MIN + 0.5) {
+        chart.append(el('path', {
+          d: `M ${saA.x} ${saA.y} A ${SA_R} ${SA_R} 0 0 0 ${saThumb.x} ${saThumb.y}`,
+          fill: 'none', stroke: 'rgba(255,255,255,0.3)', 'stroke-width': 8, 'stroke-linecap': 'round', 'pointer-events': 'none'
+        }));
+      }
+
+      // Tick marks at 50%, 75%, 100%, 125%, 150%
+      [SC_LO, 0.75, 1.0, 1.25, SC_HI].forEach(s => {
+        const td = SA_MIN + ((s - SC_LO) / (SC_HI - SC_LO)) * (SA_MAX - SA_MIN);
+        const pi = point(td, SA_R - 10), po = point(td, SA_R + 10);
+        chart.append(el('line', {
+          x1: pi.x, y1: pi.y, x2: po.x, y2: po.y,
+          stroke: s === 1.0 ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,0.28)',
+          'stroke-width': s === 1.0 ? 2 : 1, 'stroke-linecap': 'round', 'pointer-events': 'none'
+        }));
+      });
+
+      // Thumb
+      chart.append(el('circle', { cx: saThumb.x, cy: saThumb.y, r: 10, fill: '#f8f5ec', stroke: 'rgba(255,255,255,0.5)', 'stroke-width': 1.5, 'pointer-events': 'none' }));
+
+      // Label — anchored below the arc's lower end where there's room
+      const saLbl = point(230, 442);
+      chart.append(el('text', { x: saLbl.x, y: saLbl.y - 8, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: 'rgba(255,255,255,0.28)', 'font-size': 8, 'letter-spacing': 1, 'font-weight': 700 }, 'SCALE'));
+      chart.append(el('text', { x: saLbl.x, y: saLbl.y + 8, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: 'rgba(255,255,255,0.6)', 'font-size': 12, 'font-weight': 800 }, `${Math.round(wheelScale * 100)}%`));
+
+      // Wide transparent hit zone
+      chart.append(el('path', {
+        d: `M ${saA.x} ${saA.y} A ${SA_R} ${SA_R} 0 0 0 ${saB.x} ${saB.y}`,
+        fill: 'none', stroke: 'transparent', 'stroke-width': 36, style: 'cursor:grab;'
+      }));
     }
     function renderTable(data) {
       planetTable.replaceChildren(...data.map((planet) => {
@@ -1888,6 +1931,7 @@ ${aspectLines || 'none within orb'}`;
     // ── Radial dial drag ──
     let dialDrag = null;
     let dateRingMode = 'days';
+    let wheelScale = 1.0;
     function isMultOf(v, u) { const r = Math.abs(v) % u; return r < u * 0.012 || (u - r) < u * 0.012; }
     const DATE_MODE_CONF = {
       days:   { halfRange: 30, ticks: 120, tickStep: 0.5,  majorEvery: 5,  minorEvery: 1,   msPerUnit: 86400000,          label: 'DAYS' },
@@ -1913,13 +1957,26 @@ ${aspectLines || 'none within orb'}`;
         dialDrag = { type: 'date', startAngle: Math.atan2(y, x), startMs: latestDate.getTime() };
         chart.setPointerCapture(e.pointerId);
         e.preventDefault();
+      } else if (r >= 402 && r <= 430 && x < 0 && Math.abs(y) <= -x + 24) {
+        dialDrag = { type: 'scale' };
+        chart.setPointerCapture(e.pointerId);
+        e.preventDefault();
       }
     });
     chart.addEventListener('pointermove', (e) => {
       const { x, y } = svgCoords(e);
       const r = Math.hypot(x, y);
       if (!dialDrag) {
-        chart.style.cursor = (r >= 308 && r <= 324) || (r >= 330 && r <= 348) ? 'grab' : '';
+        const onScale = r >= 402 && r <= 430 && x < 0 && Math.abs(y) <= -x + 24;
+        chart.style.cursor = (r >= 308 && r <= 324) || (r >= 330 && r <= 348) || onScale ? 'grab' : '';
+        return;
+      }
+      if (dialDrag.type === 'scale') {
+        const mathAngle = Math.atan2(y, x) * 180 / Math.PI;
+        let ourDeg = ((mathAngle + 90) + 360) % 360;
+        ourDeg = Math.max(225, Math.min(315, ourDeg));
+        wheelScale = +(0.5 + ((ourDeg - 225) / 90)).toFixed(2);
+        render();
         return;
       }
       let delta = Math.atan2(y, x) - dialDrag.startAngle;
@@ -1928,7 +1985,7 @@ ${aspectLines || 'none within orb'}`;
       const mode = DATE_MODE_CONF[dateRingMode];
       const msShift = dialDrag.type === 'date'
         ? (delta / (2 * Math.PI)) * mode.halfRange * 2 * mode.msPerUnit
-        : (delta / (2 * Math.PI)) * 24 * 3600000;   // 360° = 24 hours
+        : (delta / (2 * Math.PI)) * 24 * 3600000;
       setDate(new Date(dialDrag.startMs + msShift));
     });
     chart.addEventListener('pointerup', () => { dialDrag = null; chart.style.cursor = ''; });
