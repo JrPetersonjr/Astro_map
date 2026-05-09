@@ -392,6 +392,30 @@
     }
     .j-unlock-welcome strong { color: var(--text); }
 
+    .dasha-panel {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+    .dasha-panel h3 {
+      margin: 0 0 10px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gold);
+    }
+    .dasha-current { margin-bottom: 10px; }
+    .dasha-anta { margin-top: 4px; padding-top: 8px; border-top: 1px solid var(--line); }
+    .dasha-label { font-size: 0.7rem; color: var(--soft); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+    .dasha-planet { font-size: 1.15rem; font-weight: 800; margin-bottom: 4px; line-height: 1.2; }
+    .dasha-planet.anta { font-size: 1rem; }
+    .dasha-progress-bar { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; margin: 4px 0; }
+    .dasha-bar-fill { height: 100%; border-radius: 2px; opacity: 0.7; }
+    .dasha-end { font-size: 0.72rem; color: var(--soft); }
+    .dasha-upcoming-header { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--soft); margin: 10px 0 5px; }
+    .dasha-upcoming { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; margin-bottom: 4px; }
+    .dasha-years { color: var(--soft); font-size: 0.72rem; }
+
     .j-heading { margin: 0 0 6px; font-size: 1.05rem; }
     .j-subheading { margin: 0 0 12px; font-size: 1rem; }
     .j-note-bottom { margin-bottom: 16px; }
@@ -984,6 +1008,7 @@
               <button type="button" class="secondary btn-sm j-danger-btn" id="journalClearBtn">Clear All</button>
             </div>
             <div id="journalPatternStats" class="pattern-stats hidden"></div>
+            <div id="journalDashaPanel" class="dasha-panel hidden"></div>
             <div class="journal-list j-list-area" id="journalList"></div>
           </section>
 
@@ -1008,6 +1033,12 @@
             <h2 class="j-subheading">Settings</h2>
             <label>Display name <small class="j-label-hint">(stored encrypted, optional)</small>
               <input type="text" id="journalDisplayNameEdit" placeholder="Your name" autocomplete="off">
+            </label>
+            <label>Birth date <small class="j-label-hint">(for Vimshottari Dasha — stored encrypted)</small>
+              <input type="date" id="journalBirthDateEdit" autocomplete="bday">
+            </label>
+            <label>Birth time <small class="j-label-hint">(optional — improves Dasha precision)</small>
+              <input type="time" id="journalBirthTimeEdit" step="60" autocomplete="bday-hour">
             </label>
             <h2 class="j-subheading j-settings-divider">Change Password</h2>
             <label>Current password <input type="password" id="journalCurrentPwd" autocomplete="current-password"></label>
@@ -2067,12 +2098,104 @@ ${aspectLines || 'none within orb'}`;
       renderCalendar();
     });
 
+    // ── Vimshottari Dasha ──
+    const DASHA_PLANETS = ['Ketu','Venus','Sun','Moon','Mars','Rahu','Jupiter','Saturn','Mercury'];
+    const DASHA_YEARS = { Ketu:7, Venus:20, Sun:6, Moon:10, Mars:7, Rahu:18, Jupiter:16, Saturn:19, Mercury:17 };
+    const NAKSHATRA_LORD = [
+      'Ketu','Venus','Sun','Moon','Mars','Rahu','Jupiter','Saturn','Mercury',
+      'Ketu','Venus','Sun','Moon','Mars','Rahu','Jupiter','Saturn','Mercury',
+      'Ketu','Venus','Sun','Moon','Mars','Rahu','Jupiter','Saturn','Mercury'
+    ];
+    const DASHA_COLOR = {
+      Ketu:'#cecbee', Venus:'#f4c0d1', Sun:'#fac775', Moon:'#d3d1c7', Mars:'#f0997b',
+      Rahu:'#9fe1cb', Jupiter:'#9fe1cb', Saturn:'#b5d4f4', Mercury:'#bbd6a8'
+    };
+    const MS_PER_YEAR = 365.25 * 24 * 3600 * 1000;
+
+    function computeDashas(birthDate, birthTime) {
+      const dt = new Date(`${birthDate}T${birthTime || '12:00'}:00`);
+      const moonLon = longitudeFor(A.Body.Moon, dt);
+      const siderealLon = normalize(moonLon - 24.2);
+      const nkSize = 360 / 27;
+      const nkIdx = Math.floor(siderealLon / nkSize);
+      const fracIn = (siderealLon % nkSize) / nkSize;
+      const startLord = NAKSHATRA_LORD[nkIdx];
+      const startIdx = DASHA_PLANETS.indexOf(startLord);
+      const birthMs = dt.getTime();
+      const dashas = [];
+      let elapsed = 0;
+      for (let cycle = 0; cycle < 3; cycle++) {
+        for (let i = 0; i < 9; i++) {
+          const planet = DASHA_PLANETS[(startIdx + i) % 9];
+          const years = (cycle === 0 && i === 0) ? (1 - fracIn) * DASHA_YEARS[planet] : DASHA_YEARS[planet];
+          dashas.push({ planet, startMs: birthMs + elapsed * MS_PER_YEAR, endMs: birthMs + (elapsed + years) * MS_PER_YEAR, years });
+          elapsed += years;
+        }
+      }
+      return dashas;
+    }
+
+    function getCurrentDasha(birthDate, birthTime) {
+      const dashas = computeDashas(birthDate, birthTime);
+      const now = Date.now();
+      const maha = dashas.find(d => d.startMs <= now && d.endMs > now);
+      if (!maha) return null;
+      const mahaLordIdx = DASHA_PLANETS.indexOf(maha.planet);
+      const antDashas = [];
+      let antMs = maha.startMs;
+      for (let i = 0; i < 9; i++) {
+        const ant = DASHA_PLANETS[(mahaLordIdx + i) % 9];
+        const dur = (DASHA_YEARS[ant] / 120) * maha.years * MS_PER_YEAR;
+        antDashas.push({ planet: ant, startMs: antMs, endMs: antMs + dur });
+        antMs += dur;
+      }
+      const anta = antDashas.find(d => d.startMs <= now && d.endMs > now);
+      const mahaIdx = dashas.indexOf(maha);
+      return { maha, anta, upcoming: dashas.slice(mahaIdx + 1, mahaIdx + 4) };
+    }
+
+    function renderDashaPanel() {
+      const el = document.getElementById('journalDashaPanel');
+      if (!el) return;
+      if (!journalBirthDate) { el.classList.add('hidden'); return; }
+      try {
+        const res = getCurrentDasha(journalBirthDate, journalBirthTime);
+        if (!res) { el.classList.add('hidden'); return; }
+        const { maha, anta, upcoming } = res;
+        const now = Date.now();
+        const pct = Math.round(((now - maha.startMs) / (maha.endMs - maha.startMs)) * 100);
+        const fmt = ms => new Date(ms).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        el.classList.remove('hidden');
+        el.innerHTML = `
+          <h3>Vimshottari Dasha</h3>
+          <div class="dasha-current">
+            <div class="dasha-label">Mahadasha</div>
+            <div class="dasha-planet" style="color:${DASHA_COLOR[maha.planet]};">${maha.planet}</div>
+            <div class="dasha-progress-bar"><div class="dasha-bar-fill" style="width:${pct}%;background:${DASHA_COLOR[maha.planet]};"></div></div>
+            <div class="dasha-end">ends ${fmt(maha.endMs)} · ${pct}% complete</div>
+          </div>
+          ${anta ? `<div class="dasha-current dasha-anta">
+            <div class="dasha-label">Antardasha</div>
+            <div class="dasha-planet anta" style="color:${DASHA_COLOR[anta.planet]};">${anta.planet}</div>
+            <div class="dasha-end">ends ${fmt(anta.endMs)}</div>
+          </div>` : ''}
+          ${upcoming.length ? `<div class="dasha-upcoming-header">Upcoming Mahadashas</div>
+            ${upcoming.map(d => `<div class="dasha-upcoming">
+              <span style="color:${DASHA_COLOR[d.planet]};font-weight:700;">${d.planet}</span>
+              <span class="dasha-years">${fmt(d.startMs)} – ${fmt(d.endMs)}</span>
+            </div>`).join('')}` : ''}
+        `;
+      } catch { el.classList.add('hidden'); }
+    }
+
     // ── Journal: AES-GCM-256 encrypted local storage ──
-    // Payload format: { name: string, entries: Entry[] }
+    // Payload format: { name, birthDate, birthTime, entries }
     // Stored format:  { salt: b64, iv: b64, ct: b64 }
     const JOURNAL_STORE = 'astro_journal_enc';
     let journalKey = null;
     let journalName = '';
+    let journalBirthDate = '';
+    let journalBirthTime = '';
     let journalEntries = [];
     let lastAnalysis = null;
     let journalUnlockAttempts = 0;
@@ -2115,7 +2238,7 @@ ${aspectLines || 'none within orb'}`;
 
     async function journalPersist() {
       const stored = journalLoad();
-      const enc = await journalEncrypt(journalKey, { name: journalName, entries: journalEntries });
+      const enc = await journalEncrypt(journalKey, { name: journalName, birthDate: journalBirthDate, birthTime: journalBirthTime, entries: journalEntries });
       localStorage.setItem(JOURNAL_STORE, JSON.stringify({ salt: stored.salt, ...enc }));
     }
 
@@ -2152,12 +2275,16 @@ ${aspectLines || 'none within orb'}`;
         throw new Error('Wrong password');
       }
       journalUnlockAttempts = 0;
-      // Support old format (plain array) and new format ({ name, entries })
+      // Support old format (plain array) and new format ({ name, birthDate, birthTime, entries })
       if (Array.isArray(payload)) {
         journalName = '';
+        journalBirthDate = '';
+        journalBirthTime = '';
         journalEntries = payload;
       } else {
         journalName = payload.name || '';
+        journalBirthDate = payload.birthDate || '';
+        journalBirthTime = payload.birthTime || '';
         journalEntries = payload.entries || [];
       }
     }
@@ -2227,6 +2354,7 @@ ${aspectLines || 'none within orb'}`;
         journalUpdateMeta();
         renderJournal();
         renderPatternStats();
+        renderDashaPanel();
       } else {
         locked.classList.remove('hidden');
         unlocked.classList.add('hidden');
@@ -2351,6 +2479,7 @@ ${aspectLines || 'none within orb'}`;
         });
       });
       renderPatternStats();
+      renderDashaPanel();
     }
 
     document.getElementById('journalSetupBtn').addEventListener('click', async () => {
@@ -2382,6 +2511,8 @@ ${aspectLines || 'none within orb'}`;
       journalKey = null;
       journalName = '';
       journalEntries = [];
+      journalBirthDate = '';
+      journalBirthTime = '';
       document.getElementById('journalChangePwdPanel').classList.add('hidden');
       document.getElementById('journalClearPanel').classList.add('hidden');
       journalInitView();
@@ -2437,6 +2568,8 @@ ${aspectLines || 'none within orb'}`;
     document.getElementById('journalChangePwdBtn').addEventListener('click', () => {
       document.getElementById('journalChangePwdPanel').classList.remove('hidden');
       document.getElementById('journalDisplayNameEdit').value = journalName;
+      document.getElementById('journalBirthDateEdit').value = journalBirthDate;
+      document.getElementById('journalBirthTimeEdit').value = journalBirthTime;
     });
 
     document.getElementById('journalCancelChangePwdBtn').addEventListener('click', () => {
@@ -2455,11 +2588,14 @@ ${aspectLines || 'none within orb'}`;
       // Allow saving name even if password fields are empty (name-only update)
       if (!current && !next && !confirm) {
         journalName = newName;
+        journalBirthDate = document.getElementById('journalBirthDateEdit').value;
+        journalBirthTime = document.getElementById('journalBirthTimeEdit').value;
         await journalPersist();
         if (newName) localStorage.setItem('astro_journal_dname', newName);
         else localStorage.removeItem('astro_journal_dname');
         document.getElementById('journalChangePwdPanel').classList.add('hidden');
         journalUpdateMeta();
+        renderDashaPanel();
         setStatus('Name updated.');
         return;
       }
@@ -2468,6 +2604,8 @@ ${aspectLines || 'none within orb'}`;
       if (next !== confirm) { setStatus('New passwords do not match.'); return; }
       try {
         journalName = newName;
+        journalBirthDate = document.getElementById('journalBirthDateEdit').value;
+        journalBirthTime = document.getElementById('journalBirthTimeEdit').value;
         await journalChangePassword(current, next);
         if (newName) localStorage.setItem('astro_journal_dname', newName);
         else localStorage.removeItem('astro_journal_dname');
