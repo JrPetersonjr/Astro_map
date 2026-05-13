@@ -2846,7 +2846,6 @@ ${skyContext}`
     // ── Dream save + interpret ──
     function buildJournalContext(question) {
       const recent = journalEntries.slice(0, 5);
-      const dreams = journalEntries.filter(e => e.entryType === 'dream').slice(0, 3);
       const scored = journalEntries.filter(e => e.alignment !== null);
       const avgAlign = scored.length ? Math.round(scored.reduce((s, e) => s + e.alignment, 0) / scored.length) : null;
 
@@ -2857,11 +2856,15 @@ ${skyContext}`
         return `${d}${align} — ${tag}${e.text.slice(0, 280)}${e.text.length > 280 ? '...' : ''}`;
       }).join('\n');
 
+      // Include any unsaved draft in the entry box so users don't have to save before asking
+      const draft = (document.getElementById('journalEntryInput')?.value || '').trim();
+
       return [
         `The user has ${journalEntries.length} encrypted journal entries.`,
         avgAlign != null ? `Average sky alignment across ${scored.length} scored entries: ${avgAlign}%.` : '',
         recent.length ? `\nRecent entries:\n${entryLines}` : '',
-        `\nUser's question: ${question}`
+        draft ? `\nCurrent unsaved entry (not yet saved):\n${draft}` : '',
+        `\nUser's question or entry to interpret: ${question}`
       ].filter(Boolean).join(' ');
     }
 
