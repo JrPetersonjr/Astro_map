@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Request must include a "prompt" string' });
   }
 
-  const model = process.env.QUERY_MODEL || 'gemini-2.0-flash';
+  const model = process.env.QUERY_MODEL || 'gemini-2.5-flash';
   const systemPrompt = typeof skyContext === 'string' && skyContext
     ? `You are a skilled sky interpreter — equal parts astronomer, herbalist, and journal keeper. You read celestial patterns with scientific precision and speak about them with the warmth of someone who genuinely lives by the rhythms of the sky. You are not a prophet and never predict the future. You interpret the present: how the current planetary weather maps onto what someone is actually experiencing right now.
 
