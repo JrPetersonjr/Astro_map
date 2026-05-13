@@ -373,6 +373,14 @@
     .tarot-card-result .t-sky-note { font-size: 0.73rem; color: var(--soft); margin-top: 4px; font-style: italic; }
     .tarot-align-bar { font-size: 0.76rem; font-weight: 800; letter-spacing: 0.05em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
     .tarot-section-divider { border: none; border-top: 1px solid var(--line); margin: 16px 0; }
+    .tarot-card-kw-row { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.04); flex-wrap: wrap; }
+    .tarot-card-kw-name { font-size: 0.67rem; font-weight: 700; color: var(--gold); min-width: 130px; padding-top: 4px; flex-shrink: 0; }
+    .tarot-card-kw-chips { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; }
+    .tarot-card-kw-divider { width: 100%; border: none; border-top: 1px dashed rgba(255,255,255,0.06); margin: 2px 0 4px; }
+    .tarot-chip.rev-chip { border-color: rgba(223,102,93,0.35); color: rgba(223,102,93,0.75); }
+    .tarot-chip.rev-chip:hover { border-color: var(--coral); color: var(--coral); }
+    .tarot-chip.rev-chip.selected { background: rgba(223,102,93,0.12); border-color: var(--coral); color: var(--coral); }
+    .tarot-slot-kw-preview { font-size: 0.7rem; margin-top: 5px; min-height: 0; transition: color 0.15s; }
 
     .journal-list {
       display: grid;
@@ -3098,80 +3106,23 @@ ${skyContext}`
       'balance':       'spiritual',
     };
 
-    const TAROT_CLOUD_KEYWORDS = [
-      { kw: 'attraction',     themes: ['love_interest'] },
-      { kw: 'longing',        themes: ['love_interest', 'loss'] },
-      { kw: 'connection',     themes: ['love_interest', 'family_home'] },
-      { kw: 'heartbreak',     themes: ['loss', 'love_interest'] },
-      { kw: 'desire',         themes: ['love_interest'] },
-      { kw: 'jealousy',       themes: ['tension', 'love_interest'] },
-      { kw: 'commitment',     themes: ['love_interest', 'family_home'] },
-      { kw: 'grief',          themes: ['loss'] },
-      { kw: 'letting go',     themes: ['loss', 'completion'] },
-      { kw: 'emptiness',      themes: ['loss'] },
-      { kw: 'sadness',        themes: ['loss'] },
-      { kw: 'nostalgia',      themes: ['loss', 'completion'] },
-      { kw: 'acceptance',     themes: ['completion', 'loss'] },
-      { kw: 'abundance',      themes: ['money_gain'] },
-      { kw: 'scarcity',       themes: ['money_loss'] },
-      { kw: 'generosity',     themes: ['money_gain', 'family_home'] },
-      { kw: 'debt',           themes: ['money_loss'] },
-      { kw: 'security',       themes: ['money_gain', 'family_home'] },
-      { kw: 'prosperity',     themes: ['money_gain', 'career'] },
-      { kw: 'frustration',    themes: ['tension'] },
-      { kw: 'conflict',       themes: ['tension'] },
-      { kw: 'anger',          themes: ['tension'] },
-      { kw: 'betrayal',       themes: ['tension', 'loss'] },
-      { kw: 'pressure',       themes: ['tension', 'career'] },
-      { kw: 'resistance',     themes: ['tension'] },
-      { kw: 'power struggle', themes: ['tension'] },
-      { kw: 'exhaustion',     themes: ['health'] },
-      { kw: 'healing',        themes: ['health', 'spiritual'] },
-      { kw: 'vitality',       themes: ['health'] },
-      { kw: 'anxiety',        themes: ['health', 'tension'] },
-      { kw: 'rest',           themes: ['health'] },
-      { kw: 'recovery',       themes: ['health'] },
-      { kw: 'ambition',       themes: ['career'] },
-      { kw: 'blocked',        themes: ['career', 'tension'] },
-      { kw: 'success',        themes: ['career', 'money_gain'] },
-      { kw: 'purpose',        themes: ['career', 'spiritual'] },
-      { kw: 'discipline',     themes: ['career'] },
-      { kw: 'recognition',    themes: ['career', 'money_gain'] },
-      { kw: 'stagnation',     themes: ['career', 'tension'] },
-      { kw: 'belonging',      themes: ['family_home'] },
-      { kw: 'nurturing',      themes: ['family_home'] },
-      { kw: 'roots',          themes: ['family_home', 'completion'] },
-      { kw: 'protection',     themes: ['family_home'] },
-      { kw: 'stability',      themes: ['family_home', 'career'] },
-      { kw: 'isolation',      themes: ['loss', 'family_home'] },
-      { kw: 'intuition',      themes: ['spiritual'] },
-      { kw: 'dreams',         themes: ['spiritual'] },
-      { kw: 'mystery',        themes: ['spiritual', 'tension'] },
-      { kw: 'guidance',       themes: ['spiritual', 'new_beginnings'] },
-      { kw: 'surrender',      themes: ['spiritual', 'completion'] },
-      { kw: 'clarity',        themes: ['spiritual', 'new_beginnings'] },
-      { kw: 'confusion',      themes: ['spiritual', 'tension'] },
-      { kw: 'upheaval',       themes: ['sudden_change'] },
-      { kw: 'breakthrough',   themes: ['sudden_change', 'new_beginnings'] },
-      { kw: 'liberation',     themes: ['sudden_change', 'new_beginnings'] },
-      { kw: 'chaos',          themes: ['sudden_change', 'tension'] },
-      { kw: 'transformation', themes: ['sudden_change', 'completion'] },
-      { kw: 'surprise',       themes: ['sudden_change'] },
-      { kw: 'hope',           themes: ['new_beginnings'] },
-      { kw: 'courage',        themes: ['new_beginnings', 'career'] },
-      { kw: 'curiosity',      themes: ['new_beginnings', 'spiritual'] },
-      { kw: 'possibility',    themes: ['new_beginnings'] },
-      { kw: 'fresh start',    themes: ['new_beginnings'] },
-      { kw: 'momentum',       themes: ['new_beginnings', 'career'] },
-      { kw: 'closure',        themes: ['completion', 'loss'] },
-      { kw: 'achievement',    themes: ['completion', 'career'] },
-      { kw: 'release',        themes: ['completion', 'spiritual'] },
-      { kw: 'transition',     themes: ['completion', 'sudden_change'] },
-      { kw: 'harmony',        themes: ['balance', 'family_home'] },
-      { kw: 'patience',       themes: ['balance'] },
-      { kw: 'fairness',       themes: ['balance'] },
-      { kw: 'integration',    themes: ['balance', 'spiritual'] },
-    ];
+    // Keyword → card themes lookup, built from window._TAROT_CARDS at init time
+    let _tarotKwThemeMap = null;
+    function getTarotKwThemeMap() {
+      if (_tarotKwThemeMap) return _tarotKwThemeMap;
+      const cards = window._TAROT_CARDS || [];
+      const map = new Map();
+      cards.forEach(card => {
+        const addKw = (kw) => {
+          if (!map.has(kw)) map.set(kw, new Set());
+          card.themes.forEach(t => map.get(kw).add(t));
+        };
+        card.keywords.upright.forEach(addKw);
+        card.keywords.reversed.forEach(addKw);
+      });
+      _tarotKwThemeMap = map;
+      return map;
+    }
 
     const TAROT_SPREADS = {
       single: {
@@ -3282,21 +3233,61 @@ ${skyContext}`
       if (!cloud) return;
       cloud.innerHTML = '';
       const sel = tarotKwSelections[period];
+      const cards = window._TAROT_CARDS || [];
 
-      TAROT_CLOUD_KEYWORDS.forEach(({ kw }) => {
+      function makeChip(kw, isReversed) {
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'tarot-chip' + (sel.has(kw) ? ' selected' : '');
+        btn.className = 'tarot-chip' + (isReversed ? ' rev-chip' : '') + (sel.has(kw) ? ' selected' : '');
         btn.textContent = kw;
+        btn.title = isReversed ? 'Reversed keyword' : 'Upright keyword';
         btn.addEventListener('click', () => {
           if (sel.has(kw)) { sel.delete(kw); btn.classList.remove('selected'); }
           else             { sel.add(kw);    btn.classList.add('selected'); }
-          const n = sel.size;
-          countEl.textContent = n ? `${n} feeling${n > 1 ? 's' : ''} selected` : '';
+          countEl.textContent = sel.size ? `${sel.size} selected` : '';
         });
-        cloud.appendChild(btn);
+        return btn;
+      }
+
+      // Group cards by arcana/suit
+      const groups = [
+        { label: 'Major Arcana', cards: cards.filter(c => c.arcana === 'Major') },
+        { label: 'Cups',         cards: cards.filter(c => c.suit === 'Cups') },
+        { label: 'Pentacles',    cards: cards.filter(c => c.suit === 'Pentacles') },
+        { label: 'Swords',       cards: cards.filter(c => c.suit === 'Swords') },
+        { label: 'Wands',        cards: cards.filter(c => c.suit === 'Wands') },
+      ];
+
+      groups.forEach(group => {
+        if (!group.cards.length) return;
+        const header = document.createElement('div');
+        header.style.cssText = 'font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--soft);margin:10px 0 4px;';
+        header.textContent = group.label;
+        cloud.appendChild(header);
+
+        group.cards.forEach(card => {
+          const row = document.createElement('div');
+          row.className = 'tarot-card-kw-row';
+          const nameEl = document.createElement('div');
+          nameEl.className = 'tarot-card-kw-name';
+          nameEl.textContent = card.name;
+          row.appendChild(nameEl);
+
+          const chipsEl = document.createElement('div');
+          chipsEl.className = 'tarot-card-kw-chips';
+          card.keywords.upright.forEach(kw => chipsEl.appendChild(makeChip(kw, false)));
+          if (card.keywords.reversed.length) {
+            const div = document.createElement('hr');
+            div.className = 'tarot-card-kw-divider';
+            chipsEl.appendChild(div);
+            card.keywords.reversed.forEach(kw => chipsEl.appendChild(makeChip(kw, true)));
+          }
+          row.appendChild(chipsEl);
+          cloud.appendChild(row);
+        });
       });
-      countEl.textContent = sel.size ? `${sel.size} feeling${sel.size > 1 ? 's' : ''} selected` : '';
+
+      countEl.textContent = sel.size ? `${sel.size} selected` : '';
     }
 
     function generateKeywordReading() {
@@ -3313,12 +3304,13 @@ ${skyContext}`
       let totalScore = 0;
       let periodCount = 0;
 
+      const kwMap = getTarotKwThemeMap();
       periods.forEach(({ label, sel }) => {
         const selectedKws = Array.from(sel);
         const allThemes = [];
         selectedKws.forEach(kw => {
-          const entry = TAROT_CLOUD_KEYWORDS.find(k => k.kw === kw);
-          if (entry) entry.themes.forEach(t => { if (!allThemes.includes(t)) allThemes.push(t); });
+          const themes = kwMap.get(kw);
+          if (themes) themes.forEach(t => { if (!allThemes.includes(t)) allThemes.push(t); });
         });
 
         const result = scoreTarotThemes(allThemes);
@@ -3380,14 +3372,35 @@ ${skyContext}`
             <input type="text" class="tarot-card-input" list="tarotCardNames" placeholder="Card name…" autocomplete="off">
             <button type="button" class="tarot-orient-btn" data-reversed="false">Upright</button>
           </div>
+          <div class="tarot-slot-kw-preview"></div>
         `;
         const orientBtn = slot.querySelector('.tarot-orient-btn');
+        const input = slot.querySelector('.tarot-card-input');
+        const preview = slot.querySelector('.tarot-slot-kw-preview');
+
+        function refreshSlotPreview() {
+          const name = (input.value || '').trim();
+          const cards = window._TAROT_CARDS || [];
+          const card = cards.find(c => c.name.toLowerCase() === name.toLowerCase());
+          if (card) {
+            const rev = orientBtn.dataset.reversed === 'true';
+            const kws = rev ? card.keywords.reversed : card.keywords.upright;
+            preview.textContent = kws.join(' · ');
+            preview.style.color = rev ? 'var(--coral)' : 'var(--violet)';
+          } else {
+            preview.textContent = '';
+          }
+        }
+
         orientBtn.addEventListener('click', () => {
           const rev = orientBtn.dataset.reversed === 'true';
           orientBtn.dataset.reversed = String(!rev);
           orientBtn.textContent = rev ? 'Upright' : 'Reversed';
           orientBtn.classList.toggle('reversed', !rev);
+          refreshSlotPreview();
         });
+        input.addEventListener('input', refreshSlotPreview);
+        input.addEventListener('change', refreshSlotPreview);
         slotsEl.appendChild(slot);
       });
     }
@@ -3522,7 +3535,7 @@ ${skyContext}`
       document.getElementById('tarotInterpretBtn').addEventListener('click', interpretSpread);
 
       document.getElementById('tarotClearAllBtn').addEventListener('click', () => {
-        ['today', 'week', 'month'].forEach(p => { tarotKwSelections[p].clear(); buildTarotKeywordCloud(p); });
+        ['today', 'week', 'month'].forEach(p => { tarotKwSelections[p].clear(); _tarotKwThemeMap = null; buildTarotKeywordCloud(p); });
         document.getElementById('tarotKeywordOutput').classList.add('hidden');
         document.getElementById('tarotKeywordActions').classList.add('hidden');
         lastTarotKwReading = null;
@@ -3571,9 +3584,6 @@ ${skyContext}`
     }
 
   </script>
-  <script type="module">
-    import { TAROT_CARDS } from './data/tarotCards.js';
-    window._TAROT_CARDS = TAROT_CARDS;
-  </script>
+  <script src="data/tarotCards.js"></script>
 </body>
 </html>

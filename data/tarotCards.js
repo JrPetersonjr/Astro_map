@@ -1,4 +1,4 @@
-export const LIFE_THEMES = {
+const LIFE_THEMES = {
   LOVE: 'love_interest',
   LOSS: 'loss',
   MONEY_GAIN: 'money_gain',
@@ -14,7 +14,7 @@ export const LIFE_THEMES = {
   BALANCE: 'balance',
 };
 
-export const TAROT_CARDS = [
+window._TAROT_CARDS = [
   // MAJOR ARCANA (0–21)
   {
     id: 0,
@@ -1118,10 +1118,3 @@ export const TAROT_CARDS = [
   },
 ];
 
-export const getCardById = (id) => TAROT_CARDS.find(card => card.id === id);
-export const getCardByName = (name) => TAROT_CARDS.find(card => card.name.toLowerCase() === name.toLowerCase());
-export const getCardsBySuit = (suit) => TAROT_CARDS.filter(card => card.suit === suit);
-export const getCardsByTheme = (theme) => TAROT_CARDS.filter(card => card.themes.includes(theme));
-export const getCardsByKeyword = (keyword) => TAROT_CARDS.filter(card =>
-  card.keywords.upright.some(k => k.includes(keyword)) || card.keywords.reversed.some(k => k.includes(keyword))
-);
