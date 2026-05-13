@@ -41,20 +41,32 @@
       color: var(--text);
     }
 
+    .app-header {
+      width: min(1560px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 22px 0 10px;
+      text-align: center;
+    }
+
     main {
-      width: min(1220px, calc(100% - 28px));
-      min-height: 100vh;
+      width: min(1560px, calc(100% - 28px));
       margin: 0 auto;
       display: grid;
-      grid-template-columns: minmax(340px, 720px) minmax(310px, 420px);
+      grid-template-columns: 270px minmax(380px, 1fr) minmax(360px, 460px);
       grid-template-rows: auto auto;
       align-items: start;
-      gap: 30px;
-      padding: 28px 0;
+      gap: 20px;
+      padding: 8px 0 28px;
+    }
+
+    .sky-controls {
+      grid-column: 1;
+      grid-row: 1 / 3;
+      align-self: start;
     }
 
     .map-shell {
-      grid-column: 1;
+      grid-column: 2;
       grid-row: 1;
       min-width: 0;
       aspect-ratio: 1;
@@ -66,13 +78,13 @@
     }
 
     .side {
-      grid-column: 2;
+      grid-column: 3;
       grid-row: 1 / 3;
       align-self: start;
     }
 
     .planet-legend {
-      grid-column: 1;
+      grid-column: 2;
       grid-row: 2;
       display: flex;
       flex-wrap: wrap;
@@ -870,20 +882,44 @@
     .planet-hit { cursor: pointer; }
     .planet-hit:hover .planet-ring { stroke-width: 2.2; filter: drop-shadow(0 0 10px rgba(245, 230, 180, 0.45)); }
 
-    @media (max-width: 950px) {
-      main {
-        grid-template-columns: 1fr;
-        align-items: start;
-        padding-top: 18px;
-      }
-      .side { order: -1; }
-    }
+    /* ── Tarot sub-navigation ── */
+    .tarot-subnav { display: flex; border-bottom: 1px solid var(--line); margin-bottom: 12px; gap: 0; }
+    .tarot-subnav-btn { flex: 1; background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); cursor: pointer; font-size: 0.74rem; font-weight: 700; padding: 8px 4px; text-transform: uppercase; letter-spacing: 0.06em; transition: all 0.15s; margin-bottom: -1px; }
+    .tarot-subnav-btn:hover { color: var(--text); }
+    .tarot-subnav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .tarot-sub-panel { display: none; }
+    .tarot-sub-panel.active { display: block; }
+    .tarot-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); gap: 8px; max-height: 560px; overflow-y: auto; padding-bottom: 4px; }
+    .tarot-card-tile { cursor: pointer; text-align: center; border-radius: 6px; padding: 3px; transition: background 0.15s; }
+    .tarot-card-tile:hover { background: rgba(255,255,255,0.05); }
+    .tarot-card-tile.selected { background: rgba(170,151,232,0.12); outline: 1px solid var(--violet); }
+    .tarot-card-tile img { width: 100%; height: auto; border-radius: 4px; display: block; }
+    .tarot-card-tile .tc-tile-name { font-size: 0.58rem; color: var(--muted); margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tarot-card-detail { background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 12px; margin-top: 10px; display: flex; gap: 12px; align-items: flex-start; }
+    .tarot-card-detail-text { flex: 1; min-width: 0; }
+    .tarot-card-detail-text .t-card-name { font-weight: 700; font-size: 0.88rem; margin-bottom: 2px; }
+    .tarot-card-detail-text .t-card-orient { font-size: 0.7rem; color: var(--soft); margin-bottom: 6px; }
+    .tarot-card-detail-text .t-card-kw { font-size: 0.72rem; color: var(--violet); margin-bottom: 5px; }
+    .tarot-card-detail-text .t-card-desc { font-size: 0.79rem; color: var(--muted); line-height: 1.6; }
+    .tarot-from-journal-cta { width: 100%; background: rgba(170,151,232,0.07); border: 1px solid rgba(170,151,232,0.22); border-radius: 8px; color: var(--violet); cursor: pointer; font-size: 0.83rem; padding: 14px 12px; margin-top: 14px; text-align: center; transition: all 0.15s; line-height: 1.4; display: block; }
+    .tarot-from-journal-cta:hover { background: rgba(170,151,232,0.15); border-color: var(--violet); }
+    .tarot-journal-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; margin-top: 12px; }
 
+    /* ── Sky controls strip at bottom ── */
+    .sky-caption-area { margin-top: 10px; }
+
+    @media (max-width: 1200px) {
+      main { grid-template-columns: 240px minmax(340px, 1fr) minmax(320px, 420px); gap: 16px; }
+    }
+    @media (max-width: 950px) {
+      main { grid-template-columns: 1fr; padding-top: 14px; }
+      .sky-controls { grid-column: 1; grid-row: auto; }
+      .map-shell { grid-column: 1; grid-row: auto; }
+      .planet-legend { grid-column: 1; grid-row: auto; }
+      .side { grid-column: 1; grid-row: auto; }
+    }
     @media (max-width: 560px) {
-      main {
-        width: min(100% - 20px, 1220px);
-        gap: 18px;
-      }
+      main { width: min(100% - 20px, 1560px); gap: 14px; }
       h1 { font-size: 2.25rem; }
       .controls { grid-template-columns: 1fr; }
       .row { grid-template-columns: 74px 1fr; }
@@ -893,18 +929,8 @@
   </style>
 </head>
 <body>
-  <main>
-    <section class="map-shell" aria-label="Live astrological sky map">
-      <svg id="chart" viewBox="-70 -70 860 860" role="img" aria-labelledby="chartTitle chartDesc">
-        <title id="chartTitle">LuminaSynodic - Daily Astrological Sky Map</title>
-        <desc id="chartDesc">Live zodiac wheel with calculated planet positions and major aspects.</desc>
-      </svg>
-    </section>
-
-    <div id="planetLegend" class="planet-legend"></div>
-
-    <aside class="side">
-      <div class="logo-header">
+  <header class="app-header">
+    <div class="logo-header" style="display:inline-flex;flex-direction:column;align-items:center;gap:4px;">
         <svg class="logo-svg" viewBox="0 0 220 178" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
             <radialGradient id="lsSunGrad" cx="38%" cy="34%" r="62%">
@@ -952,58 +978,76 @@
         <div class="eyebrow" id="dateEyebrow">Today</div>
       </div>
       <p class="lede">Live ephemeris positions with date travel, major aspects, retrogrades, and optional local horizon context.</p>
+  </header>
 
+  <main>
+    <section class="sky-controls">
+      <section class="panel controls">
+        <label>Date
+          <input id="dateInput" type="date">
+        </label>
+        <label>Time
+          <input id="timeInput" type="time" step="60">
+        </label>
+        <label class="wide">Shift from today: <span id="offsetLabel">0 days</span>
+          <input id="offsetRange" type="range" min="-30" max="30" value="0">
+        </label>
+        <div class="jump-row wide">
+          <button type="button" class="secondary" data-shift="-7">-7d</button>
+          <button type="button" class="secondary" data-shift="-1">-1d</button>
+          <button type="button" id="todayBtn">Today</button>
+          <button type="button" class="secondary" data-shift="1">+1d</button>
+          <button type="button" class="secondary" data-shift="7">+7d</button>
+          <button type="button" class="secondary" id="locationBtn">Use My Location</button>
+        </div>
+      </section>
+
+      <section class="panel insight" aria-live="polite">
+        <h2 id="insightTitle">Current Sky</h2>
+        <p id="insightText"></p>
+      </section>
+
+      <section class="panel">
+        <div class="table" id="planetTable" aria-label="Planet positions"></div>
+      </section>
+
+      <section class="panel">
+        <label>What's going on in your life?
+          <textarea class="chat-input" id="chatInput" placeholder="Example: loss, a new relationship, money pressure, job tension, family conflict, a move, or a sudden opportunity."></textarea>
+        </label>
+        <div class="actions">
+          <button type="button" id="analyzeChat">Map to Sky</button>
+          <button type="button" class="secondary" id="clearChat">Clear</button>
+          <button type="button" class="secondary hidden" id="saveToJournalBtn">Save to Journal</button>
+        </div>
+        <div class="chat-log" id="chatLog" aria-live="polite"></div>
+      </section>
+      <textarea class="caption" id="caption" aria-label="Sky caption"></textarea>
+      <div class="actions">
+        <button type="button" id="copyCaption">Copy Caption</button>
+        <button type="button" class="secondary" id="sharePage">Share Link</button>
+        <a class="button secondary" href="sky-map-social.png" download>Download Preview</a>
+      </div>
+      <p class="source-note">Ephemeris: Astronomy Engine, an MIT-licensed library based on VSOP87 and NOVAS models. Location is used for local horizon altitude/azimuth, not stored or sent anywhere. AI query support is available on Netlify when QUERY_API_KEY is configured.</p>
+      <div class="status" id="status"></div>
+    </section>
+
+    <section class="map-shell" aria-label="Live astrological sky map">
+      <svg id="chart" viewBox="-70 -70 860 860" role="img" aria-labelledby="chartTitle chartDesc">
+        <title id="chartTitle">LuminaSynodic - Daily Astrological Sky Map</title>
+        <desc id="chartDesc">Live zodiac wheel with calculated planet positions and major aspects.</desc>
+      </svg>
+    </section>
+    <div id="planetLegend" class="planet-legend"></div>
+
+    <aside class="side">
       <div class="tabs">
-        <button type="button" class="tab-btn active" data-tab="sky">Sky</button>
-        <button type="button" class="tab-btn" data-tab="calendar">Calendar</button>
+        <button type="button" class="tab-btn active" data-tab="calendar">Calendar</button>
         <button type="button" class="tab-btn" data-tab="journal">Journal</button>
         <button type="button" class="tab-btn" data-tab="tarot">Tarot</button>
       </div>
 
-      <div id="skyTab" class="tab-content active">
-        <section class="panel controls">
-          <label>Date
-            <input id="dateInput" type="date">
-          </label>
-          <label>Time
-            <input id="timeInput" type="time" step="60">
-          </label>
-          <label class="wide">Shift from today: <span id="offsetLabel">0 days</span>
-            <input id="offsetRange" type="range" min="-30" max="30" value="0">
-          </label>
-          <div class="jump-row wide">
-            <button type="button" class="secondary" data-shift="-7">-7d</button>
-            <button type="button" class="secondary" data-shift="-1">-1d</button>
-            <button type="button" id="todayBtn">Today</button>
-            <button type="button" class="secondary" data-shift="1">+1d</button>
-            <button type="button" class="secondary" data-shift="7">+7d</button>
-            <button type="button" class="secondary" id="locationBtn">Use My Location</button>
-          </div>
-        </section>
-
-        <section class="panel insight" aria-live="polite">
-          <h2 id="insightTitle">Current Sky</h2>
-          <p id="insightText"></p>
-        </section>
-
-        <section class="panel">
-          <div class="table" id="planetTable" aria-label="Planet positions"></div>
-        </section>
-
-        <section class="panel">
-          <label>What's going on in your life?
-            <textarea class="chat-input" id="chatInput" placeholder="Example: loss, a new relationship, money pressure, job tension, family conflict, a move, or a sudden opportunity."></textarea>
-          </label>
-          <div class="actions">
-            <button type="button" id="analyzeChat">Map to Sky</button>
-            <button type="button" class="secondary" id="clearChat">Clear</button>
-            <button type="button" class="secondary hidden" id="saveToJournalBtn">Save to Journal</button>
-          </div>
-          <div class="chat-log" id="chatLog" aria-live="polite"></div>
-        </section>
-      </div>
-
-      <div id="calendarTab" class="tab-content">
+      <div id="calendarTab" class="tab-content active">
         <section class="panel">
           <div class="j-header">
             <button type="button" class="secondary btn-compact" id="prevMonth">&lt;</button>
@@ -1171,109 +1215,115 @@
 
       <!-- ── Tarot Tab ── -->
       <div id="tarotTab" class="tab-content">
+        <div class="tarot-subnav">
+          <button type="button" class="tarot-subnav-btn active" data-subnav="emotionMap">Emotion Map</button>
+          <button type="button" class="tarot-subnav-btn" data-subnav="interp">Interp</button>
+          <button type="button" class="tarot-subnav-btn" data-subnav="cards">Cards</button>
+        </div>
 
-        <!-- Feeling Keyword Cloud -->
-        <section class="panel">
-          <div class="j-header">
-            <span class="j-title">Feeling Cloud</span>
-            <button type="button" class="secondary btn-sm" id="tarotClearAllBtn">Clear All</button>
-          </div>
-          <p class="source-note" style="margin-bottom:12px;">Select feelings that resonate for each timeframe. The sky will be mapped against your selections.</p>
-
-          <div class="tarot-period-section">
-            <div class="tarot-period-header" data-period="today">
-              <h4>Today</h4>
-              <span class="tarot-period-toggle-icon">▶</span>
+        <!-- Emotion Map sub-panel -->
+        <div id="tarotEmotionMap" class="tarot-sub-panel active">
+          <section class="panel">
+            <div class="j-header">
+              <span class="j-title">Feeling Cloud</span>
+              <button type="button" class="secondary btn-sm" id="tarotClearAllBtn">Clear All</button>
             </div>
-            <div class="tarot-period-body" id="tarotBodyToday">
-              <div class="tarot-kw-cloud" id="tarotCloudToday"></div>
-              <div class="tarot-period-count" id="tarotCountToday"></div>
+            <p class="source-note" style="margin-bottom:12px;">Select feelings that resonate for each timeframe. The sky will be mapped against your selections.</p>
+
+            <div class="tarot-period-section">
+              <div class="tarot-period-header" data-period="today">
+                <h4>Today</h4>
+                <span class="tarot-period-toggle-icon">▶</span>
+              </div>
+              <div class="tarot-period-body" id="tarotBodyToday">
+                <div class="tarot-kw-cloud" id="tarotCloudToday"></div>
+                <div class="tarot-period-count" id="tarotCountToday"></div>
+              </div>
             </div>
-          </div>
 
-          <div class="tarot-period-section">
-            <div class="tarot-period-header" data-period="week">
-              <h4>This Week</h4>
-              <span class="tarot-period-toggle-icon">▶</span>
+            <div class="tarot-period-section">
+              <div class="tarot-period-header" data-period="week">
+                <h4>This Week</h4>
+                <span class="tarot-period-toggle-icon">▶</span>
+              </div>
+              <div class="tarot-period-body" id="tarotBodyWeek">
+                <div class="tarot-kw-cloud" id="tarotCloudWeek"></div>
+                <div class="tarot-period-count" id="tarotCountWeek"></div>
+              </div>
             </div>
-            <div class="tarot-period-body" id="tarotBodyWeek">
-              <div class="tarot-kw-cloud" id="tarotCloudWeek"></div>
-              <div class="tarot-period-count" id="tarotCountWeek"></div>
+
+            <div class="tarot-period-section">
+              <div class="tarot-period-header" data-period="month">
+                <h4>This Month</h4>
+                <span class="tarot-period-toggle-icon">▶</span>
+              </div>
+              <div class="tarot-period-body" id="tarotBodyMonth">
+                <div class="tarot-kw-cloud" id="tarotCloudMonth"></div>
+                <div class="tarot-period-count" id="tarotCountMonth"></div>
+              </div>
             </div>
-          </div>
 
-          <div class="tarot-period-section">
-            <div class="tarot-period-header" data-period="month">
-              <h4>This Month</h4>
-              <span class="tarot-period-toggle-icon">▶</span>
+            <div class="actions" style="margin-top:12px;">
+              <button type="button" class="primary" id="tarotMapBtn">Map to Sky</button>
             </div>
-            <div class="tarot-period-body" id="tarotBodyMonth">
-              <div class="tarot-kw-cloud" id="tarotCloudMonth"></div>
-              <div class="tarot-period-count" id="tarotCountMonth"></div>
+            <div id="tarotKeywordOutput" class="tarot-output hidden"></div>
+            <div id="tarotKeywordActions" class="actions hidden">
+              <button type="button" id="tarotSaveKwBtn">Save to Journal</button>
+              <button type="button" id="tarotAIKwBtn" class="secondary">Add to AI Reading</button>
             </div>
-          </div>
+          </section>
+        </div>
 
-          <div class="actions" style="margin-top:12px;">
-            <button type="button" class="primary" id="tarotMapBtn">Map to Sky</button>
-          </div>
-          <div id="tarotKeywordOutput" class="tarot-output hidden"></div>
-          <div id="tarotKeywordActions" class="actions hidden">
-            <button type="button" id="tarotSaveKwBtn">Save to Journal</button>
-            <button type="button" id="tarotAIKwBtn" class="secondary">Add to AI Reading</button>
-          </div>
-        </section>
+        <!-- Interp sub-panel -->
+        <div id="tarotInterp" class="tarot-sub-panel">
+          <section class="panel">
+            <div class="j-header">
+              <span class="j-title">Reading Interpreter</span>
+            </div>
+            <p class="source-note" style="margin-bottom:12px;">Enter the cards from your physical spread to map their meanings against the current sky.</p>
 
-        <hr class="tarot-section-divider">
+            <div class="tarot-spread-row">
+              <label style="flex:1;">Spread
+                <select id="tarotSpreadSelect">
+                  <option value="single">Single Card</option>
+                  <option value="three_ppf">3-Card: Past / Present / Future</option>
+                  <option value="three_sao">3-Card: Situation / Action / Outcome</option>
+                  <option value="three_mbs">3-Card: Mind / Body / Spirit</option>
+                  <option value="horseshoe">Horseshoe (7 cards)</option>
+                  <option value="celtic_cross">Celtic Cross (10 cards)</option>
+                </select>
+              </label>
+              <label class="tarot-position-toggle">
+                <input type="checkbox" id="tarotPositionEffects" checked>
+                Position effects
+              </label>
+            </div>
 
-        <!-- Reading Interpreter -->
-        <section class="panel">
-          <div class="j-header">
-            <span class="j-title">Reading Interpreter</span>
-          </div>
-          <p class="source-note" style="margin-bottom:12px;">Enter the cards from your physical spread to map their meanings against the current sky.</p>
+            <div id="tarotCardSlots" class="tarot-card-slots"></div>
+            <datalist id="tarotCardNames"></datalist>
 
-          <div class="tarot-spread-row">
-            <label style="flex:1;">Spread
-              <select id="tarotSpreadSelect">
-                <option value="single">Single Card</option>
-                <option value="three_ppf">3-Card: Past / Present / Future</option>
-                <option value="three_sao">3-Card: Situation / Action / Outcome</option>
-                <option value="three_mbs">3-Card: Mind / Body / Spirit</option>
-                <option value="horseshoe">Horseshoe (7 cards)</option>
-                <option value="celtic_cross">Celtic Cross (10 cards)</option>
-              </select>
-            </label>
-            <label class="tarot-position-toggle">
-              <input type="checkbox" id="tarotPositionEffects" checked>
-              Position effects
-            </label>
-          </div>
+            <div class="actions">
+              <button type="button" class="primary" id="tarotInterpretBtn">Interpret Reading</button>
+              <button type="button" class="secondary btn-sm" id="tarotClearSpreadBtn">Clear</button>
+            </div>
+            <div id="tarotSpreadOutput" class="tarot-output hidden"></div>
+            <div id="tarotSpreadActions" class="actions hidden">
+              <button type="button" id="tarotSaveSpreadBtn">Save to Journal</button>
+              <button type="button" id="tarotAISpreadBtn" class="secondary">Add to AI Reading</button>
+            </div>
+          </section>
+        </div>
 
-          <div id="tarotCardSlots" class="tarot-card-slots"></div>
-          <datalist id="tarotCardNames"></datalist>
+        <!-- Cards sub-panel -->
+        <div id="tarotCards" class="tarot-sub-panel">
+          <section class="panel">
+            <div class="tarot-cards-grid" id="tarotCardsGrid"></div>
+          </section>
+        </div>
 
-          <div class="actions">
-            <button type="button" class="primary" id="tarotInterpretBtn">Interpret Reading</button>
-            <button type="button" class="secondary btn-sm" id="tarotClearSpreadBtn">Clear</button>
-          </div>
-          <div id="tarotSpreadOutput" class="tarot-output hidden"></div>
-          <div id="tarotSpreadActions" class="actions hidden">
-            <button type="button" id="tarotSaveSpreadBtn">Save to Journal</button>
-            <button type="button" id="tarotAISpreadBtn" class="secondary">Add to AI Reading</button>
-          </div>
-        </section>
-
+        <button class="tarot-from-journal-cta" id="tarotFromJournalBtn">Show my cards based on my latest journal entry — click here</button>
       </div>
 
-      <textarea class="caption" id="caption" aria-label="Sky caption"></textarea>
-
-      <div class="actions">
-        <button type="button" id="copyCaption">Copy Caption</button>
-        <button type="button" class="secondary" id="sharePage">Share Link</button>
-        <a class="button secondary" href="sky-map-social.png" download>Download Preview</a>
-      </div>
-      <p class="source-note">Ephemeris: Astronomy Engine, an MIT-licensed library based on VSOP87 and NOVAS models. Location is used for local horizon altitude/azimuth, not stored or sent anywhere. AI query support is available on Netlify when QUERY_API_KEY is configured.</p>
-      <div class="status" id="status"></div>
     </aside>
   </main>
 
@@ -2282,6 +2332,7 @@ ${skyContext}`
         if (btn.dataset.tab === 'tarot') initTarotTab();
       });
     });
+    renderCalendar();
 
     // (profile/login removed — identity is managed by the encrypted journal)
 
@@ -2341,7 +2392,6 @@ ${skyContext}`
         el.addEventListener('click', () => {
           const selectedDate = new Date(calDate.getFullYear(), calDate.getMonth(), d);
           setDate(selectedDate);
-          document.querySelector('[data-tab="sky"]').click();
         });
         calendarGrid.appendChild(el);
       }
@@ -3665,6 +3715,74 @@ ${skyContext}`
       });
 
       buildSpreadSlots();
+
+      // Tarot sub-nav switching
+      document.querySelectorAll('.tarot-subnav-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tarot-subnav-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.tarot-sub-panel').forEach(p => p.classList.remove('active'));
+          btn.classList.add('active');
+          const panelId = 'tarot' + btn.dataset.subnav.charAt(0).toUpperCase() + btn.dataset.subnav.slice(1);
+          const panel = document.getElementById(panelId);
+          if (panel) panel.classList.add('active');
+          if (btn.dataset.subnav === 'cards') buildTarotCardsGrid();
+        });
+      });
+
+      // Cards grid builder (lazy)
+      let cardsGridBuilt = false;
+      function buildTarotCardsGrid() {
+        if (cardsGridBuilt) return;
+        cardsGridBuilt = true;
+        const grid = document.getElementById('tarotCardsGrid');
+        if (!grid) return;
+        const cards = window._TAROT_CARDS || [];
+        cards.forEach(card => {
+          const tile = document.createElement('div');
+          tile.className = 'tarot-card-tile';
+          tile.innerHTML = tarotCardImg(card.name, false);
+          tile.title = card.name;
+          tile.addEventListener('click', () => {
+            const existing = grid.querySelector('.tarot-card-detail');
+            if (existing && existing.dataset.card === card.name) { existing.remove(); return; }
+            if (existing) existing.remove();
+            const detail = document.createElement('div');
+            detail.className = 'tarot-card-detail';
+            detail.dataset.card = card.name;
+            detail.innerHTML = `<strong>${card.name}</strong><br><em>${card.arcana}${card.suit ? ' · ' + card.suit : ''}</em><br><span class="tarot-kw-chip kw-upright">${(card.keywords.upright || []).slice(0,4).join('</span><span class="tarot-kw-chip kw-upright">')}</span><br><span class="tarot-kw-chip kw-reversed">${(card.keywords.reversed || []).slice(0,3).join('</span><span class="tarot-kw-chip kw-reversed">')}</span><br><p style="margin:6px 0 0;font-size:0.8rem;color:var(--muted)">${card.meaning || ''}</p>`;
+            tile.after(detail);
+          });
+          grid.appendChild(tile);
+        });
+      }
+
+      // Journal CTA: show cards matching latest entry themes
+      document.getElementById('tarotFromJournalBtn').addEventListener('click', () => {
+        const entry = journalEntries[0];
+        if (!entry) { setStatus('No journal entries found. Write one first.'); return; }
+        const text = entry.text || '';
+        const themes = detectThemes(text);
+        const cards = window._TAROT_CARDS || [];
+        const map = getTarotKwThemeMap();
+        const themeVals = Object.values(themes).filter(Boolean);
+        const matched = cards.filter(c => c.themes && c.themes.some(t => themeVals.includes(t)));
+        if (!matched.length) { setStatus('No matching cards found for your latest entry themes.'); return; }
+        // Switch to Cards sub-panel and show matches
+        document.querySelectorAll('.tarot-subnav-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.subnav === 'cards');
+        });
+        document.querySelectorAll('.tarot-sub-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('tarotCards').classList.add('active');
+        buildTarotCardsGrid();
+        const grid = document.getElementById('tarotCardsGrid');
+        // Highlight matching tiles
+        grid.querySelectorAll('.tarot-card-tile').forEach((tile, i) => {
+          const card = (window._TAROT_CARDS || [])[i];
+          if (card && matched.includes(card)) tile.style.outline = '2px solid var(--gold)';
+          else tile.style.outline = '';
+        });
+        setStatus(`Showing ${matched.length} cards matching themes from your latest entry.`);
+      });
     }
 
   </script>
