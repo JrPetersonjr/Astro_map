@@ -23,7 +23,8 @@ export async function handler(event) {
   const skyContext = typeof requestBody.skyContext === 'string' ? requestBody.skyContext : null;
 
   const apiUrl = process.env.QUERY_API_URL || 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
-  const model = process.env.QUERY_MODEL || 'gemini-2.0-flash-lite';
+  const model = process.env.QUERY_MODEL || 'gemini-1.5-flash';
+  console.log('Using model:', model, '| key prefix:', apiKey.slice(0, 8));
 
   const systemPrompt = skyContext
     ? `You are a skilled sky interpreter — equal parts astronomer, herbalist, and journal keeper. You read celestial patterns with scientific precision and speak about them with the warmth of someone who genuinely lives by the rhythms of the sky. You are not a prophet and never predict the future. You interpret the present: how the current planetary weather maps onto what someone is actually experiencing right now.
@@ -70,8 +71,9 @@ ${skyContext}`
 
     const data = await response.json();
     if (!response.ok) {
-      console.error('API Error:', { status: response.status, error: data });
-      return { statusCode: 502, body: JSON.stringify({ error: data?.error?.message || 'API request failed', details: data }) };
+      const errMsg = data?.error?.message || data?.error?.status || JSON.stringify(data);
+      console.error('API Error:', response.status, errMsg);
+      return { statusCode: 502, body: JSON.stringify({ error: `Gemini ${response.status}: ${errMsg}` }) };
     }
 
     const text = data?.choices?.[0]?.message?.content || data?.output || JSON.stringify(data);

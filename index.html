@@ -2815,9 +2815,9 @@ ${aspectLines || 'none within orb'}`;
         const chatLog = document.getElementById('journalChatLog');
         chatLog.lastElementChild.innerHTML = formatSkyReading(response);
         chatLog.scrollTop = chatLog.scrollHeight;
-      } catch {
+      } catch (e) {
         const chatLog = document.getElementById('journalChatLog');
-        chatLog.lastElementChild.innerHTML = 'Dream logged. AI interpretation unavailable — check connection.';
+        chatLog.lastElementChild.innerHTML = `Dream logged. AI error: ${e.message}`;
       }
     });
 
@@ -2837,8 +2837,8 @@ ${aspectLines || 'none within orb'}`;
         const fullPrompt = buildJournalContext(question);
         const response = await querySkyAssistant(fullPrompt, skyContext);
         thinking.innerHTML = formatSkyReading(response);
-      } catch {
-        thinking.innerHTML = 'Unable to reach AI. Check your connection.';
+      } catch (e) {
+        thinking.innerHTML = `AI error: ${e.message}`;
       }
       document.getElementById('journalChatLog').scrollTop = Infinity;
     }
