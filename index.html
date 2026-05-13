@@ -327,6 +327,8 @@
     .j-acc-hint { font-size: 0.72rem; color: var(--soft); }
     .j-back-btn { width: 100%; margin-top: 6px; }
     .j-full-btn { width: 100%; }
+    .j-key-row { margin-bottom: 12px; }
+    .j-key-status { margin-left: 8px; }
 
     .journal-list {
       display: grid;
@@ -1060,6 +1062,13 @@
           <!-- Change password panel -->
           <section class="panel hidden" id="journalChangePwdPanel">
             <h2 class="j-subheading">Settings</h2>
+            <label>Gemini API key <small class="j-label-hint">(stored locally — get one free at aistudio.google.com)</small>
+              <input type="password" id="geminiApiKeyInput" placeholder="AIza..." autocomplete="off">
+            </label>
+            <div class="actions j-actions j-key-row">
+              <button type="button" id="saveGeminiKeyBtn" class="secondary btn-sm">Save Key</button>
+              <span id="geminiKeyStatus" class="source-note j-key-status"></span>
+            </div>
             <label>Display name <small class="j-label-hint">(stored encrypted, optional)</small>
               <input type="text" id="journalDisplayNameEdit" placeholder="Your name" autocomplete="off">
             </label>
@@ -1430,42 +1439,55 @@ Retrogrades: ${retroText}
 Active aspects (tightest first):
 ${aspectLines || 'none within orb'}`;
     }
+    function getGeminiKey() {
+      return localStorage.getItem('lumina_gemini_key') || '';
+    }
+
     async function querySkyAssistant(prompt, skyContext) {
-      const response = await fetch('/.netlify/functions/query', {
+      const apiKey = getGeminiKey();
+      if (!apiKey) throw new Error('No API key set — add your Gemini key in Settings.');
+
+      const systemPrompt = skyContext
+        ? `You are a skilled sky interpreter — equal parts astronomer, herbalist, and journal keeper. You read celestial patterns with scientific precision and speak about them with the warmth of someone who genuinely lives by the rhythms of the sky. You are not a prophet and never predict the future. You interpret the present: how the current planetary weather maps onto what someone is actually experiencing right now.
+
+When someone shares their life with you, respond in this structure:
+
+**Line 1 — Alignment score:** Open with exactly this format: "Alignment: X%" where X is your honest estimate (0–100) of how strongly the current sky pattern resonates with the themes in their entry. Base it on aspect strength and orb, moon phase fit, and thematic overlap. Be honest — a scattered sky gets a 40%, not an 85%.
+
+**Body — 3 flowing paragraphs:** Write in natural, evocative prose. Weave the actual planetary positions, aspect names, orbs, and nakshatra names into the narrative the way a person speaks them — not like a data report. Lead with the 1–2 most striking resonances between the sky and their experience. Cross-reference Western and Vedic layers where they reinforce each other.
+
+**Closing observation:** A grounded present-tense sentence about what the current sky seems to be showing — never a prediction, always an interpretation. Honest if things are mixed or contradictory.
+
+**Dream interpretation:** If the user shares a dream, interpret it symbolically through both the current sky and archetypal/Jungian lenses. Name 2–3 key symbols and connect them to active planetary themes. You do not need to open with an Alignment score for dream entries — start with the most resonant symbol. End with a reflection question about what the dream might be processing or preparing the dreamer for.
+
+**Reflection question:** On its own line at the very end, write one open-ended question — no label, no asterisks — that gently invites the writer to look deeper at something specific from what they shared. It should feel like a quiet prompt from a thoughtful friend, not a therapist's script.
+
+Tone: clear, textured, a little earthy and intuitive without being precious or New Age. Think: someone who reads both scientific papers and old almanacs and takes both seriously.
+
+Total length: 260–370 words. No bullet points. No headers after the alignment line.
+
+Current sky data:
+${skyContext}`
+        : `You are a skilled sky interpreter — grounded, a little earthy, equal parts scientist and intuitive. Someone has shared something from their life. Respond with warmth and genuine insight, then end with one open-ended question that invites them to look deeper. Keep it under 220 words. No bullet points.`;
+
+      const apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+      const response = await fetch(apiUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, skyContext: skyContext || null })
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: systemPrompt }] },
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: { maxOutputTokens: 900, temperature: 0.82 }
+        })
       });
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data?.error || data?.message || `HTTP ${response.status}`);
+        const msg = data?.error?.message || JSON.stringify(data);
+        throw new Error(`Gemini ${response.status}: ${msg}`);
       }
-      const result = data?.data;
-      if (!result) {
-        throw new Error('Unexpected API response');
-      }
-      if (typeof result === 'string') return result;
-      if (typeof result.output === 'string') return result.output;
-      if (Array.isArray(result.output)) {
-        const parts = result.output.flatMap((item) => {
-          if (!item || !item.content) return [];
-          return item.content
-            .filter((block) => block?.type === 'output_text' && block?.text)
-            .map((block) => block.text);
-        });
-        if (parts.length) return parts.join(' ');
-      }
-      if (Array.isArray(result.choices)) {
-        const text = result.choices
-          .map((choice) => {
-            const outputText = choice?.output?.[0]?.content?.find((c) => c.type === 'output_text')?.text;
-            return outputText || '';
-          })
-          .filter(Boolean)
-          .join('\n');
-        if (text) return text;
-      }
-      return JSON.stringify(result);
+      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!text) throw new Error('Empty response from Gemini');
+      return text;
     }
     function analyzeAgainstSky(text) {
       const data = latestData;
@@ -2685,6 +2707,16 @@ ${aspectLines || 'none within orb'}`;
       document.getElementById('journalClearConfirm').value = '';
       renderJournal();
       setStatus('All entries deleted.');
+    });
+
+    document.getElementById('saveGeminiKeyBtn').addEventListener('click', () => {
+      const key = document.getElementById('geminiApiKeyInput').value.trim();
+      const status = document.getElementById('geminiKeyStatus');
+      if (!key) { localStorage.removeItem('lumina_gemini_key'); status.textContent = 'Key cleared.'; return; }
+      localStorage.setItem('lumina_gemini_key', key);
+      document.getElementById('geminiApiKeyInput').value = '';
+      status.textContent = 'Key saved.';
+      setTimeout(() => { status.textContent = ''; }, 3000);
     });
 
     document.getElementById('journalChangePwdBtn').addEventListener('click', () => {
