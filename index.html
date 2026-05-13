@@ -381,6 +381,18 @@
     .tarot-chip.rev-chip:hover { border-color: var(--coral); color: var(--coral); }
     .tarot-chip.rev-chip.selected { background: rgba(223,102,93,0.12); border-color: var(--coral); color: var(--coral); }
     .tarot-slot-kw-preview { font-size: 0.7rem; margin-top: 5px; min-height: 0; transition: color 0.15s; }
+    .tarot-card-frame { display: inline-flex; flex-direction: column; align-items: center; background: #f5f0e8; border: 2px solid #1a1a1a; border-radius: 8px; padding: 6px 6px 4px; max-width: 130px; text-align: center; flex-shrink: 0; }
+    .tarot-card-frame .tc-num { font-family: Georgia, serif; font-size: 0.7rem; color: #2a2a2a; letter-spacing: 0.1em; margin-bottom: 3px; }
+    .tarot-card-frame img { width: 110px; height: 190px; object-fit: cover; border-radius: 3px; display: block; }
+    .tarot-card-frame .tc-name { font-family: Georgia, serif; font-size: 0.62rem; color: #2a2a2a; font-style: italic; margin-top: 4px; text-transform: lowercase; letter-spacing: 0.03em; }
+    .tarot-card-frame.reversed img { transform: rotate(180deg); }
+    .tarot-card-result-row { display: flex; gap: 14px; align-items: flex-start; margin: 12px 0; }
+    .tarot-card-result-row .tarot-card-frame { margin-top: 2px; }
+    .tarot-card-result-row .t-result-text { flex: 1; min-width: 0; }
+    .tarot-kw-card-thumb { width: 28px; height: 46px; object-fit: cover; border-radius: 3px; border: 1px solid rgba(255,255,255,0.15); flex-shrink: 0; margin-top: 2px; }
+    .tarot-slot-card-preview { display: flex; gap: 10px; align-items: flex-start; margin-top: 8px; }
+    .tarot-slot-card-preview .tarot-card-frame { max-width: 90px; }
+    .tarot-slot-card-preview .tarot-card-frame img { width: 76px; height: 132px; }
 
     .journal-list {
       display: grid;
@@ -3106,6 +3118,57 @@ ${skyContext}`
       'balance':       'spiritual',
     };
 
+    const TAROT_IMAGE_MAP = {
+      'The Fool':'thefool.jpeg','The Magician':'themagician.jpeg','The High Priestess':'thehighpriestess.jpeg',
+      'The Empress':'theempress.jpeg','The Emperor':'theemperor.jpeg','The Hierophant':'thehierophant.jpeg',
+      'The Lovers':'TheLovers.jpg','The Chariot':'thechariot.jpeg','Strength':'thestrength.jpeg',
+      'The Hermit':'thehermit.jpeg','Wheel of Fortune':'wheeloffortune.jpeg','Justice':'justice.jpeg',
+      'The Hanged Man':'thehangedman.jpeg','Death':'death.jpeg','Temperance':'temperance.jpeg',
+      'The Devil':'thedevil.jpeg','The Tower':'thetower.jpeg','The Star':'thestar.jpeg',
+      'The Moon':'themoon.jpeg','The Sun':'thesun.jpeg','Judgement':'judgement.jpeg','The World':'theworld.jpeg',
+      'Ace of Cups':'aceofcups.jpeg','Two of Cups':'twoofcups.jpeg','Three of Cups':'threeofcups.jpeg',
+      'Four of Cups':'fourofcups.jpeg','Five of Cups':'fiveofcups.jpeg','Six of Cups':'sixofcups.jpeg',
+      'Seven of Cups':'sevenofcups.jpeg','Eight of Cups':'eightofcups.jpeg','Nine of Cups':'nineofcups.jpeg',
+      'Ten of Cups':'tenofcups.jpeg','Page of Cups':'pageofcups.jpeg','Knight of Cups':'knightofcups.jpeg',
+      'Queen of Cups':'queenofcups.jpeg','King of Cups':'kingofcups.jpeg',
+      'Ace of Pentacles':'aceofpentacles.jpeg','Two of Pentacles':'twoofpentacles.jpeg','Three of Pentacles':'threeofpentacles.jpeg',
+      'Four of Pentacles':'fourofpentacles.jpeg','Five of Pentacles':'fiveofpentacles.jpeg','Six of Pentacles':'sixofpentacles.jpeg',
+      'Seven of Pentacles':'sevenofpentacles.jpeg','Eight of Pentacles':'eightofpentacles.jpeg','Nine of Pentacles':'nineofpentacles.jpeg',
+      'Ten of Pentacles':'tenofpentacles.jpeg','Page of Pentacles':'pageofpentacles.jpeg','Knight of Pentacles':'knightofpentacles.jpeg',
+      'Queen of Pentacles':'queenofpentacles.jpeg','King of Pentacles':'kingofpentacles.jpeg',
+      'Ace of Swords':'aceofswords.jpeg','Two of Swords':'twoofswords.jpeg','Three of Swords':'threeofswords.jpeg',
+      'Four of Swords':'fourofswords.jpeg','Five of Swords':'fiveofswords.jpeg','Six of Swords':'sixofswords.jpeg',
+      'Seven of Swords':'sevenofswords.jpeg','Eight of Swords':'eightofswords.jpeg','Nine of Swords':'nineofswords.jpeg',
+      'Ten of Swords':'tenofswords.jpeg','Page of Swords':'pageofswords.jpeg','Knight of Swords':'knightofswords.jpeg',
+      'Queen of Swords':'queenofswords.jpeg','King of Swords':'kingofswords.jpeg',
+      'Ace of Wands':'aceofwands.jpeg','Two of Wands':'twoofwands.jpeg','Three of Wands':'threeofwands.jpeg',
+      'Four of Wands':'fourofwands.jpeg','Five of Wands':'fiveofwands.jpeg','Six of Wands':'sixofwands.jpeg',
+      'Seven of Wands':'sevenofwands.jpeg','Eight of Wands':'eightofwands.jpeg','Nine of Wands':'nineofwands.jpeg',
+      'Ten of Wands':'tenofwands.jpeg','Page of Wands':'pageofwands.jpeg','Knight of Wands':'knightofwands.jpeg',
+      'Queen of Wands':'queenofwands.jpeg','King of Wands':'kingofwands.jpeg',
+    };
+
+    function tarotCardImg(name, reversed) {
+      const file = TAROT_IMAGE_MAP[name];
+      if (!file) return '';
+      return `<div class="tarot-card-frame${reversed ? ' reversed' : ''}">
+        <div class="tc-num">${tarotRomanNumeral(name)}</div>
+        <img src="data/cards/${file}" alt="${name}" loading="lazy">
+        <div class="tc-name">${name.toLowerCase()}</div>
+      </div>`;
+    }
+
+    function tarotRomanNumeral(name) {
+      const card = (window._TAROT_CARDS || []).find(c => c.name === name);
+      if (!card) return '';
+      if (card.arcana === 'Major') {
+        const romans = ['0','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX','XXI'];
+        return romans[card.number] || '';
+      }
+      const nums = { 'Ace':'A','Page':'P','Knight':'Kn','Queen':'Q','King':'K' };
+      return nums[card.number] || String(card.number);
+    }
+
     // Keyword → card themes lookup, built from window._TAROT_CARDS at init time
     let _tarotKwThemeMap = null;
     function getTarotKwThemeMap() {
@@ -3268,6 +3331,17 @@ ${skyContext}`
         group.cards.forEach(card => {
           const row = document.createElement('div');
           row.className = 'tarot-card-kw-row';
+
+          const file = TAROT_IMAGE_MAP[card.name];
+          if (file) {
+            const thumb = document.createElement('img');
+            thumb.src = `data/cards/${file}`;
+            thumb.alt = card.name;
+            thumb.className = 'tarot-kw-card-thumb';
+            thumb.loading = 'lazy';
+            row.appendChild(thumb);
+          }
+
           const nameEl = document.createElement('div');
           nameEl.className = 'tarot-card-kw-name';
           nameEl.textContent = card.name;
@@ -3385,10 +3459,16 @@ ${skyContext}`
           if (card) {
             const rev = orientBtn.dataset.reversed === 'true';
             const kws = rev ? card.keywords.reversed : card.keywords.upright;
-            preview.textContent = kws.join(' · ');
-            preview.style.color = rev ? 'var(--coral)' : 'var(--violet)';
+            const kwColor = rev ? 'var(--coral)' : 'var(--violet)';
+            preview.innerHTML = `<div class="tarot-slot-card-preview">
+              ${tarotCardImg(card.name, rev)}
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:0.72rem;color:var(--muted);line-height:1.5;margin-bottom:4px;">${escapeHtml(card.meaning)}</div>
+                <div style="font-size:0.7rem;color:${kwColor};">${kws.join(' · ')}</div>
+              </div>
+            </div>`;
           } else {
-            preview.textContent = '';
+            preview.innerHTML = '';
           }
         }
 
@@ -3464,23 +3544,27 @@ ${skyContext}`
           html += `<div class="tarot-card-result"><div class="t-card-pos">${r.pos.label}</div><div class="t-card-desc" style="color:var(--coral);">${r.error}</div></div>`;
           return;
         }
-        html += `<div class="tarot-card-result">
-          <div class="t-card-pos">${r.pos.label}</div>
-          <div class="t-card-name">${r.card.name}</div>
-          <div class="t-card-orient">${r.reversed ? 'Reversed' : 'Upright'} · ${r.card.arcana} Arcana${r.card.suit ? ' · ' + r.card.suit : ''}</div>`;
-        if (positionEffects && r.pos.hint) {
-          html += `<div class="t-card-pos-hint">${r.pos.hint}</div>`;
-        }
-        html += `<div class="t-card-kw">${r.keywords.join(' · ')}</div>
-          <div class="t-card-desc">${escapeHtml(r.card.description)}</div>
-          <div class="t-sky-note">Sky alignment ${r.finalScore}%`;
+        let skyNote = `Sky alignment ${r.finalScore}%`;
         if (r.result.details.length) {
           const top = r.result.details[0];
-          html += ` — ${top.label}`;
-          if (top.aspectStr) html += `: ${top.aspectStr}`;
-          if (top.retroPlanets.length) html += ` (${top.retroPlanets.join(', ')} retrograde)`;
+          skyNote += ` — ${top.label}`;
+          if (top.aspectStr) skyNote += `: ${top.aspectStr}`;
+          if (top.retroPlanets.length) skyNote += ` (${top.retroPlanets.join(', ')} retrograde)`;
         }
-        html += `</div></div>`;
+        html += `<div class="tarot-card-result">
+          <div class="t-card-pos">${r.pos.label}</div>
+          <div class="tarot-card-result-row">
+            ${tarotCardImg(r.card.name, r.reversed)}
+            <div class="t-result-text">
+              <div class="t-card-name">${r.card.name}</div>
+              <div class="t-card-orient">${r.reversed ? 'Reversed' : 'Upright'} · ${r.card.arcana} Arcana${r.card.suit ? ' · ' + r.card.suit : ''}</div>
+              ${positionEffects && r.pos.hint ? `<div class="t-card-pos-hint">${r.pos.hint}</div>` : ''}
+              <div class="t-card-kw">${r.keywords.join(' · ')}</div>
+              <div class="t-card-desc">${escapeHtml(r.card.description)}</div>
+              <div class="t-sky-note">${skyNote}</div>
+            </div>
+          </div>
+        </div>`;
       });
 
       if (signature.retrogrades.length) {
