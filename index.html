@@ -329,6 +329,11 @@
     .j-full-btn { width: 100%; }
     .j-key-row { margin-bottom: 12px; }
     .j-key-status { margin-left: 8px; }
+    .j-no-key-card { background: rgba(231,187,102,0.07); border: 1px solid rgba(231,187,102,0.25); border-radius: 8px; padding: 12px 14px; font-size: 0.84rem; line-height: 1.6; }
+    .j-no-key-card strong { color: var(--gold); display: block; margin-bottom: 6px; }
+    .j-no-key-card ol { margin: 6px 0 0 16px; padding: 0; }
+    .j-no-key-card li { margin-bottom: 3px; }
+    .j-no-key-card code { background: rgba(255,255,255,0.1); padding: 1px 5px; border-radius: 3px; font-size: 0.82rem; }
 
     .journal-list {
       display: grid;
@@ -1443,10 +1448,49 @@ ${aspectLines || 'none within orb'}`;
       return localStorage.getItem('lumina_gemini_key') || '';
     }
 
-    async function querySkyAssistant(prompt, skyContext) {
-      const apiKey = getGeminiKey();
-      if (!apiKey) throw new Error('No API key set — add your Gemini key in Settings.');
+    function noKeyCard(chatLogEl) {
+      const div = document.createElement('div');
+      div.className = 'j-bubble ai j-no-key-card';
+      div.innerHTML = `
+        <strong>AI not connected</strong>
+        <p>LuminaSynodic uses Google Gemini for sky readings. A free API key takes about 60 seconds to get:</p>
+        <ol>
+          <li>Go to <strong>aistudio.google.com</strong></li>
+          <li>Click <strong>Get API key → Create API key</strong></li>
+          <li>Copy the key (starts with <code>AIza</code>)</li>
+          <li>Come back here → open <strong>Journal → Password/Settings</strong> → paste it in the <em>Gemini API key</em> field → Save Key</li>
+        </ol>
+        <p style="margin-top:6px;font-size:0.78rem;color:var(--soft);">It's free, no credit card required, and the key is stored only on your device.</p>
+      `;
+      if (chatLogEl) chatLogEl.appendChild(div);
+      return div;
+    }
 
+    async function querySkyAssistant(prompt, skyContext) {
+      const userKey = getGeminiKey();
+
+      // Try user's own key first (direct Gemini call — no server needed)
+      if (userKey) {
+        return await _callGeminiDirect(prompt, skyContext, userKey);
+      }
+
+      // No personal key — try server-side proxy (shared key, works for anyone)
+      try {
+        const proxyRes = await fetch('/api/query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt, skyContext: skyContext || '' })
+        });
+        if (proxyRes.ok) {
+          const proxyData = await proxyRes.json();
+          if (proxyData.data) return proxyData.data;
+        }
+      } catch (_) { /* server not available */ }
+
+      throw new Error('NO_KEY');
+    }
+
+    async function _callGeminiDirect(prompt, skyContext, apiKey) {
       const systemPrompt = skyContext
         ? `You are a skilled sky interpreter — equal parts astronomer, herbalist, and journal keeper. You read celestial patterns with scientific precision and speak about them with the warmth of someone who genuinely lives by the rhythms of the sky. You are not a prophet and never predict the future. You interpret the present: how the current planetary weather maps onto what someone is actually experiencing right now.
 
@@ -2029,9 +2073,15 @@ ${skyContext}`
         finalAnalysis = aiResult;
         assistantBubble.innerHTML = formatSkyReading(aiResult);
       } catch (error) {
-        finalAnalysis = analyzeAgainstSky(text);
-        assistantBubble.innerHTML = finalAnalysis;
-        setStatus('AI query unavailable; using local mapping.');
+        if (error.message === 'NO_KEY') {
+          assistantBubble.remove();
+          noKeyCard(document.getElementById('chatLog'));
+          finalAnalysis = '';
+        } else {
+          finalAnalysis = analyzeAgainstSky(text);
+          assistantBubble.innerHTML = finalAnalysis;
+          setStatus('AI query unavailable; using local mapping.');
+        }
       }
       const rawNote = typeof finalAnalysis === 'string' ? finalAnalysis : finalAnalysis.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
       lastAnalysis = { userText: text, skyNote: rawNote, alignment: parseAlignment(rawNote), moonPhase: getMoonPhaseName(new Date()) };
@@ -2849,7 +2899,8 @@ ${skyContext}`
         chatLog.scrollTop = chatLog.scrollHeight;
       } catch (e) {
         const chatLog = document.getElementById('journalChatLog');
-        chatLog.lastElementChild.innerHTML = `Dream logged. AI error: ${e.message}`;
+        if (e.message === 'NO_KEY') { chatLog.lastElementChild.remove(); noKeyCard(chatLog); }
+        else chatLog.lastElementChild.innerHTML = `Dream logged. AI error: ${e.message}`;
       }
     });
 
@@ -2870,7 +2921,9 @@ ${skyContext}`
         const response = await querySkyAssistant(fullPrompt, skyContext);
         thinking.innerHTML = formatSkyReading(response);
       } catch (e) {
-        thinking.innerHTML = `AI error: ${e.message}`;
+        const chatLog = document.getElementById('journalChatLog');
+        if (e.message === 'NO_KEY') { thinking.remove(); noKeyCard(chatLog); }
+        else thinking.innerHTML = `AI error: ${e.message}`;
       }
       document.getElementById('journalChatLog').scrollTop = Infinity;
     }
