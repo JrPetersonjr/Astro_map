@@ -2418,8 +2418,6 @@ ${skyContext}`
       }
     }
 
-    renderCalendar();
-
     document.getElementById('prevMonth').addEventListener('click', () => {
       calDate.setMonth(calDate.getMonth() - 1);
       renderCalendar();
@@ -4129,6 +4127,9 @@ ${skyContext}`
         setStatus(`Showing ${matched.length} cards matching themes from your latest entry.`);
       });
     }
+
+    // Deferred initial renders — must run after all let/const declarations above
+    renderCalendar();
 
   </script>
   <script src="data/tarotCards.js"></script>
