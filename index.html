@@ -1162,6 +1162,22 @@
     let wheelScale = 1.0;
     let latestAspects = [];
     let latestDate = new Date();
+    let dialDrag = null;
+    let dateRingMode = 'days';
+    function isMultOf(v, u) { const r = Math.abs(v) % u; return r < u * 0.012 || (u - r) < u * 0.012; }
+    const DATE_MODE_CONF = {
+      days:   { halfRange: 30, ticks: 120, tickStep: 0.5,  majorEvery: 5,  minorEvery: 1,   msPerUnit: 86400000,          label: 'DAYS' },
+      weeks:  { halfRange: 26, ticks: 104, tickStep: 0.5,  majorEvery: 4,  minorEvery: 1,   msPerUnit: 7 * 86400000,       label: 'WKS'  },
+      months: { halfRange: 24, ticks: 96,  tickStep: 0.5,  majorEvery: 3,  minorEvery: 1,   msPerUnit: 30.44 * 86400000,   label: 'MO'   },
+      years:  { halfRange: 10, ticks: 80,  tickStep: 0.25, majorEvery: 1,  minorEvery: 0.5, msPerUnit: 365.25 * 86400000,  label: 'YR'   }
+    };
+    function svgCoords(e) {
+      const rect = chart.getBoundingClientRect();
+      return {
+        x: (e.clientX - rect.left) * (860 / rect.width) - 430,
+        y: (e.clientY - rect.top) * (860 / rect.height) - 430
+      };
+    }
 
     function pad(n) { return String(n).padStart(2, '0'); }
     function localDateValue(date) { return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`; }
@@ -1930,22 +1946,6 @@ ${aspectLines || 'none within orb'}`;
     setDate(now);
 
     // ── Radial dial drag ──
-    let dialDrag = null;
-    let dateRingMode = 'days';
-    function isMultOf(v, u) { const r = Math.abs(v) % u; return r < u * 0.012 || (u - r) < u * 0.012; }
-    const DATE_MODE_CONF = {
-      days:   { halfRange: 30, ticks: 120, tickStep: 0.5,  majorEvery: 5,  minorEvery: 1,   msPerUnit: 86400000,          label: 'DAYS' },
-      weeks:  { halfRange: 26, ticks: 104, tickStep: 0.5,  majorEvery: 4,  minorEvery: 1,   msPerUnit: 7 * 86400000,       label: 'WKS'  },
-      months: { halfRange: 24, ticks: 96,  tickStep: 0.5,  majorEvery: 3,  minorEvery: 1,   msPerUnit: 30.44 * 86400000,   label: 'MO'   },
-      years:  { halfRange: 10, ticks: 80,  tickStep: 0.25, majorEvery: 1,  minorEvery: 0.5, msPerUnit: 365.25 * 86400000,  label: 'YR'   }
-    };
-    function svgCoords(e) {
-      const rect = chart.getBoundingClientRect();
-      return {
-        x: (e.clientX - rect.left) * (860 / rect.width) - 430,
-        y: (e.clientY - rect.top) * (860 / rect.height) - 430
-      };
-    }
     chart.addEventListener('pointerdown', (e) => {
       const { x, y } = svgCoords(e);
       const r = Math.hypot(x, y);
