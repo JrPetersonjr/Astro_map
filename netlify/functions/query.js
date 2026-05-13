@@ -23,7 +23,7 @@ export async function handler(event) {
   const skyContext = typeof requestBody.skyContext === 'string' ? requestBody.skyContext : null;
 
   const apiUrl = process.env.QUERY_API_URL || 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
-  const model = process.env.QUERY_MODEL || 'gemini-1.5-flash';
+  const model = process.env.QUERY_MODEL || 'gemini-2.0-flash';
   console.log('Using model:', model, '| key prefix:', apiKey.slice(0, 8));
 
   const systemPrompt = skyContext
