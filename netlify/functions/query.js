@@ -3,9 +3,9 @@ export async function handler(event) {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
   }
 
-  const apiKey = process.env.QUERY_API_KEY;
+  const apiKey = process.env.LUMINA || process.env.QUERY_API_KEY;
   if (!apiKey) {
-    return { statusCode: 500, body: JSON.stringify({ error: 'Missing QUERY_API_KEY environment variable' }) };
+    return { statusCode: 500, body: JSON.stringify({ error: 'Missing LUMINA environment variable' }) };
   }
 
   let requestBody;
