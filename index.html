@@ -1829,8 +1829,8 @@ ${aspectLines || 'none within orb'}`;
       });
       chart.append(modePill);
 
-      // ── SCALE ARC (left quarter, r=415, deg 225→315) ──
-      const SA_R = 415, SA_MIN = 225, SA_MAX = 315, SC_LO = 0.5, SC_HI = 1.5;
+      // ── SCALE ARC (left side, r=415, deg 240→300) ──
+      const SA_R = 415, SA_MIN = 240, SA_MAX = 300, SC_LO = 0.5, SC_HI = 1.5;
       const saA = point(SA_MIN, SA_R), saB = point(SA_MAX, SA_R);
       const thumbDeg = SA_MIN + ((wheelScale - SC_LO) / (SC_HI - SC_LO)) * (SA_MAX - SA_MIN);
       const saThumb = point(thumbDeg, SA_R);
@@ -1838,14 +1838,14 @@ ${aspectLines || 'none within orb'}`;
       // Track
       chart.append(el('path', {
         d: `M ${saA.x} ${saA.y} A ${SA_R} ${SA_R} 0 0 0 ${saB.x} ${saB.y}`,
-        fill: 'none', stroke: 'rgba(255,255,255,0.1)', 'stroke-width': 16, 'stroke-linecap': 'round', 'pointer-events': 'none'
+        fill: 'none', stroke: 'rgba(255,255,255,0.1)', 'stroke-width': 10, 'stroke-linecap': 'round', 'pointer-events': 'none'
       }));
 
       // Active fill
       if (thumbDeg > SA_MIN + 0.5) {
         chart.append(el('path', {
           d: `M ${saA.x} ${saA.y} A ${SA_R} ${SA_R} 0 0 0 ${saThumb.x} ${saThumb.y}`,
-          fill: 'none', stroke: 'rgba(255,255,255,0.3)', 'stroke-width': 8, 'stroke-linecap': 'round', 'pointer-events': 'none'
+          fill: 'none', stroke: 'rgba(255,255,255,0.3)', 'stroke-width': 6, 'stroke-linecap': 'round', 'pointer-events': 'none'
         }));
       }
 
@@ -1863,15 +1863,14 @@ ${aspectLines || 'none within orb'}`;
       // Thumb
       chart.append(el('circle', { cx: saThumb.x, cy: saThumb.y, r: 10, fill: '#f8f5ec', stroke: 'rgba(255,255,255,0.5)', 'stroke-width': 1.5, 'pointer-events': 'none' }));
 
-      // Label — anchored below the arc's lower end where there's room
-      const saLbl = point(230, 442);
-      chart.append(el('text', { x: saLbl.x, y: saLbl.y - 8, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: 'rgba(255,255,255,0.28)', 'font-size': 8, 'letter-spacing': 1, 'font-weight': 700 }, 'SCALE'));
-      chart.append(el('text', { x: saLbl.x, y: saLbl.y + 8, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: 'rgba(255,255,255,0.6)', 'font-size': 12, 'font-weight': 800 }, `${Math.round(wheelScale * 100)}%`));
+      // Label — below arc bottom endpoint
+      chart.append(el('text', { x: 20, y: 592, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: 'rgba(255,255,255,0.28)', 'font-size': 8, 'letter-spacing': 1, 'font-weight': 700 }, 'SCALE'));
+      chart.append(el('text', { x: 20, y: 610, 'text-anchor': 'middle', 'dominant-baseline': 'middle', fill: 'rgba(255,255,255,0.6)', 'font-size': 12, 'font-weight': 800 }, `${Math.round(wheelScale * 100)}%`));
 
       // Wide transparent hit zone
       chart.append(el('path', {
         d: `M ${saA.x} ${saA.y} A ${SA_R} ${SA_R} 0 0 0 ${saB.x} ${saB.y}`,
-        fill: 'none', stroke: 'transparent', 'stroke-width': 36, style: 'cursor:grab;'
+        fill: 'none', stroke: 'transparent', 'stroke-width': 28, style: 'cursor:grab;'
       }));
     }
     function renderTable(data) {
@@ -1957,25 +1956,32 @@ ${aspectLines || 'none within orb'}`;
         dialDrag = { type: 'date', startAngle: Math.atan2(y, x), startMs: latestDate.getTime() };
         chart.setPointerCapture(e.pointerId);
         e.preventDefault();
-      } else if (r >= 402 && r <= 430 && x < 0 && Math.abs(y) <= -x + 24) {
-        dialDrag = { type: 'scale' };
-        chart.setPointerCapture(e.pointerId);
-        e.preventDefault();
+      } else if (r >= 400 && r <= 435 && x < 0) {
+        const scA = ((Math.atan2(y, x) * 180 / Math.PI + 90) + 360) % 360;
+        if (scA >= 240 && scA <= 300) {
+          dialDrag = { type: 'scale' };
+          chart.setPointerCapture(e.pointerId);
+          e.preventDefault();
+        }
       }
     });
     chart.addEventListener('pointermove', (e) => {
       const { x, y } = svgCoords(e);
       const r = Math.hypot(x, y);
       if (!dialDrag) {
-        const onScale = r >= 402 && r <= 430 && x < 0 && Math.abs(y) <= -x + 24;
+        let onScale = false;
+        if (r >= 400 && r <= 435 && x < 0) {
+          const scA = ((Math.atan2(y, x) * 180 / Math.PI + 90) + 360) % 360;
+          onScale = scA >= 240 && scA <= 300;
+        }
         chart.style.cursor = (r >= 308 && r <= 324) || (r >= 330 && r <= 348) || onScale ? 'grab' : '';
         return;
       }
       if (dialDrag.type === 'scale') {
         const mathAngle = Math.atan2(y, x) * 180 / Math.PI;
         let ourDeg = ((mathAngle + 90) + 360) % 360;
-        ourDeg = Math.max(225, Math.min(315, ourDeg));
-        wheelScale = +(0.5 + ((ourDeg - 225) / 90)).toFixed(2);
+        ourDeg = Math.max(240, Math.min(300, ourDeg));
+        wheelScale = +(0.5 + ((ourDeg - 240) / 60)).toFixed(2);
         render();
         return;
       }
