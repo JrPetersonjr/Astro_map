@@ -11,7 +11,7 @@ export async function handler(event) {
   let requestBody;
   try {
     requestBody = JSON.parse(event.body || '{}');
-  } catch (error) {
+  } catch {
     return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON body' }) };
   }
 
@@ -21,10 +21,7 @@ export async function handler(event) {
   }
 
   const skyContext = typeof requestBody.skyContext === 'string' ? requestBody.skyContext : null;
-
-  const apiUrl = process.env.QUERY_API_URL || 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
   const model = process.env.QUERY_MODEL || 'gemini-2.0-flash';
-  console.log('Using model:', model, '| key prefix:', apiKey.slice(0, 8));
 
   const systemPrompt = skyContext
     ? `You are a skilled sky interpreter — equal parts astronomer, herbalist, and journal keeper. You read celestial patterns with scientific precision and speak about them with the warmth of someone who genuinely lives by the rhythms of the sky. You are not a prophet and never predict the future. You interpret the present: how the current planetary weather maps onto what someone is actually experiencing right now.
@@ -49,14 +46,13 @@ Current sky data:
 ${skyContext}`
     : `You are a skilled sky interpreter — grounded, a little earthy, equal parts scientist and intuitive. Someone has shared something from their life. Respond with warmth and genuine insight, then end with one open-ended question that invites them to look deeper. Keep it under 220 words. No bullet points.`;
 
+  // Use Gemini native REST API directly
+  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+
   const payload = {
-    model,
-    messages: [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: prompt }
-    ],
-    max_tokens: 900,
-    temperature: 0.82
+    system_instruction: { parts: [{ text: systemPrompt }] },
+    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+    generationConfig: { maxOutputTokens: 900, temperature: 0.82 }
   };
 
   try {
@@ -64,22 +60,25 @@ ${skyContext}`
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`
+        'x-goog-api-key': apiKey
       },
       body: JSON.stringify(payload)
     });
 
     const data = await response.json();
     if (!response.ok) {
-      const errMsg = data?.error?.message || data?.error?.status || JSON.stringify(data);
-      console.error('API Error:', response.status, errMsg);
+      const errMsg = data?.error?.message || JSON.stringify(data);
+      console.error('Gemini error:', response.status, errMsg);
       return { statusCode: 502, body: JSON.stringify({ error: `Gemini ${response.status}: ${errMsg}` }) };
     }
 
-    const text = data?.choices?.[0]?.message?.content || data?.output || JSON.stringify(data);
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) {
+      return { statusCode: 502, body: JSON.stringify({ error: 'Empty response from Gemini' }) };
+    }
     return { statusCode: 200, body: JSON.stringify({ data: text }) };
   } catch (error) {
-    console.error('Fetch Error:', error.message);
-    return { statusCode: 500, body: JSON.stringify({ error: error.message || 'Query call failed' }) };
+    console.error('Fetch error:', error.message);
+    return { statusCode: 500, body: JSON.stringify({ error: error.message || 'Request failed' }) };
   }
 }
