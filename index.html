@@ -314,6 +314,20 @@
     .phase-avg  { font-size: 0.72rem; font-weight: 700; color: var(--gold); }
     .phase-avg.dim { color: var(--soft); }
 
+    .j-account-list { display: flex; flex-direction: column; gap: 8px; margin: 10px 0 14px; }
+    .j-account-btn {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 11px 14px; background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line); border-radius: 8px;
+      cursor: pointer; text-align: left; width: 100%;
+      color: var(--text); font-size: 0.9rem; transition: background 0.15s;
+    }
+    .j-account-btn:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.22); }
+    .j-acc-name { font-weight: 600; }
+    .j-acc-hint { font-size: 0.72rem; color: var(--soft); }
+    .j-back-btn { width: 100%; margin-top: 6px; }
+    .j-full-btn { width: 100%; }
+
     .journal-list {
       display: grid;
       gap: 8px;
@@ -943,6 +957,12 @@
               <h2 class="j-heading">Personal Journal</h2>
               <p class="source-note j-note-bottom" id="journalLockMsg">Encrypted and stored locally on this device.</p>
             </div>
+            <!-- Account picker (shown when multiple accounts exist) -->
+            <div id="journalAccountPicker" class="hidden">
+              <div id="journalAccountList" class="j-account-list"></div>
+              <button type="button" class="secondary j-full-btn" id="journalAddAccountBtn">+ New Account</button>
+            </div>
+
             <div id="journalSetupForm" class="hidden">
               <label>Your name <small class="j-label-hint">(optional — stored encrypted)</small>
                 <input type="text" id="journalDisplayName" placeholder="How should we address you?" autocomplete="name">
@@ -954,20 +974,19 @@
                 <input type="password" id="journalPwdConfirm" placeholder="Confirm password" autocomplete="new-password">
               </label>
               <button type="button" id="journalSetupBtn" class="j-form-btn">Create Journal</button>
+              <button type="button" class="secondary j-back-btn hidden" id="journalSetupBackBtn">← Back to Accounts</button>
               <div class="source-note j-enc-notice privacy">
                 <strong>🔐 Privacy notice</strong>
                 Your journal is encrypted on your device using AES-256. <strong>Your password cannot be recovered</strong> — there is no reset option, no backup link, and no way to access your entries without it. No one — including the app developer — can read your entries. They never leave your device. Save your password somewhere safe before continuing.
               </div>
             </div>
             <div id="journalUnlockForm" class="hidden">
-              <p class="j-unlock-welcome hidden" id="journalUnlockWelcome">Welcome back, <strong id="journalWelcomeName"></strong></p>
-              <label>Display name
-                <input type="text" id="journalUnlockNameDisplay" placeholder="—" readonly autocomplete="off">
-              </label>
+              <p class="j-unlock-welcome" id="journalUnlockWelcome">Unlocking journal for <strong id="journalWelcomeName">this account</strong></p>
               <label>Password
                 <input type="password" id="journalPwd" placeholder="Enter your journal password" autocomplete="current-password">
               </label>
               <button type="button" id="journalUnlockBtn" class="j-form-btn">Unlock</button>
+              <button type="button" class="secondary j-back-btn" id="journalBackToPickerBtn">← Back to Accounts</button>
               <p class="source-note j-enc-notice">Journal is AES-256 encrypted locally. Password is not recoverable.</p>
             </div>
           </section>
@@ -982,6 +1001,7 @@
                 <p class="j-entry-count" id="journalEntryCount"></p>
               </div>
               <div class="j-btn-row">
+                <button type="button" class="secondary btn-sm" id="journalSwitchBtn">Switch</button>
                 <button type="button" class="secondary btn-sm" id="journalChangePwdBtn">Password</button>
                 <button type="button" class="secondary btn-sm" id="journalLockBtn">Lock</button>
               </div>
@@ -2199,9 +2219,12 @@ ${aspectLines || 'none within orb'}`;
 
     // ── Journal: AES-GCM-256 encrypted local storage ──
     // Payload format: { name, birthDate, birthTime, entries }
-    // Stored format:  { salt: b64, iv: b64, ct: b64 }
-    const JOURNAL_STORE = 'astro_journal_enc';
+    // Account index:  astro_journal_accounts = [{id, name}]
+    // Per-account:    astro_journal_enc_<id>
+    const JOURNAL_INDEX = 'astro_journal_accounts';
+    const JOURNAL_ACTIVE = 'astro_journal_active';
     let journalKey = null;
+    let journalActiveId = null;
     let journalName = '';
     let journalBirthDate = '';
     let journalBirthTime = '';
@@ -2209,6 +2232,23 @@ ${aspectLines || 'none within orb'}`;
     let lastAnalysis = null;
     let journalUnlockAttempts = 0;
     let journalLockoutUntil = 0;
+
+    function journalGetAccounts() {
+      return JSON.parse(localStorage.getItem(JOURNAL_INDEX) || '[]');
+    }
+    function journalStoreKey(id) { return `astro_journal_enc_${id}`; }
+    function journalMigrate() {
+      const old = localStorage.getItem('astro_journal_enc');
+      if (!old) return;
+      const accounts = journalGetAccounts();
+      if (accounts.find(a => a.id === 'legacy')) return;
+      const storedName = localStorage.getItem('astro_journal_dname') || '';
+      localStorage.setItem(journalStoreKey('legacy'), old);
+      accounts.push({ id: 'legacy', name: storedName });
+      localStorage.setItem(JOURNAL_INDEX, JSON.stringify(accounts));
+      localStorage.removeItem('astro_journal_enc');
+      localStorage.removeItem('astro_journal_dname');
+    }
 
     const journalList = document.getElementById('journalList');
 
@@ -2241,25 +2281,38 @@ ${aspectLines || 'none within orb'}`;
     }
 
     function journalLoad() {
-      const raw = localStorage.getItem(JOURNAL_STORE);
+      if (!journalActiveId) return null;
+      const raw = localStorage.getItem(journalStoreKey(journalActiveId));
       return raw ? JSON.parse(raw) : null;
     }
 
     async function journalPersist() {
       const stored = journalLoad();
       const enc = await journalEncrypt(journalKey, { name: journalName, birthDate: journalBirthDate, birthTime: journalBirthTime, entries: journalEntries });
-      localStorage.setItem(JOURNAL_STORE, JSON.stringify({ salt: stored.salt, ...enc }));
+      localStorage.setItem(journalStoreKey(journalActiveId), JSON.stringify({ salt: stored.salt, ...enc }));
+      const accounts = journalGetAccounts();
+      const acc = accounts.find(a => a.id === journalActiveId);
+      if (acc && acc.name !== journalName) {
+        acc.name = journalName;
+        localStorage.setItem(JOURNAL_INDEX, JSON.stringify(accounts));
+      }
     }
 
     async function journalCreate(password, name) {
+      const id = crypto.randomUUID ? crypto.randomUUID() : (Date.now().toString(36) + Math.random().toString(36).slice(2));
       const salt = crypto.getRandomValues(new Uint8Array(16));
       journalKey = await journalDeriveKey(password, salt);
       journalName = name || '';
+      journalBirthDate = '';
+      journalBirthTime = '';
       journalEntries = [];
+      journalActiveId = id;
       const enc = await journalEncrypt(journalKey, { name: journalName, entries: journalEntries });
-      localStorage.setItem(JOURNAL_STORE, JSON.stringify({ salt: b64enc(salt), ...enc }));
-      if (journalName) localStorage.setItem('astro_journal_dname', journalName);
-      else localStorage.removeItem('astro_journal_dname');
+      localStorage.setItem(journalStoreKey(id), JSON.stringify({ salt: b64enc(salt), ...enc }));
+      const accounts = journalGetAccounts();
+      accounts.push({ id, name: journalName });
+      localStorage.setItem(JOURNAL_INDEX, JSON.stringify(accounts));
+      localStorage.setItem(JOURNAL_ACTIVE, id);
     }
 
     async function journalUnlock(password) {
@@ -2328,8 +2381,8 @@ ${aspectLines || 'none within orb'}`;
       await journalDecrypt(testKey, stored.iv, stored.ct); // throws if wrong
       const newSalt = crypto.getRandomValues(new Uint8Array(16));
       journalKey = await journalDeriveKey(newPwd, newSalt);
-      const enc = await journalEncrypt(journalKey, { name: journalName, entries: journalEntries });
-      localStorage.setItem(JOURNAL_STORE, JSON.stringify({ salt: b64enc(newSalt), ...enc }));
+      const enc = await journalEncrypt(journalKey, { name: journalName, birthDate: journalBirthDate, birthTime: journalBirthTime, entries: journalEntries });
+      localStorage.setItem(journalStoreKey(journalActiveId), JSON.stringify({ salt: b64enc(newSalt), ...enc }));
     }
 
     function journalExport() {
@@ -2353,13 +2406,45 @@ ${aspectLines || 'none within orb'}`;
       count.textContent = n === 0 ? 'No entries' : `${n} entr${n === 1 ? 'y' : 'ies'} — encrypted locally`;
     }
 
+    function renderAccountPicker(accounts) {
+      const list = document.getElementById('journalAccountList');
+      list.innerHTML = '';
+      accounts.forEach(acc => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'j-account-btn';
+        btn.innerHTML = `<span class="j-acc-name">${acc.name || 'Unnamed Journal'}</span><span class="j-acc-hint">tap to unlock →</span>`;
+        btn.addEventListener('click', () => {
+          journalActiveId = acc.id;
+          localStorage.setItem(JOURNAL_ACTIVE, acc.id);
+          document.getElementById('journalAccountPicker').classList.add('hidden');
+          document.getElementById('journalSetupForm').classList.add('hidden');
+          document.getElementById('journalUnlockForm').classList.remove('hidden');
+          document.getElementById('journalWelcomeName').textContent = acc.name || 'this account';
+          document.getElementById('journalPwd').focus();
+        });
+        list.appendChild(btn);
+      });
+    }
+
+    function journalShowPicker(accounts) {
+      document.getElementById('journalAccountPicker').classList.remove('hidden');
+      document.getElementById('journalSetupForm').classList.add('hidden');
+      document.getElementById('journalUnlockForm').classList.add('hidden');
+      document.getElementById('journalSetupBackBtn').classList.remove('hidden');
+      document.getElementById('journalLockMsg').textContent = 'Choose an account to unlock.';
+      renderAccountPicker(accounts);
+    }
+
     function journalInitView() {
-      const stored = journalLoad();
+      journalMigrate();
+      const accounts = journalGetAccounts();
       const locked = document.getElementById('journalLocked');
       const unlocked = document.getElementById('journalUnlocked');
       if (journalKey) {
         locked.classList.add('hidden');
         unlocked.classList.remove('hidden');
+        document.getElementById('journalSwitchBtn').classList.toggle('hidden', accounts.length < 2);
         journalUpdateMeta();
         renderJournal();
         renderPatternStats();
@@ -2369,27 +2454,24 @@ ${aspectLines || 'none within orb'}`;
         unlocked.classList.add('hidden');
         const setupForm = document.getElementById('journalSetupForm');
         const unlockForm = document.getElementById('journalUnlockForm');
+        const picker = document.getElementById('journalAccountPicker');
         const msg = document.getElementById('journalLockMsg');
-        if (stored) {
-          setupForm.classList.add('hidden');
-          unlockForm.classList.remove('hidden');
-          msg.textContent = 'Your journal is encrypted locally on this device.';
-          const storedName = localStorage.getItem('astro_journal_dname');
-          const nameDisplay = document.getElementById('journalUnlockNameDisplay');
-          const welcome = document.getElementById('journalUnlockWelcome');
-          const welcomeName = document.getElementById('journalWelcomeName');
-          if (storedName && nameDisplay) {
-            nameDisplay.value = storedName;
-            welcomeName.textContent = storedName;
-            welcome.classList.remove('hidden');
-          } else if (nameDisplay) {
-            nameDisplay.value = '';
-            welcome.classList.add('hidden');
-          }
-        } else {
+        picker.classList.add('hidden');
+        if (accounts.length === 0) {
           setupForm.classList.remove('hidden');
           unlockForm.classList.add('hidden');
+          document.getElementById('journalSetupBackBtn').classList.add('hidden');
           msg.textContent = 'Create a password to begin your encrypted personal journal.';
+        } else if (accounts.length === 1) {
+          journalActiveId = accounts[0].id;
+          localStorage.setItem(JOURNAL_ACTIVE, journalActiveId);
+          setupForm.classList.add('hidden');
+          unlockForm.classList.remove('hidden');
+          document.getElementById('journalWelcomeName').textContent = accounts[0].name || 'this account';
+          msg.textContent = 'Your journal is encrypted locally on this device.';
+          document.getElementById('journalPwd').focus();
+        } else {
+          journalShowPicker(accounts);
         }
       }
     }
@@ -2522,9 +2604,41 @@ ${aspectLines || 'none within orb'}`;
       journalEntries = [];
       journalBirthDate = '';
       journalBirthTime = '';
+      journalActiveId = null;
       document.getElementById('journalChangePwdPanel').classList.add('hidden');
       document.getElementById('journalClearPanel').classList.add('hidden');
       journalInitView();
+    });
+
+    document.getElementById('journalSwitchBtn').addEventListener('click', () => {
+      journalKey = null;
+      journalName = '';
+      journalEntries = [];
+      journalBirthDate = '';
+      journalBirthTime = '';
+      journalActiveId = null;
+      document.getElementById('journalChangePwdPanel').classList.add('hidden');
+      document.getElementById('journalClearPanel').classList.add('hidden');
+      journalInitView();
+    });
+
+    document.getElementById('journalBackToPickerBtn').addEventListener('click', () => {
+      journalActiveId = null;
+      document.getElementById('journalUnlockForm').classList.add('hidden');
+      document.getElementById('journalPwd').value = '';
+      journalShowPicker(journalGetAccounts());
+    });
+
+    document.getElementById('journalSetupBackBtn').addEventListener('click', () => {
+      document.getElementById('journalSetupForm').classList.add('hidden');
+      journalShowPicker(journalGetAccounts());
+    });
+
+    document.getElementById('journalAddAccountBtn').addEventListener('click', () => {
+      document.getElementById('journalAccountPicker').classList.add('hidden');
+      document.getElementById('journalSetupForm').classList.remove('hidden');
+      document.getElementById('journalSetupBackBtn').classList.remove('hidden');
+      document.getElementById('journalLockMsg').textContent = 'Create a new encrypted journal account.';
     });
 
     document.getElementById('journalSaveEntryBtn').addEventListener('click', async () => {
@@ -2567,7 +2681,6 @@ ${aspectLines || 'none within orb'}`;
       const word = document.getElementById('journalClearConfirm').value.trim();
       if (word !== 'CLEAR') { setStatus('Type CLEAR (all caps) to confirm.'); return; }
       await journalClearAll();
-      localStorage.removeItem('astro_journal_dname');
       document.getElementById('journalClearPanel').classList.add('hidden');
       document.getElementById('journalClearConfirm').value = '';
       renderJournal();
@@ -2600,8 +2713,6 @@ ${aspectLines || 'none within orb'}`;
         journalBirthDate = document.getElementById('journalBirthDateEdit').value;
         journalBirthTime = document.getElementById('journalBirthTimeEdit').value;
         await journalPersist();
-        if (newName) localStorage.setItem('astro_journal_dname', newName);
-        else localStorage.removeItem('astro_journal_dname');
         document.getElementById('journalChangePwdPanel').classList.add('hidden');
         journalUpdateMeta();
         renderDashaPanel();
@@ -2616,8 +2727,6 @@ ${aspectLines || 'none within orb'}`;
         journalBirthDate = document.getElementById('journalBirthDateEdit').value;
         journalBirthTime = document.getElementById('journalBirthTimeEdit').value;
         await journalChangePassword(current, next);
-        if (newName) localStorage.setItem('astro_journal_dname', newName);
-        else localStorage.removeItem('astro_journal_dname');
         document.getElementById('journalChangePwdPanel').classList.add('hidden');
         ['journalCurrentPwd', 'journalNewPwd', 'journalConfirmNewPwd'].forEach(id => {
           document.getElementById(id).value = '';
@@ -2632,8 +2741,11 @@ ${aspectLines || 'none within orb'}`;
      document.getElementById('journalPwdConfirm')].forEach(input => {
       input.addEventListener('keydown', e => {
         if (e.key === 'Enter') {
-          const stored = journalLoad();
-          (stored ? document.getElementById('journalUnlockBtn') : document.getElementById('journalSetupBtn')).click();
+          const unlockForm = document.getElementById('journalUnlockForm');
+          (!unlockForm.classList.contains('hidden')
+            ? document.getElementById('journalUnlockBtn')
+            : document.getElementById('journalSetupBtn')
+          ).click();
         }
       });
     });
