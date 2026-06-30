@@ -10,6 +10,8 @@
   <meta property="og:description" content="A live transit wheel using today's date, adjustable time travel, aspects, retrogrades, and optional location context.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="sky-map-social.png">
+  <link rel="apple-touch-icon" href="sky-map-social.png">
+  <link rel="manifest" href="standalone/manifest.webmanifest">
   <style>
     :root {
       color-scheme: dark;
@@ -352,7 +354,7 @@
 
     /* ── Tarot Tab ── */
     .tarot-period-section { margin-bottom: 10px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-    .tarot-period-header { display: flex; align-items: center; justify-content: space-between; padding: 9px 14px; cursor: pointer; user-select: none; background: rgba(255,255,255,0.03); }
+    .tarot-period-header { display: flex; align-items: center; justify-content: space-between; padding: 9px 14px; cursor: pointer; -webkit-user-select: none; user-select: none; background: rgba(255,255,255,0.03); }
     .tarot-period-header:hover { background: rgba(255,255,255,0.06); }
     .tarot-period-header h4 { margin: 0; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold); }
     .tarot-period-toggle-icon { font-size: 0.7rem; color: var(--soft); transition: transform 0.2s; }
@@ -861,6 +863,7 @@
       display: none;
     }
     .sky-share-panel .caption-preview.visible { display: block; }
+    #installAppBtn.hidden-install { display: none; }
 
     .chat-log {
       display: grid;
@@ -1062,6 +1065,7 @@
       <section class="panel sky-share-panel">
         <textarea class="caption" id="caption" aria-label="Sky caption"></textarea>
         <div class="share-row">
+          <button type="button" class="secondary hidden-install" id="installAppBtn">Install App</button>
           <button type="button" id="copyCaption">Copy Caption</button>
           <button type="button" class="secondary" id="sharePage">Share Link</button>
           <a class="button secondary" href="sky-map-social.png" download>Download Preview</a>
@@ -1212,11 +1216,31 @@
           <!-- Change password panel -->
           <section class="panel hidden" id="journalChangePwdPanel">
             <h2 class="j-subheading">Settings</h2>
-            <label>Gemini API key <small class="j-label-hint">(stored locally — get one free at aistudio.google.com)</small>
+            <label>AI provider <small class="j-label-hint">(auto tries local Gemini key, then server bridge)</small>
+              <select id="aiProviderSelect">
+                <option value="auto">Auto</option>
+                <option value="gemini">Gemini</option>
+                <option value="mage-local">Mage Local</option>
+                <option value="gguf-local">GGUF Local</option>
+                <option value="homeplanet-local">Homeplanet Local</option>
+                <option value="vedastro">VedAstro MCP</option>
+                <option value="kerykeion">Kerykeion API</option>
+              </select>
+            </label>
+            <label>Gemini API key <small class="j-label-hint">(stored locally — optional in auto mode)</small>
               <input type="password" id="geminiApiKeyInput" placeholder="AIza..." autocomplete="off">
             </label>
+            <label>Bridge endpoint <small class="j-label-hint">(optional override for VedAstro/Kerykeion)</small>
+              <input type="url" id="astroBridgeEndpointInput" placeholder="https://..." autocomplete="off">
+            </label>
+            <label>Local runtime URL <small class="j-label-hint">(for Mage/GGUF/Homeplanet local bridge)</small>
+              <input type="url" id="localRuntimeUrlInput" placeholder="http://127.0.0.1:8787" autocomplete="off">
+            </label>
+            <label>Bridge API key <small class="j-label-hint">(stored locally, sent only to your selected endpoint)</small>
+              <input type="password" id="astroBridgeApiKeyInput" placeholder="Optional key/token" autocomplete="off">
+            </label>
             <div class="actions j-actions j-key-row">
-              <button type="button" id="saveGeminiKeyBtn" class="secondary btn-sm">Save Key</button>
+              <button type="button" id="saveGeminiKeyBtn" class="secondary btn-sm">Save AI Settings</button>
               <span id="geminiKeyStatus" class="source-note j-key-status"></span>
             </div>
             <label>Display name <small class="j-label-hint">(stored encrypted, optional)</small>
@@ -1707,44 +1731,116 @@ ${aspectLines || 'none within orb'}`;
       return localStorage.getItem('lumina_gemini_key') || '';
     }
 
+    function getAiProvider() {
+      return localStorage.getItem('lumina_ai_provider') || 'auto';
+    }
+
+    function getBridgeEndpoint() {
+      return localStorage.getItem('lumina_bridge_endpoint') || '';
+    }
+
+    function getBridgeApiKey() {
+      return localStorage.getItem('lumina_bridge_api_key') || '';
+    }
+
+    function getLocalRuntimeUrl() {
+      return localStorage.getItem('lumina_local_runtime_url') || 'http://127.0.0.1:8787';
+    }
+
     function noKeyCard(chatLogEl) {
       const div = document.createElement('div');
       div.className = 'j-bubble ai j-no-key-card';
       div.innerHTML = `
         <strong>AI not connected</strong>
-        <p>LuminaSynodic uses Google Gemini for sky readings. A free API key takes about 60 seconds to get:</p>
+        <p>You can connect Gemini, VedAstro MCP, or a Kerykeion-compatible API from Journal settings.</p>
         <ol>
-          <li>Go to <strong>aistudio.google.com</strong></li>
-          <li>Click <strong>Get API key → Create API key</strong></li>
-          <li>Copy the key (starts with <code>AIza</code>)</li>
-          <li>Come back here → open <strong>Journal → Password/Settings</strong> → paste it in the <em>Gemini API key</em> field → Save Key</li>
+          <li>Open <strong>Journal → Password/Settings</strong></li>
+          <li>Choose an <strong>AI provider</strong></li>
+          <li>For Gemini: add your <code>AIza...</code> key</li>
+          <li>For VedAstro/Kerykeion: optionally set endpoint + API key</li>
         </ol>
-        <p style="margin-top:6px;font-size:0.78rem;color:var(--soft);">It's free, no credit card required, and the key is stored only on your device.</p>
+        <p style="margin-top:6px;font-size:0.78rem;color:var(--soft);">All personal keys are stored only on this device and sent only when you query AI.</p>
       `;
       if (chatLogEl) chatLogEl.appendChild(div);
       return div;
     }
 
-    async function querySkyAssistant(prompt, skyContext) {
-      const userKey = getGeminiKey();
+    async function postJsonWithFallback(paths, payload) {
+      for (const path of paths) {
+        try {
+          const response = await fetch(path, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (response.ok) {
+            const data = await response.json();
+            return { ok: true, data };
+          }
+        } catch (_) {
+          // Try next candidate path.
+        }
+      }
+      return { ok: false, data: null };
+    }
 
-      // Try user's own key first (direct Gemini call — no server needed)
-      if (userKey) {
+    async function querySkyAssistant(prompt, skyContext) {
+      const provider = getAiProvider();
+      const userKey = getGeminiKey();
+      const bridgeEndpoint = getBridgeEndpoint();
+      const bridgeApiKey = getBridgeApiKey();
+      const localRuntimeUrl = getLocalRuntimeUrl();
+
+      // Local runtime providers (Mage / GGUF / Homeplanet).
+      if (provider === 'mage-local' || provider === 'gguf-local' || provider === 'homeplanet-local') {
+        const localResult = await postJsonWithFallback(
+          [`${localRuntimeUrl}/local/bridge`, '/local/bridge'],
+          {
+            provider,
+            prompt,
+            skyContext: skyContext || '',
+            contextHints: ['archivist-projects', 'mage-system', 'indra-system']
+          }
+        );
+        if (localResult.ok && localResult.data?.data) return localResult.data.data;
+        throw new Error('Local runtime unavailable. Start standalone/local-runtime.js first.');
+      }
+
+      // Gemini-only mode requires a local Gemini key.
+      if (provider === 'gemini' && !userKey) {
+        throw new Error('NO_KEY');
+      }
+
+      // Try local Gemini key directly when selected or in auto mode.
+      if (userKey && (provider === 'gemini' || provider === 'auto')) {
         return await _callGeminiDirect(prompt, skyContext, userKey);
       }
 
-      // No personal key — try server-side proxy (shared key, works for anyone)
-      try {
-        const proxyRes = await fetch('/api/query', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt, skyContext: skyContext || '' })
-        });
-        if (proxyRes.ok) {
-          const proxyData = await proxyRes.json();
-          if (proxyData.data) return proxyData.data;
-        }
-      } catch (_) { /* server not available */ }
+      // Try the multi-provider bridge for VedAstro, Kerykeion, or auto fallback.
+      if (provider === 'vedastro' || provider === 'kerykeion' || provider === 'auto') {
+        const bridgeResult = await postJsonWithFallback(
+          ['/api/astro-bridge', '/.netlify/functions/astro-bridge'],
+          {
+            provider,
+            prompt,
+            skyContext: skyContext || '',
+            bridgeEndpoint: bridgeEndpoint || undefined,
+            bridgeApiKey: bridgeApiKey || undefined
+          }
+        );
+        if (bridgeResult.ok && bridgeResult.data?.data) return bridgeResult.data.data;
+      }
+
+      // Legacy Gemini proxy fallback.
+      const proxyResult = await postJsonWithFallback(
+        ['/api/query', '/.netlify/functions/query'],
+        { prompt, skyContext: skyContext || '' }
+      );
+      if (proxyResult.ok && proxyResult.data?.data) return proxyResult.data.data;
+
+      if (provider === 'gemini' || provider === 'auto') {
+        throw new Error('NO_KEY');
+      }
 
       throw new Error('NO_KEY');
     }
@@ -3028,11 +3124,29 @@ ${skyContext}`
 
     document.getElementById('saveGeminiKeyBtn').addEventListener('click', () => {
       const key = document.getElementById('geminiApiKeyInput').value.trim();
+      const aiProvider = document.getElementById('aiProviderSelect').value;
+      const bridgeEndpoint = document.getElementById('astroBridgeEndpointInput').value.trim();
+      const localRuntimeUrl = document.getElementById('localRuntimeUrlInput').value.trim();
+      const bridgeApiKey = document.getElementById('astroBridgeApiKeyInput').value.trim();
       const status = document.getElementById('geminiKeyStatus');
-      if (!key) { localStorage.removeItem('lumina_gemini_key'); status.textContent = 'Key cleared.'; return; }
-      localStorage.setItem('lumina_gemini_key', key);
+
+      localStorage.setItem('lumina_ai_provider', aiProvider || 'auto');
+
+      if (!key) localStorage.removeItem('lumina_gemini_key');
+      else localStorage.setItem('lumina_gemini_key', key);
+
+      if (!bridgeEndpoint) localStorage.removeItem('lumina_bridge_endpoint');
+      else localStorage.setItem('lumina_bridge_endpoint', bridgeEndpoint);
+
+      if (!localRuntimeUrl) localStorage.removeItem('lumina_local_runtime_url');
+      else localStorage.setItem('lumina_local_runtime_url', localRuntimeUrl);
+
+      if (!bridgeApiKey) localStorage.removeItem('lumina_bridge_api_key');
+      else localStorage.setItem('lumina_bridge_api_key', bridgeApiKey);
+
       document.getElementById('geminiApiKeyInput').value = '';
-      status.textContent = 'Key saved.';
+      document.getElementById('astroBridgeApiKeyInput').value = '';
+      status.textContent = 'AI settings saved.';
       setTimeout(() => { status.textContent = ''; }, 3000);
     });
 
@@ -3041,7 +3155,45 @@ ${skyContext}`
       document.getElementById('journalDisplayNameEdit').value = journalName;
       document.getElementById('journalBirthDateEdit').value = journalBirthDate;
       document.getElementById('journalBirthTimeEdit').value = journalBirthTime;
+      document.getElementById('aiProviderSelect').value = getAiProvider();
+      document.getElementById('astroBridgeEndpointInput').value = getBridgeEndpoint();
+      document.getElementById('localRuntimeUrlInput').value = getLocalRuntimeUrl();
     });
+
+    // ── PWA install + service worker (standalone mode) ──
+    (function initStandaloneInstall() {
+      const installBtn = document.getElementById('installAppBtn');
+      if (!installBtn) return;
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('standalone/sw.js').catch(() => {
+          // Non-fatal when running in non-HTTP contexts.
+        });
+      }
+
+      let deferredPrompt = null;
+      window.addEventListener('beforeinstallprompt', (event) => {
+        event.preventDefault();
+        deferredPrompt = event;
+        installBtn.classList.remove('hidden-install');
+      });
+
+      installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) {
+          setStatus('Install prompt not available in this browser context yet.');
+          return;
+        }
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        installBtn.classList.add('hidden-install');
+      });
+
+      window.addEventListener('appinstalled', () => {
+        installBtn.classList.add('hidden-install');
+        setStatus('LuminaSynodic installed.');
+      });
+    })();
 
     document.getElementById('journalCancelChangePwdBtn').addEventListener('click', () => {
       document.getElementById('journalChangePwdPanel').classList.add('hidden');

@@ -1,0 +1,17 @@
+{
+  "name": "LuminaSynodic Standalone",
+  "short_name": "LuminaLocal",
+  "start_url": "/index.html?standalone=1",
+  "display": "standalone",
+  "background_color": "#101012",
+  "theme_color": "#101012",
+  "description": "Installable local astrology workstation with Mage/GGUF bridging and project context indexing.",
+  "icons": [
+    {
+      "src": "/sky-map-social.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

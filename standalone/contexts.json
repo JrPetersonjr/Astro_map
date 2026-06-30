@@ -1,0 +1,54 @@
+{
+  "server": {
+    "host": "127.0.0.1",
+    "port": 8787,
+    "corsOrigin": "*"
+  },
+  "mage": {
+    "mcpUrl": "http://127.0.0.1:7788/api/mcp",
+    "apiKey": "",
+    "intent": "astrology-reading"
+  },
+  "gguf": {
+    "baseUrl": "http://127.0.0.1:1234/v1/chat/completions",
+    "apiKey": "",
+    "model": "local-model"
+  },
+  "homeplanet": {
+    "endpoint": "http://127.0.0.1:8801/api/readings",
+    "apiKey": ""
+  },
+  "contexts": [
+    {
+      "name": "archivist-projects",
+      "roots": [
+        "H:/airlock/homeplanetstudio/projects",
+        "H:/airlock/flowstate_mage/projects"
+      ]
+    },
+    {
+      "name": "mage-system",
+      "roots": [
+        "H:/airlock/homeplanetstudio/mage",
+        "H:/airlock/flowstate_mage/mage"
+      ]
+    },
+    {
+      "name": "indra-system",
+      "roots": [
+        "H:/airlock/homeplanetstudio/indra",
+        "H:/airlock/flowstate_mage/indra"
+      ]
+    }
+  ],
+  "indexing": {
+    "maxFileBytes": 3145728,
+    "includeExtensions": [
+      ".txt", ".md", ".markdown", ".json", ".yaml", ".yml", ".toml", ".ini", ".cfg",
+      ".js", ".ts", ".tsx", ".jsx", ".py", ".ps1", ".sh", ".bat", ".cmd", ".html", ".css"
+    ],
+    "ignoreDirs": [
+      ".git", "node_modules", "dist", "build", ".next", ".venv", "venv", "__pycache__", ".cache"
+    ]
+  }
+}
