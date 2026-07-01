@@ -3666,7 +3666,9 @@ ${skyContext}`
       });
     });
 
-    initializePageView();
+    // initializePageView() runs in the deferred init block at the end of this
+    // script — it triggers tab rendering that depends on calendarGrid /
+    // JOURNAL_INDEX and other consts declared further below.
 
     // (profile/login removed — identity is managed by the encrypted journal)
 
@@ -5994,6 +5996,7 @@ ${skyContext}`
     loadPrecomputedForecast();
     refreshMageStatus();
     renderCalendar();
+    initializePageView();
 
   </script>
   <script src="data/tarotCards.js"></script>
