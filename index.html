@@ -2893,6 +2893,7 @@ If the tool supports image output, return the image directly and keep any text r
         const entry = (data.days || []).find((d) => d.date === key);
         if (!entry || !entry.forecast) return;
 
+        panel.classList.remove('forecast-hidden');
         panel.style.display = '';
         source.textContent = `Source: ${data.source || 'precomputed'} · Generated: ${data.generatedAt ? new Date(data.generatedAt).toLocaleString() : 'unknown'}`;
         body.textContent = entry.forecast;

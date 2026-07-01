@@ -1,5 +1,1529 @@
 {
-  "generatedAt": "",
-  "source": "manual",
-  "days": []
+  "generatedAt": "2026-07-01T18:07:58.882Z",
+  "source": "mage-local",
+  "style": "cosmic-weather",
+  "days": [
+    {
+      "date": "2026-07-01",
+      "forecast": "The long-range backdrop holds steady — Jupiter in Leo, Saturn in Aries, Uranus in Gemini, Neptune in Aries, and Pluto retrograde in Aquarius set the season's tone.\nToday the Sun is in Cancer, and the Moon is Full in Capricorn. Mercury is retrograde in Cancer, Venus is in Leo, and Mars is in Gemini.\nThe tightest thread in the sky is Neptune sextile Pluto, with Uranus sextile Neptune close behind.\nSo, with a Full Moon in Capricorn while Mercury is retrograde in Cancer, here's what to expect —\nTruth is rising to the surface today, pulling everything out of the shadows and into the light. You may find yourself revisiting old conversations or unfinished plans as you decide what is truly worth keeping and what is ready to be released. Watch for a sudden breakthrough or a crack in your current structure; it is simply letting new air into your life. Whether you are focusing on deepening intimacy or refining your professional direction, move with the intention of a fresh start. Trust the spark of potential waiting within you. Step forward with courage.",
+      "sky": {
+        "moonPhase": "Full Moon",
+        "positions": [
+          {
+            "planet": "Sun",
+            "sign": "Cancer",
+            "retrograde": false
+          },
+          {
+            "planet": "Moon",
+            "sign": "Capricorn",
+            "retrograde": false
+          },
+          {
+            "planet": "Mercury",
+            "sign": "Cancer",
+            "retrograde": true
+          },
+          {
+            "planet": "Venus",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Mars",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Jupiter",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Saturn",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Uranus",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Neptune",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Pluto",
+            "sign": "Aquarius",
+            "retrograde": true
+          }
+        ],
+        "aspects": [
+          {
+            "a": "Neptune",
+            "b": "Pluto",
+            "aspect": "Sextile",
+            "orb": 0.4
+          },
+          {
+            "a": "Uranus",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 0.7
+          },
+          {
+            "a": "Uranus",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 1.1
+          },
+          {
+            "a": "Mars",
+            "b": "Uranus",
+            "aspect": "Conjunction",
+            "orb": 1.7
+          },
+          {
+            "a": "Mars",
+            "b": "Jupiter",
+            "aspect": "Sextile",
+            "orb": 1.7
+          },
+          {
+            "a": "Moon",
+            "b": "Jupiter",
+            "aspect": "Opposition",
+            "orb": 2.1
+          }
+        ],
+        "themes": [
+          "Sudden Change / Breakthrough",
+          "Love / Attraction / Reconnection",
+          "Career / Work / Responsibility",
+          "New Beginnings"
+        ],
+        "cards": [
+          "The Fool",
+          "The Empress",
+          "The Magician",
+          "The Fool"
+        ]
+      }
+    },
+    {
+      "date": "2026-07-02",
+      "forecast": "The long-range backdrop holds steady — Jupiter in Leo, Saturn in Aries, Uranus in Gemini, Neptune in Aries, and Pluto retrograde in Aquarius set the season's tone.\nToday the Sun is in Cancer, and the Moon is Waning Gibbous in Aquarius. Mercury is retrograde in Cancer, Venus is in Leo, and Mars is in Gemini.\nThe tightest thread in the sky is Neptune sextile Pluto, with Uranus sextile Neptune close behind.\nSo, with a Waning Gibbous in Aquarius while Mercury is retrograde in Cancer, here's what to expect —\nYou may feel a sudden crack in the old structures of your life, a disruption that serves as a necessary liberation to let new air into your spirit. As you review unfinished conversations and reconsider your plans, use this time to clear space for what truly matters. You are being asked to balance your drive for direction with a deep need for recovery; listen to your body’s limits so you do not burn out before the breakthrough arrives. Whether in intimacy or career, choose what aligns with your highest purpose and release the rest. Trust the transformation unfolding beneath the surface. Move with intention.",
+      "sky": {
+        "moonPhase": "Waning Gibbous",
+        "positions": [
+          {
+            "planet": "Sun",
+            "sign": "Cancer",
+            "retrograde": false
+          },
+          {
+            "planet": "Moon",
+            "sign": "Aquarius",
+            "retrograde": false
+          },
+          {
+            "planet": "Mercury",
+            "sign": "Cancer",
+            "retrograde": true
+          },
+          {
+            "planet": "Venus",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Mars",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Jupiter",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Saturn",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Uranus",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Neptune",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Pluto",
+            "sign": "Aquarius",
+            "retrograde": true
+          }
+        ],
+        "aspects": [
+          {
+            "a": "Neptune",
+            "b": "Pluto",
+            "aspect": "Sextile",
+            "orb": 0.4
+          },
+          {
+            "a": "Uranus",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 0.6
+          },
+          {
+            "a": "Mars",
+            "b": "Uranus",
+            "aspect": "Conjunction",
+            "orb": 1
+          },
+          {
+            "a": "Uranus",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 1.1
+          },
+          {
+            "a": "Mars",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 1.7
+          },
+          {
+            "a": "Mars",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 2.1
+          }
+        ],
+        "themes": [
+          "Sudden Change / Breakthrough",
+          "Love / Attraction / Reconnection",
+          "Career / Work / Responsibility",
+          "Health / Body / Burnout"
+        ],
+        "cards": [
+          "The Chariot",
+          "The Lovers",
+          "The Emperor",
+          "Temperance"
+        ]
+      }
+    },
+    {
+      "date": "2026-07-03",
+      "forecast": "The long-range backdrop holds steady — Jupiter in Leo, Saturn in Aries, Uranus in Gemini, Neptune in Aries, and Pluto retrograde in Aquarius set the season's tone.\nToday the Sun is in Cancer, and the Moon is Waning Gibbous in Aquarius. Mercury is retrograde in Cancer, Venus is in Leo, and Mars is in Gemini.\nThe tightest thread in the sky is Mars conjunct Uranus, with Neptune sextile Pluto close behind.\nSo, with a Waning Gibbous in Aquarius while Mercury is retrograde in Cancer, here's what to expect —\nYou may feel a sudden crack in the old structures of your life, a disruption that serves as a necessary liberation to let new air into stagnant spaces. As you navigate these shifts, look closely at your words and unfinished conversations; there is a profound need to review what was left unsaid before moving forward. While some endings may bring a sense of mourning for what has passed, use this clearing to make room for deep connection and the chemistry of new beginnings. Direct your discipline toward your highest goals, steering your life with purpose through this period of transformation. Trust the process of becoming.",
+      "sky": {
+        "moonPhase": "Waning Gibbous",
+        "positions": [
+          {
+            "planet": "Sun",
+            "sign": "Cancer",
+            "retrograde": false
+          },
+          {
+            "planet": "Moon",
+            "sign": "Aquarius",
+            "retrograde": false
+          },
+          {
+            "planet": "Mercury",
+            "sign": "Cancer",
+            "retrograde": true
+          },
+          {
+            "planet": "Venus",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Mars",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Jupiter",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Saturn",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Uranus",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Neptune",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Pluto",
+            "sign": "Aquarius",
+            "retrograde": true
+          }
+        ],
+        "aspects": [
+          {
+            "a": "Mars",
+            "b": "Uranus",
+            "aspect": "Conjunction",
+            "orb": 0.4
+          },
+          {
+            "a": "Neptune",
+            "b": "Pluto",
+            "aspect": "Sextile",
+            "orb": 0.4
+          },
+          {
+            "a": "Uranus",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 0.6
+          },
+          {
+            "a": "Moon",
+            "b": "Venus",
+            "aspect": "Opposition",
+            "orb": 0.7
+          },
+          {
+            "a": "Mars",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 1
+          },
+          {
+            "a": "Uranus",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 1
+          }
+        ],
+        "themes": [
+          "Sudden Change / Breakthrough",
+          "Love / Attraction / Reconnection",
+          "Career / Work / Responsibility",
+          "Loss / Grief / Ending"
+        ],
+        "cards": [
+          "Wheel of Fortune",
+          "Ace of Cups",
+          "The Chariot",
+          "Five of Cups"
+        ]
+      }
+    },
+    {
+      "date": "2026-07-04",
+      "forecast": "The long-range backdrop holds steady — Jupiter in Leo, Saturn in Aries, Uranus in Gemini, Neptune in Aries, and Pluto retrograde in Aquarius set the season's tone.\nToday the Sun is in Cancer, and the Moon is Waning Gibbous in Pisces. Mercury is retrograde in Cancer, Venus is in Leo, and Mars is in Gemini.\nThe tightest thread in the sky is Mars sextile Neptune, with Mars conjunct Uranus close behind.\nSo, with a Waning Gibbous in Pisces while Mercury is retrograde in Cancer, here's what to expect —\nYou may feel a sudden crack in the old structures of your life, a disruption that feels like liberation as it clears space for new air to enter. As you review unfinished conversations and reconsider your plans, pay close attention to where your energy is being redirected. This is a time to balance your professional ambitions with a deep need for physical recovery; listen to your body's limits so you don't burn out while pursuing your goals. In your connections, look for the chemistry that demands honesty and real intimacy. Trust the process of shedding what no longer fits. Move with purpose.",
+      "sky": {
+        "moonPhase": "Waning Gibbous",
+        "positions": [
+          {
+            "planet": "Sun",
+            "sign": "Cancer",
+            "retrograde": false
+          },
+          {
+            "planet": "Moon",
+            "sign": "Pisces",
+            "retrograde": false
+          },
+          {
+            "planet": "Mercury",
+            "sign": "Cancer",
+            "retrograde": true
+          },
+          {
+            "planet": "Venus",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Mars",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Jupiter",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Saturn",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Uranus",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Neptune",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Pluto",
+            "sign": "Aquarius",
+            "retrograde": true
+          }
+        ],
+        "aspects": [
+          {
+            "a": "Mars",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 0.3
+          },
+          {
+            "a": "Mars",
+            "b": "Uranus",
+            "aspect": "Conjunction",
+            "orb": 0.3
+          },
+          {
+            "a": "Neptune",
+            "b": "Pluto",
+            "aspect": "Sextile",
+            "orb": 0.4
+          },
+          {
+            "a": "Uranus",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 0.5
+          },
+          {
+            "a": "Mars",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 0.6
+          },
+          {
+            "a": "Moon",
+            "b": "Mars",
+            "aspect": "Square",
+            "orb": 0.8
+          }
+        ],
+        "themes": [
+          "Sudden Change / Breakthrough",
+          "Love / Attraction / Reconnection",
+          "Career / Work / Responsibility",
+          "Health / Body / Burnout"
+        ],
+        "cards": [
+          "Death",
+          "Two of Cups",
+          "Justice",
+          "Queen of Pentacles"
+        ]
+      }
+    },
+    {
+      "date": "2026-07-05",
+      "forecast": "The long-range backdrop holds steady — Jupiter in Leo, Saturn in Aries, Uranus in Gemini, Neptune in Aries, and Pluto retrograde in Aquarius set the season's tone.\nToday the Sun is in Cancer, and the Moon is Waning Gibbous in Pisces. Mercury is retrograde in Cancer, Venus is in Leo, and Mars is in Gemini.\nThe tightest thread in the sky is Mars trine Pluto, with Neptune sextile Pluto close behind.\nSo, with a Waning Gibbous in Pisces while Mercury is retrograde in Cancer, here's what to expect —\nYou may feel a sudden crack in your current reality, a disruption that feels like The Tower falling but is actually the very thing letting new air into your life. As old patterns are released and space is cleared, use this momentum to review unfinished conversations and refine your plans with newfound clarity. While you navigate shifts in intimacy and connection, remember to honor your physical limits; true power comes from knowing when to rest and recover. Aim your intention at what you are ready to build and trust the quiet transformation happening beneath the surface. Step into your strength.",
+      "sky": {
+        "moonPhase": "Waning Gibbous",
+        "positions": [
+          {
+            "planet": "Sun",
+            "sign": "Cancer",
+            "retrograde": false
+          },
+          {
+            "planet": "Moon",
+            "sign": "Pisces",
+            "retrograde": false
+          },
+          {
+            "planet": "Mercury",
+            "sign": "Cancer",
+            "retrograde": true
+          },
+          {
+            "planet": "Venus",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Mars",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Jupiter",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Saturn",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Uranus",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Neptune",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Pluto",
+            "sign": "Aquarius",
+            "retrograde": true
+          }
+        ],
+        "aspects": [
+          {
+            "a": "Mars",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 0.1
+          },
+          {
+            "a": "Neptune",
+            "b": "Pluto",
+            "aspect": "Sextile",
+            "orb": 0.4
+          },
+          {
+            "a": "Mars",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 0.4
+          },
+          {
+            "a": "Uranus",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 0.5
+          },
+          {
+            "a": "Sun",
+            "b": "Saturn",
+            "aspect": "Square",
+            "orb": 0.7
+          },
+          {
+            "a": "Uranus",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 0.8
+          }
+        ],
+        "themes": [
+          "Sudden Change / Breakthrough",
+          "Love / Attraction / Reconnection",
+          "Career / Work / Responsibility",
+          "Health / Body / Burnout"
+        ],
+        "cards": [
+          "The Tower",
+          "Three of Cups",
+          "King of Cups",
+          "Four of Swords"
+        ]
+      }
+    },
+    {
+      "date": "2026-07-06",
+      "forecast": "The long-range backdrop holds steady — Jupiter in Leo, Saturn in Aries, Uranus in Gemini, Neptune in Aries, and Pluto retrograde in Aquarius set the season's tone.\nToday the Sun is in Cancer, and the Moon is Last Quarter in Aries. Mercury is retrograde in Cancer, Venus is in Leo, and Mars is in Gemini.\nThe tightest thread in the sky is Sun square Saturn, with Neptune sextile Pluto close behind.\nSo, with a Last Quarter in Aries while Mercury is retrograde in Cancer, here's what to expect —\nYou are entering a period of necessary clearing, where the energy shifts toward releasing what is heavy to make room for what is vital. As you review unfinished conversations and old plans, listen to the quiet, underground work of your own transformation. This is a time to honor your limits; prioritize rest and body awareness so you can move toward new professional goals with steady discipline. Seek comfort in the familiarity of home and kinship, allowing yourself to feel held by your roots. Trust the process of shedding the old to make space for the new. You are evolving beautifully.",
+      "sky": {
+        "moonPhase": "Last Quarter",
+        "positions": [
+          {
+            "planet": "Sun",
+            "sign": "Cancer",
+            "retrograde": false
+          },
+          {
+            "planet": "Moon",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Mercury",
+            "sign": "Cancer",
+            "retrograde": true
+          },
+          {
+            "planet": "Venus",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Mars",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Jupiter",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Saturn",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Uranus",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Neptune",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Pluto",
+            "sign": "Aquarius",
+            "retrograde": true
+          }
+        ],
+        "aspects": [
+          {
+            "a": "Sun",
+            "b": "Saturn",
+            "aspect": "Square",
+            "orb": 0.2
+          },
+          {
+            "a": "Neptune",
+            "b": "Pluto",
+            "aspect": "Sextile",
+            "orb": 0.3
+          },
+          {
+            "a": "Uranus",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 0.4
+          },
+          {
+            "a": "Uranus",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 0.8
+          },
+          {
+            "a": "Mars",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 0.8
+          },
+          {
+            "a": "Moon",
+            "b": "Jupiter",
+            "aspect": "Trine",
+            "orb": 0.9
+          }
+        ],
+        "themes": [
+          "Health / Body / Burnout",
+          "Career / Work / Responsibility",
+          "Family / Home / Belonging"
+        ],
+        "cards": [
+          "Six of Swords",
+          "Ace of Pentacles",
+          "Six of Cups"
+        ]
+      }
+    },
+    {
+      "date": "2026-07-07",
+      "forecast": "The long-range backdrop holds steady — Jupiter in Leo, Saturn in Aries, Uranus in Gemini, Neptune retrograde in Aries, and Pluto retrograde in Aquarius set the season's tone.\nToday the Sun is in Cancer, and the Moon is Last Quarter in Aries. Mercury is retrograde in Cancer, Venus is in Leo, and Mars is in Gemini.\nThe tightest thread in the sky is Neptune sextile Pluto, with Uranus sextile Neptune close behind.\nSo, with a Last Quarter in Aries while Mercury is retrograde in Cancer, here's what to expect —\nYou are navigating a profound period of clearing, where the old must be released to make room for what is coming. As you review unfinished plans and dissolve outdated illusions, pay close attention to the sudden breakthroughs that arrive through disruption; these cracks are simply letting new air into your life. While some endings may feel heavy, they are necessary to refine your direction and discipline in your work. Trust the quiet, underground transformation happening within you as you balance your responsibilities with a deep desire for connection. Embrace the shift.",
+      "sky": {
+        "moonPhase": "Last Quarter",
+        "positions": [
+          {
+            "planet": "Sun",
+            "sign": "Cancer",
+            "retrograde": false
+          },
+          {
+            "planet": "Moon",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Mercury",
+            "sign": "Cancer",
+            "retrograde": true
+          },
+          {
+            "planet": "Venus",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Mars",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Jupiter",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Saturn",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Uranus",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Neptune",
+            "sign": "Aries",
+            "retrograde": true
+          },
+          {
+            "planet": "Pluto",
+            "sign": "Aquarius",
+            "retrograde": true
+          }
+        ],
+        "aspects": [
+          {
+            "a": "Neptune",
+            "b": "Pluto",
+            "aspect": "Sextile",
+            "orb": 0.3
+          },
+          {
+            "a": "Uranus",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 0.4
+          },
+          {
+            "a": "Moon",
+            "b": "Saturn",
+            "aspect": "Conjunction",
+            "orb": 0.7
+          },
+          {
+            "a": "Uranus",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 0.7
+          },
+          {
+            "a": "Sun",
+            "b": "Saturn",
+            "aspect": "Square",
+            "orb": 1.1
+          },
+          {
+            "a": "Mars",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 1.5
+          }
+        ],
+        "themes": [
+          "Career / Work / Responsibility",
+          "Sudden Change / Breakthrough",
+          "Loss / Grief / Ending",
+          "Love / Attraction / Reconnection"
+        ],
+        "cards": [
+          "Two of Pentacles",
+          "Ace of Swords",
+          "Ten of Swords",
+          "Nine of Cups"
+        ]
+      }
+    },
+    {
+      "date": "2026-07-08",
+      "forecast": "The long-range backdrop holds steady — Jupiter in Leo, Saturn in Aries, Uranus in Gemini, Neptune retrograde in Aries, and Pluto retrograde in Aquarius set the season's tone.\nToday the Sun is in Cancer, and the Moon is Last Quarter in Aries. Mercury is retrograde in Cancer, Venus is in Leo, and Mars is in Gemini.\nThe tightest thread in the sky is Neptune sextile Pluto, with Uranus sextile Neptune close behind.\nSo, with a Last Quarter in Aries while Mercury is retrograde in Cancer, here's what to expect —\nYou are standing at a threshold where the old structures of your life are dissolving to make room for something vital. As you clear out the mental clutter and review unfinished conversations, pay attention to the sudden shifts that disrupt your routine; these cracks are simply letting new air into your world. Use this energy to refine your professional discipline and focus on how you contribute to the collective work ahead. This is a moment of profound reconnection, where intimacy meets a sense of purpose. Trust the process of transformation. You are ready for this.",
+      "sky": {
+        "moonPhase": "Last Quarter",
+        "positions": [
+          {
+            "planet": "Sun",
+            "sign": "Cancer",
+            "retrograde": false
+          },
+          {
+            "planet": "Moon",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Mercury",
+            "sign": "Cancer",
+            "retrograde": true
+          },
+          {
+            "planet": "Venus",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Mars",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Jupiter",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Saturn",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Uranus",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Neptune",
+            "sign": "Aries",
+            "retrograde": true
+          },
+          {
+            "planet": "Pluto",
+            "sign": "Aquarius",
+            "retrograde": true
+          }
+        ],
+        "aspects": [
+          {
+            "a": "Neptune",
+            "b": "Pluto",
+            "aspect": "Sextile",
+            "orb": 0.3
+          },
+          {
+            "a": "Uranus",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 0.3
+          },
+          {
+            "a": "Uranus",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 0.6
+          },
+          {
+            "a": "Moon",
+            "b": "Venus",
+            "aspect": "Trine",
+            "orb": 1.4
+          },
+          {
+            "a": "Sun",
+            "b": "Saturn",
+            "aspect": "Square",
+            "orb": 2
+          },
+          {
+            "a": "Jupiter",
+            "b": "Uranus",
+            "aspect": "Sextile",
+            "orb": 2.3
+          }
+        ],
+        "themes": [
+          "Sudden Change / Breakthrough",
+          "Career / Work / Responsibility",
+          "New Beginnings",
+          "Love / Attraction / Reconnection"
+        ],
+        "cards": [
+          "Six of Swords",
+          "Three of Pentacles",
+          "Judgement",
+          "Ten of Cups"
+        ]
+      }
+    },
+    {
+      "date": "2026-07-09",
+      "forecast": "The long-range backdrop holds steady — Jupiter in Leo, Saturn in Aries, Uranus in Gemini, Neptune retrograde in Aries, and Pluto retrograde in Aquarius set the season's tone.\nToday the Sun is in Cancer, and the Moon is Waning Crescent in Taurus. Mercury is retrograde in Cancer, Venus is in Leo, and Mars is in Gemini.\nThe tightest thread in the sky is Neptune sextile Pluto, with Uranus sextile Neptune close behind.\nSo, with a Waning Crescent in Taurus while Mercury is retrograde in Cancer, here's what to expect —\nYou may feel a sudden crack in your routine today, a disruption that serves as the very opening needed to let new air into your life. As you clear out old patterns and release what no longer fits, pay close attention to the whispers of desire or unexpected reconnections surfacing in your heart. While there is a pull toward holding tightly to your stability, true growth requires you to step through the door of a fresh beginning. Trust the quiet, underground work of transformation happening within you right now. You are ready for this shift.",
+      "sky": {
+        "moonPhase": "Waning Crescent",
+        "positions": [
+          {
+            "planet": "Sun",
+            "sign": "Cancer",
+            "retrograde": false
+          },
+          {
+            "planet": "Moon",
+            "sign": "Taurus",
+            "retrograde": false
+          },
+          {
+            "planet": "Mercury",
+            "sign": "Cancer",
+            "retrograde": true
+          },
+          {
+            "planet": "Venus",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Mars",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Jupiter",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Saturn",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Uranus",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Neptune",
+            "sign": "Aries",
+            "retrograde": true
+          },
+          {
+            "planet": "Pluto",
+            "sign": "Aquarius",
+            "retrograde": true
+          }
+        ],
+        "aspects": [
+          {
+            "a": "Neptune",
+            "b": "Pluto",
+            "aspect": "Sextile",
+            "orb": 0.3
+          },
+          {
+            "a": "Uranus",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 0.3
+          },
+          {
+            "a": "Uranus",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 0.6
+          },
+          {
+            "a": "Jupiter",
+            "b": "Uranus",
+            "aspect": "Sextile",
+            "orb": 2.1
+          },
+          {
+            "a": "Jupiter",
+            "b": "Neptune",
+            "aspect": "Trine",
+            "orb": 2.4
+          },
+          {
+            "a": "Jupiter",
+            "b": "Pluto",
+            "aspect": "Opposition",
+            "orb": 2.7
+          }
+        ],
+        "themes": [
+          "Sudden Change / Breakthrough",
+          "Love / Attraction / Reconnection",
+          "New Beginnings",
+          "Career / Work / Responsibility"
+        ],
+        "cards": [
+          "Seven of Swords",
+          "Page of Cups",
+          "The World",
+          "Four of Pentacles"
+        ]
+      }
+    },
+    {
+      "date": "2026-07-10",
+      "forecast": "The long-range backdrop holds steady — Jupiter in Leo, Saturn in Aries, Uranus in Gemini, Neptune retrograde in Aries, and Pluto retrograde in Aquarius set the season's tone.\nToday the Sun is in Cancer, and the Moon is Waning Crescent in Taurus. Mercury is retrograde in Cancer, Venus is in Virgo, and Mars is in Gemini.\nThe tightest thread in the sky is Uranus sextile Neptune, with Neptune sextile Pluto close behind.\nSo, with a Waning Crescent in Taurus while Mercury is retrograde in Cancer, here's what to expect —\nYou are standing at a threshold where the old structures must finally crack to let new air in. As you clear out the clutter of unfinished conversations and dissolving illusions, pay close attention to sudden shifts that feel like disruptions but act as liberations. This is a time for deep integration; allow your dreams to rise while you focus on the discipline required to turn potential into tangible contribution. Whether it is a fresh spark of intimacy or a new way to serve others, embrace the opening. Trust the transformation unfolding beneath the surface. You are ready.",
+      "sky": {
+        "moonPhase": "Waning Crescent",
+        "positions": [
+          {
+            "planet": "Sun",
+            "sign": "Cancer",
+            "retrograde": false
+          },
+          {
+            "planet": "Moon",
+            "sign": "Taurus",
+            "retrograde": false
+          },
+          {
+            "planet": "Mercury",
+            "sign": "Cancer",
+            "retrograde": true
+          },
+          {
+            "planet": "Venus",
+            "sign": "Virgo",
+            "retrograde": false
+          },
+          {
+            "planet": "Mars",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Jupiter",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Saturn",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Uranus",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Neptune",
+            "sign": "Aries",
+            "retrograde": true
+          },
+          {
+            "planet": "Pluto",
+            "sign": "Aquarius",
+            "retrograde": true
+          }
+        ],
+        "aspects": [
+          {
+            "a": "Uranus",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 0.2
+          },
+          {
+            "a": "Neptune",
+            "b": "Pluto",
+            "aspect": "Sextile",
+            "orb": 0.2
+          },
+          {
+            "a": "Uranus",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 0.5
+          },
+          {
+            "a": "Jupiter",
+            "b": "Uranus",
+            "aspect": "Sextile",
+            "orb": 1.9
+          },
+          {
+            "a": "Jupiter",
+            "b": "Neptune",
+            "aspect": "Trine",
+            "orb": 2.2
+          },
+          {
+            "a": "Jupiter",
+            "b": "Pluto",
+            "aspect": "Opposition",
+            "orb": 2.4
+          }
+        ],
+        "themes": [
+          "Sudden Change / Breakthrough",
+          "Love / Attraction / Reconnection",
+          "New Beginnings",
+          "Career / Work / Responsibility"
+        ],
+        "cards": [
+          "Ten of Swords",
+          "Knight of Cups",
+          "Ace of Cups",
+          "Six of Pentacles"
+        ]
+      }
+    },
+    {
+      "date": "2026-07-11",
+      "forecast": "The long-range backdrop holds steady — Jupiter in Leo, Saturn in Aries, Uranus in Gemini, Neptune retrograde in Aries, and Pluto retrograde in Aquarius set the season's tone.\nToday the Sun is in Cancer, and the Moon is Waning Crescent in Gemini. Mercury is retrograde in Cancer, Venus is in Virgo, and Mars is in Gemini.\nThe tightest thread in the sky is Uranus sextile Neptune, with Neptune sextile Pluto close behind.\nSo, with a Waning Crescent in Gemini while Mercury is retrograde in Cancer, here's what to expect —\nYou may feel a sudden, sharp shift cutting through your routine, like a crack that finally lets new air into a crowded room. Use this disruption to review unfinished conversations and dissolve the illusions that have kept you stuck in old patterns. As you clear space, focus on deepening your intimacy and tending to the roots of home and belonging. Trust the quiet, underground work of transformation happening within your soul; even when things feel uncertain, there is a profound sense of being held by the unseen. Move with intention and trust your inner knowing.",
+      "sky": {
+        "moonPhase": "Waning Crescent",
+        "positions": [
+          {
+            "planet": "Sun",
+            "sign": "Cancer",
+            "retrograde": false
+          },
+          {
+            "planet": "Moon",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Mercury",
+            "sign": "Cancer",
+            "retrograde": true
+          },
+          {
+            "planet": "Venus",
+            "sign": "Virgo",
+            "retrograde": false
+          },
+          {
+            "planet": "Mars",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Jupiter",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Saturn",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Uranus",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Neptune",
+            "sign": "Aries",
+            "retrograde": true
+          },
+          {
+            "planet": "Pluto",
+            "sign": "Aquarius",
+            "retrograde": true
+          }
+        ],
+        "aspects": [
+          {
+            "a": "Uranus",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 0.2
+          },
+          {
+            "a": "Neptune",
+            "b": "Pluto",
+            "aspect": "Sextile",
+            "orb": 0.2
+          },
+          {
+            "a": "Uranus",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 0.4
+          },
+          {
+            "a": "Moon",
+            "b": "Mars",
+            "aspect": "Conjunction",
+            "orb": 1.6
+          },
+          {
+            "a": "Jupiter",
+            "b": "Uranus",
+            "aspect": "Sextile",
+            "orb": 1.7
+          },
+          {
+            "a": "Jupiter",
+            "b": "Neptune",
+            "aspect": "Trine",
+            "orb": 1.9
+          }
+        ],
+        "themes": [
+          "Sudden Change / Breakthrough",
+          "Love / Attraction / Reconnection",
+          "Family / Home / Belonging",
+          "Spiritual / Dream / Intuition"
+        ],
+        "cards": [
+          "Knight of Swords",
+          "Queen of Cups",
+          "Queen of Pentacles",
+          "Two of Swords"
+        ]
+      }
+    },
+    {
+      "date": "2026-07-12",
+      "forecast": "The long-range backdrop holds steady — Jupiter in Leo, Saturn in Aries, Uranus in Gemini, Neptune retrograde in Aries, and Pluto retrograde in Aquarius set the season's tone.\nToday the Sun is in Cancer, and the Moon is Waning Crescent in Gemini. Mercury is retrograde in Cancer, Venus is in Virgo, and Mars is in Gemini.\nThe tightest thread in the sky is Uranus sextile Neptune, with Neptune sextile Pluto close behind.\nSo, with a Waning Crescent in Gemini while Mercury is retrograde in Cancer, here's what to expect —\nYou are entering a period of profound clearing, where the old must be released to make room for what is coming. As you review unfinished conversations and dissolve outdated illusions, pay close attention to the sudden shifts that disrupt your current rhythm; these cracks are exactly where new air enters your life. Channel this energy into your daily labor, focusing on the discipline required to turn a fresh spark of inspiration into something tangible. Like a Page of Cups offering a new vision, stay open to the unexpected beauty in a sudden breakthrough. Trust the process of transformation.",
+      "sky": {
+        "moonPhase": "Waning Crescent",
+        "positions": [
+          {
+            "planet": "Sun",
+            "sign": "Cancer",
+            "retrograde": false
+          },
+          {
+            "planet": "Moon",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Mercury",
+            "sign": "Cancer",
+            "retrograde": true
+          },
+          {
+            "planet": "Venus",
+            "sign": "Virgo",
+            "retrograde": false
+          },
+          {
+            "planet": "Mars",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Jupiter",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Saturn",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Uranus",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Neptune",
+            "sign": "Aries",
+            "retrograde": true
+          },
+          {
+            "planet": "Pluto",
+            "sign": "Aquarius",
+            "retrograde": true
+          }
+        ],
+        "aspects": [
+          {
+            "a": "Uranus",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 0.2
+          },
+          {
+            "a": "Neptune",
+            "b": "Pluto",
+            "aspect": "Sextile",
+            "orb": 0.2
+          },
+          {
+            "a": "Uranus",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 0.4
+          },
+          {
+            "a": "Sun",
+            "b": "Mercury",
+            "aspect": "Conjunction",
+            "orb": 0.6
+          },
+          {
+            "a": "Venus",
+            "b": "Uranus",
+            "aspect": "Square",
+            "orb": 1
+          },
+          {
+            "a": "Jupiter",
+            "b": "Uranus",
+            "aspect": "Sextile",
+            "orb": 1.6
+          }
+        ],
+        "themes": [
+          "Sudden Change / Breakthrough",
+          "Career / Work / Responsibility",
+          "New Beginnings"
+        ],
+        "cards": [
+          "Five of Wands",
+          "Eight of Pentacles",
+          "Page of Cups"
+        ]
+      }
+    },
+    {
+      "date": "2026-07-13",
+      "forecast": "The long-range backdrop holds steady — Jupiter in Leo, Saturn in Aries, Uranus in Gemini, Neptune retrograde in Aries, and Pluto retrograde in Aquarius set the season's tone.\nToday the Sun is in Cancer, and the Moon is New in Cancer. Mercury is retrograde in Cancer, Venus is in Virgo, and Mars is in Gemini.\nThe tightest thread in the sky is Venus square Uranus, with Uranus sextile Neptune close behind.\nSo, with a New Moon in Cancer while Mercury is retrograde in Cancer, here's what to expect —\nYou are standing at the threshold of a fresh cycle, where every intention you plant today carries the weight of a new beginning. Expect sudden shifts that disrupt your current rhythm, but view these cracks as necessary openings for much-needed air to enter your life. As you navigate unfinished conversations and dissolving illusions, focus on refining your direction and honoring your responsibilities with disciplined grace. This is a time to cultivate your personal sanctuary and find stability within your roots while remaining open to the spark of inspiration. Trust the quiet power transforming you from the inside out. Move with purpose.",
+      "sky": {
+        "moonPhase": "New Moon",
+        "positions": [
+          {
+            "planet": "Sun",
+            "sign": "Cancer",
+            "retrograde": false
+          },
+          {
+            "planet": "Moon",
+            "sign": "Cancer",
+            "retrograde": false
+          },
+          {
+            "planet": "Mercury",
+            "sign": "Cancer",
+            "retrograde": true
+          },
+          {
+            "planet": "Venus",
+            "sign": "Virgo",
+            "retrograde": false
+          },
+          {
+            "planet": "Mars",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Jupiter",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Saturn",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Uranus",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Neptune",
+            "sign": "Aries",
+            "retrograde": true
+          },
+          {
+            "planet": "Pluto",
+            "sign": "Aquarius",
+            "retrograde": true
+          }
+        ],
+        "aspects": [
+          {
+            "a": "Venus",
+            "b": "Uranus",
+            "aspect": "Square",
+            "orb": 0.1
+          },
+          {
+            "a": "Uranus",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 0.1
+          },
+          {
+            "a": "Neptune",
+            "b": "Pluto",
+            "aspect": "Sextile",
+            "orb": 0.2
+          },
+          {
+            "a": "Uranus",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 0.3
+          },
+          {
+            "a": "Sun",
+            "b": "Mercury",
+            "aspect": "Conjunction",
+            "orb": 1
+          },
+          {
+            "a": "Jupiter",
+            "b": "Uranus",
+            "aspect": "Sextile",
+            "orb": 1.4
+          }
+        ],
+        "themes": [
+          "Sudden Change / Breakthrough",
+          "Career / Work / Responsibility",
+          "New Beginnings",
+          "Family / Home / Belonging"
+        ],
+        "cards": [
+          "Eight of Wands",
+          "Nine of Pentacles",
+          "Knight of Cups",
+          "Four of Wands"
+        ]
+      }
+    },
+    {
+      "date": "2026-07-14",
+      "forecast": "The long-range backdrop holds steady — Jupiter in Leo, Saturn in Aries, Uranus in Gemini, Neptune retrograde in Aries, and Pluto retrograde in Aquarius set the season's tone.\nToday the Sun is in Cancer, and the Moon is New in Cancer. Mercury is retrograde in Cancer, Venus is in Virgo, and Mars is in Gemini.\nThe tightest thread in the sky is Uranus sextile Neptune, with Neptune sextile Pluto close behind.\nSo, with a New Moon in Cancer while Mercury is retrograde in Cancer, here's what to expect —\nYou are standing at the threshold of a fresh cycle, where the energy of new intentions meets the necessity of reviewing your unfinished business. As old illusions dissolve into the deep tide of your subconscious, look for the sudden cracks that allow new air into stagnant spaces; these disruptions are actually liberations meant to clear your path. Focus your discipline on practical goals and the tangible work ahead, treating every small step as an Ace of Pentacles—a seed of immense potential. Tend to your roots and nurture your sense of belonging while quietly transforming your inner power. Trust the process of becoming.",
+      "sky": {
+        "moonPhase": "New Moon",
+        "positions": [
+          {
+            "planet": "Sun",
+            "sign": "Cancer",
+            "retrograde": false
+          },
+          {
+            "planet": "Moon",
+            "sign": "Cancer",
+            "retrograde": false
+          },
+          {
+            "planet": "Mercury",
+            "sign": "Cancer",
+            "retrograde": true
+          },
+          {
+            "planet": "Venus",
+            "sign": "Virgo",
+            "retrograde": false
+          },
+          {
+            "planet": "Mars",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Jupiter",
+            "sign": "Leo",
+            "retrograde": false
+          },
+          {
+            "planet": "Saturn",
+            "sign": "Aries",
+            "retrograde": false
+          },
+          {
+            "planet": "Uranus",
+            "sign": "Gemini",
+            "retrograde": false
+          },
+          {
+            "planet": "Neptune",
+            "sign": "Aries",
+            "retrograde": true
+          },
+          {
+            "planet": "Pluto",
+            "sign": "Aquarius",
+            "retrograde": true
+          }
+        ],
+        "aspects": [
+          {
+            "a": "Uranus",
+            "b": "Neptune",
+            "aspect": "Sextile",
+            "orb": 0.1
+          },
+          {
+            "a": "Neptune",
+            "b": "Pluto",
+            "aspect": "Sextile",
+            "orb": 0.2
+          },
+          {
+            "a": "Uranus",
+            "b": "Pluto",
+            "aspect": "Trine",
+            "orb": 0.2
+          },
+          {
+            "a": "Venus",
+            "b": "Uranus",
+            "aspect": "Square",
+            "orb": 1.1
+          },
+          {
+            "a": "Jupiter",
+            "b": "Uranus",
+            "aspect": "Sextile",
+            "orb": 1.2
+          },
+          {
+            "a": "Jupiter",
+            "b": "Neptune",
+            "aspect": "Trine",
+            "orb": 1.3
+          }
+        ],
+        "themes": [
+          "Sudden Change / Breakthrough",
+          "Career / Work / Responsibility",
+          "Family / Home / Belonging",
+          "New Beginnings"
+        ],
+        "cards": [
+          "Knight of Wands",
+          "Page of Pentacles",
+          "The Empress",
+          "Ace of Pentacles"
+        ]
+      }
+    }
+  ]
 }

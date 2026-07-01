@@ -5,9 +5,14 @@
     "corsOrigin": "*"
   },
   "mage": {
-    "mcpUrl": "http://127.0.0.1:7788/api/mcp",
+    "mcpUrl": "",
     "apiKey": "",
     "intent": "astrology-reading",
+    "http": {
+      "model": "gemma-4-26b-a4b",
+      "baseUrl": "http://127.0.0.1:8081",
+      "path": "/v1/chat/completions"
+    },
     "launch": {
       "roots": [
         "H:/AIRLOCK/HomePlanetStudio",
