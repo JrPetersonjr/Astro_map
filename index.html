@@ -146,8 +146,11 @@
       grid-column: 2;
       grid-row: 2;
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: thin;
       gap: 6px;
       padding: 10px 0;
     }
@@ -155,6 +158,7 @@
     .legend-badge {
       display: flex;
       align-items: center;
+      flex: 0 0 auto;
       gap: 5px;
       padding: 5px 9px;
       background: rgba(255, 255, 255, 0.04);
@@ -1059,19 +1063,15 @@
     body[data-view="journal"] .sky-controls,
     body[data-view="journal"] .map-shell,
     body[data-view="journal"] .planet-legend,
-    body[data-view="journal"] .side,
     body[data-view="settings"] .sky-controls,
     body[data-view="settings"] .map-shell,
     body[data-view="settings"] .planet-legend,
-    body[data-view="settings"] .side,
     body[data-view="tarot"] .sky-controls,
     body[data-view="tarot"] .map-shell,
     body[data-view="tarot"] .planet-legend,
-    body[data-view="tarot"] .side,
     body[data-view="skies"] .sky-controls,
     body[data-view="skies"] .map-shell,
-    body[data-view="skies"] .planet-legend,
-    body[data-view="skies"] .side {
+    body[data-view="skies"] .planet-legend {
       display: none;
     }
 
@@ -1121,6 +1121,10 @@
     body[data-view="chart"] .planet-legend,
     body[data-view="chart"] #calendarTab {
       display: grid;
+    }
+
+    body[data-view="chart"] .tabs {
+      display: none;
     }
 
     body[data-view="journal"] main,
@@ -1752,7 +1756,14 @@
     }
   </style>
 </head>
-<body>
+<body data-view="chart">
+  <script>
+    (function () {
+      const raw = new URLSearchParams(window.location.search).get('view') || 'chart';
+      const normalized = (raw === 'sky-controls' || raw === 'calendar') ? 'chart' : raw;
+      document.body.dataset.view = normalized;
+    })();
+  </script>
   <header class="app-header">
     <div class="logo-header">
         <img id="generatedBrandLogo" class="logo-generated" alt="Generated LuminaSynodic logo">
@@ -2782,10 +2793,16 @@ ${aspectLines || 'none within orb'}`;
     async function launchMageServer() {
       const statusEl = document.getElementById('mageLaunchStatus');
       try {
-        statusEl.textContent = 'Launching Mage...';
-        const data = await callLocalRuntime('/local/mage/launch', {});
+        statusEl.textContent = 'Launching Mage HTTP mode...';
+        let data;
+        try {
+          data = await callLocalRuntime('/local/mage/launch', { mode: 'http' });
+        } catch {
+          statusEl.textContent = 'HTTP launch unavailable, trying local mode...';
+          data = await callLocalRuntime('/local/mage/launch', { mode: 'auto' });
+        }
         if (data.running) {
-          statusEl.textContent = `Mage launched (pid ${data.pid})`;
+          statusEl.textContent = `Mage launched (pid ${data.pid}, mode ${data.mode || 'auto'})`;
         } else {
           statusEl.textContent = 'Mage launch did not start';
         }
@@ -2793,7 +2810,7 @@ ${aspectLines || 'none within orb'}`;
         statusEl.textContent = error.message || 'Mage launch failed';
       }
       if (typeof refreshTarotDevMenu === 'function') {
-        refreshTarotDevMenu();
+        await refreshTarotDevMenu();
       }
     }
 
@@ -5020,7 +5037,7 @@ ${skyContext}`
         const base = getLocalRuntimeUrl();
         const response = await fetch(`${base}/local/mage/status`, { cache: 'no-store' });
         const data = await response.json();
-        const running = Boolean(response.ok && data.running);
+        const running = Boolean(response.ok && (data.running || data.httpReady));
         const launchable = Boolean(response.ok && (data.launchable || running));
 
         panel.classList.toggle('hidden', !tarotDevVisible || !launchable);
@@ -5030,7 +5047,8 @@ ${skyContext}`
         if (!launchable) {
           updateTarotDevStatus('Mage not detected on this system. Dev deck tools stay hidden.', true);
         } else if (running) {
-          updateTarotDevStatus(`Mage running${data.pid ? ` (pid ${data.pid})` : ''}. Dev deck tools unlocked.`);
+          const modeLabel = data.mode ? ` (${data.mode})` : '';
+          updateTarotDevStatus(`Mage running${modeLabel}${data.pid ? ` (pid ${data.pid})` : ''}. Dev deck tools unlocked.`);
         } else {
           updateTarotDevStatus(`Mage detected from ${data.detectedFrom || 'local roots'}. Launch to enable deck generation.`);
         }

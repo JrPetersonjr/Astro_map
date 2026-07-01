@@ -341,9 +341,10 @@ async function currentMageStatus() {
   const detected = detectMageLaunch();
   const detectedHttp = detectMageHttpLaunch();
   return {
-    running: false,
-    launchable: Boolean(detected || detectedHttp),
+    running: Boolean(httpReady),
+    launchable: Boolean(detected || detectedHttp || httpReady),
     httpReady,
+    mode: httpReady ? 'http' : 'auto',
     detectedFrom: detected?.detectedFrom || null,
     detectedHttpFrom: detectedHttp?.detectedFrom || null,
     cwd: detected?.cwd || null,
@@ -353,19 +354,30 @@ async function currentMageStatus() {
 }
 
 function launchMageProcess(mode = 'auto') {
-  const persisted = readMageState();
-  if (persisted?.pid && isPidAlive(persisted.pid)) {
-    return {
-      running: true,
-      launchable: true,
-      pid: persisted.pid,
-      startedAt: persisted.startedAt,
-      cwd: persisted.cwd,
-      command: persisted.command,
-      args: persisted.args,
-      mode: persisted.mode || 'auto',
-      detectedFrom: persisted.detectedFrom
-    };
+  const existing = (mageProcess?.pid && isPidAlive(mageProcess.pid)) ? mageProcess : readMageState();
+  if (existing?.pid && isPidAlive(existing.pid)) {
+    const existingMode = existing.mode || 'auto';
+    if (mode !== 'auto' && existingMode !== mode) {
+      try {
+        process.kill(existing.pid);
+      } catch {
+        // Ignore kill errors before relaunch.
+      }
+      mageProcess = null;
+      saveMageState({});
+    } else {
+      return {
+        running: true,
+        launchable: true,
+        pid: existing.pid,
+        startedAt: existing.startedAt,
+        cwd: existing.cwd,
+        command: existing.command,
+        args: existing.args,
+        mode: existingMode,
+        detectedFrom: existing.detectedFrom
+      };
+    }
   }
 
   const launch = mode === 'http' ? detectMageHttpLaunch() : detectMageLaunch();
@@ -1004,6 +1016,32 @@ const server = http.createServer(async (req, res) => {
 
 const host = config.server?.host || '127.0.0.1';
 const port = Number(config.server?.port || 8787);
+server.on('error', (error) => {
+  if (error?.code === 'EADDRINUSE') {
+    const healthUrl = `http://${host}:${port}/health`;
+    // Gracefully handle second-launch attempts when runtime is already running.
+    (async () => {
+      try {
+        const response = await fetch(healthUrl, { method: 'GET' });
+        if (response.ok) {
+          console.log(`LuminaSynodic runtime already running on http://${host}:${port}`);
+          console.log('Open http://127.0.0.1:8787/index.html?standalone=1');
+          process.exit(0);
+          return;
+        }
+      } catch {
+        // Fall through to error exit if health probe fails.
+      }
+      console.error(`Port ${port} is already in use and is not a healthy LuminaSynodic runtime.`);
+      console.error('Stop the conflicting process or change standalone/contexts.json server.port.');
+      process.exit(1);
+    })();
+    return;
+  }
+  console.error(error?.stack || error?.message || String(error));
+  process.exit(1);
+});
+
 server.listen(port, host, () => {
   console.log(`LuminaSynodic standalone runtime listening on http://${host}:${port}`);
   console.log('Tip: open http://127.0.0.1:8787/index.html?standalone=1');
