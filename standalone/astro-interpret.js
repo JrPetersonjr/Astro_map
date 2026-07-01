@@ -88,8 +88,14 @@ function interpret(sky) {
   const hard = top.filter((a) => HARD.has(a.name)).length;
   const soft = top.filter((a) => SOFT.has(a.name)).length;
   const waxing = /New|Waxing|First/.test(sky.moonPhase);
+  const isLunation = out.lunation.isFull || out.lunation.isNew;
+  const anyPersonalRetro = Boolean(out.mercuryRetro) || out.otherRetro.length > 0;
+  // A personal-planet retrograde only escalates to full "sit tight" caution when a
+  // lunation or hard aspects sharpen it; on a calmer retro day it's "mixed" (review,
+  // don't halt) — so a weeks-long Mercury retrograde no longer flattens every day.
   let tone;
-  if ((out.mercuryRetro && out.mercuryRetro.fullMoonCaution) || out.mercuryRetro || out.otherRetro.length) tone = 'cautionary';
+  if (anyPersonalRetro && (isLunation || hard > soft)) tone = 'cautionary';
+  else if (anyPersonalRetro) tone = 'mixed';
   else if (soft > hard && waxing) tone = 'encouraging';
   else tone = 'mixed';
   out.polarity = tone;
