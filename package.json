@@ -1,0 +1,9 @@
+{
+  "name": "luminasynodic",
+  "version": "0.1.0",
+  "private": true,
+  "description": "LuminaSynodic local test harness",
+  "scripts": {
+    "test": "node --test"
+  }
+}
