@@ -3,3 +3,4 @@ test_key.js
 .env*
 node_modules/
 standalone/.mage-process.json
+data/decks/brand-logo-concept-*.json
