@@ -14,7 +14,7 @@ const LIFE_THEMES = {
   BALANCE: 'balance',
 };
 
-window._TAROT_CARDS = [
+const _TAROT_CARDS = [
   // MAJOR ARCANA (0–21)
   {
     id: 0,
@@ -1117,4 +1117,8 @@ window._TAROT_CARDS = [
     description: 'The King of Wands leans forward on his throne, ready to stand. He is the one who sees the vision first and has the force of character to carry others toward it. This card marks the energy of the entrepreneur, the pioneer — someone who builds because they cannot imagine not building.',
   },
 ];
+
+// Dual-usable: keep the browser global, and expose to Node (tarot-interpret.js).
+if (typeof window !== 'undefined') window._TAROT_CARDS = _TAROT_CARDS;
+if (typeof module !== 'undefined' && module.exports) module.exports = { tarotCards: _TAROT_CARDS, LIFE_THEMES };
 
