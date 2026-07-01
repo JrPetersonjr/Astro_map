@@ -292,6 +292,8 @@
 
     .tabs {
       display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 4px;
       margin-bottom: -1px;
       position: relative;
@@ -326,6 +328,7 @@
     .tab-content.active {
       display: grid;
       gap: 14px;
+      min-width: 0;
     }
 
     .calendar-grid {
@@ -1110,6 +1113,15 @@
     body[data-view="tarot"] #tarotTab,
     body[data-view="skies"] #skiesTab {
       display: grid;
+      width: 100%;
+    }
+
+    body[data-view="journal"] #tabArea,
+    body[data-view="settings"] #tabArea,
+    body[data-view="tarot"] #tabArea,
+    body[data-view="skies"] #tabArea {
+      width: min(980px, 100%);
+      justify-self: center;
     }
 
     body[data-view="chart"] #journalTab,
@@ -1840,9 +1852,9 @@
   <nav class="page-nav" aria-label="Page sections">
     <button type="button" class="secondary active" data-view="chart">Chart</button>
     <button type="button" class="secondary" data-view="journal">Journal</button>
-    <button type="button" class="secondary" data-view="settings">Settings</button>
     <button type="button" class="secondary" data-view="tarot">Tarot</button>
     <button type="button" class="secondary" data-view="skies">Skies</button>
+    <button type="button" class="secondary" data-view="settings">Settings</button>
   </nav>
 
   <main>
@@ -1957,9 +1969,9 @@
       <div class="tabs">
         <button type="button" class="tab-btn active" data-tab="calendar">Calendar</button>
         <button type="button" class="tab-btn" data-tab="journal">Journal</button>
-        <button type="button" class="tab-btn" data-tab="settings">Settings</button>
         <button type="button" class="tab-btn" data-tab="tarot">Tarot</button>
         <button type="button" class="tab-btn" data-tab="skies">Skies</button>
+        <button type="button" class="tab-btn" data-tab="settings">Settings</button>
       </div>
 
       <div id="calendarTab" class="tab-content active">
