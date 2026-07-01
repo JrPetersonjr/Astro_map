@@ -2394,21 +2394,84 @@
     const status = document.getElementById('status');
     const chatInput = document.getElementById('chatInput');
     const chatLog = document.getElementById('chatLog');
-    let pageView = new URLSearchParams(window.location.search).get('view') || 'chart';
+    const VIEW_TO_TAB = {
+      chart: 'calendar',
+      journal: 'journal',
+      settings: 'settings',
+      tarot: 'tarot',
+      skies: 'skies'
+    };
+    const TAB_TO_VIEW = {
+      calendar: 'chart',
+      journal: 'journal',
+      settings: 'settings',
+      tarot: 'tarot',
+      skies: 'skies'
+    };
+    const VALID_VIEWS = new Set(Object.keys(VIEW_TO_TAB));
     const legacyChartViews = new Set(['sky-controls', 'calendar']);
-    if (legacyChartViews.has(pageView)) {
-      pageView = 'chart';
-      const normalizedUrl = new URL(window.location.href);
-      normalizedUrl.searchParams.set('view', 'chart');
-      window.history.replaceState({}, '', normalizedUrl.toString());
+
+    function normalizeView(view) {
+      if (legacyChartViews.has(view)) return 'chart';
+      return VALID_VIEWS.has(view) ? view : 'chart';
+    }
+
+    let pageView = normalizeView(new URLSearchParams(window.location.search).get('view') || 'chart');
+
+    const isStandaloneDev = new URLSearchParams(window.location.search).get('standalone') === '1';
+    const isLocalHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    const devErrorLoggingEnabled = isStandaloneDev || isLocalHost;
+
+    function logCaughtError(scope, error) {
+      if (!devErrorLoggingEnabled) return;
+      console.warn(`[LuminaSynodic][caught] ${scope}`, error);
     }
 
     document.body.dataset.view = pageView;
 
+    function setPageView(view, options = {}) {
+      const normalized = normalizeView(view || 'chart');
+      pageView = normalized;
+      document.body.dataset.view = normalized;
+
+      if (options.syncUrl !== false) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('view', normalized);
+        const state = { view: normalized };
+        if (options.pushHistory) window.history.pushState(state, '', url.toString());
+        else window.history.replaceState(state, '', url.toString());
+      }
+
+      if (options.syncTab !== false) {
+        const tabName = VIEW_TO_TAB[normalized] || 'calendar';
+        activateTab(tabName, { syncView: false });
+      }
+      syncPageNavActive();
+    }
+
+    function activateTab(tabName, options = {}) {
+      const tabButton = document.querySelector(`[data-tab="${tabName}"]`);
+      if (!tabButton) return;
+
+      document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach((c) => c.classList.remove('active'));
+      tabButton.classList.add('active');
+      document.getElementById(`${tabName}Tab`)?.classList.add('active');
+
+      if (tabName === 'calendar') renderCalendar();
+      if (tabName === 'journal') journalInitView();
+      if (tabName === 'settings') syncSettingsFields();
+      if (tabName === 'tarot') initTarotTab();
+      if (tabName === 'skies') renderZodiacWheel();
+
+      if (options.syncView !== false) {
+        const nextView = TAB_TO_VIEW[tabName] || 'chart';
+        setPageView(nextView, { pushHistory: !!options.pushHistory, syncTab: false });
+      }
+    }
+
     function navigateToView(view) {
-      const url = new URL(window.location.href);
-      url.searchParams.set('view', view || 'chart');
-      window.location.href = url.toString();
+      setPageView(view, { pushHistory: true });
     }
 
     function syncPageNavActive() {
@@ -2418,13 +2481,13 @@
     }
 
     function initializePageView() {
-      if (pageView === 'chart') document.querySelector('[data-tab="calendar"]')?.click();
-      if (pageView === 'journal') document.querySelector('[data-tab="journal"]')?.click();
-      if (pageView === 'settings') document.querySelector('[data-tab="settings"]')?.click();
-      if (pageView === 'tarot') document.querySelector('[data-tab="tarot"]')?.click();
-      if (pageView === 'skies') document.querySelector('[data-tab="skies"]')?.click();
-      syncPageNavActive();
+      setPageView(pageView, { syncUrl: true, pushHistory: false });
     }
+
+    window.addEventListener('popstate', () => {
+      const viewFromUrl = new URLSearchParams(window.location.search).get('view') || 'chart';
+      setPageView(viewFromUrl, { syncUrl: false });
+    });
 
     // ︎ = Unicode text variation selector — forces symbol rendering, not emoji
     const TV = '︎';
@@ -2799,7 +2862,8 @@ ${aspectLines || 'none within orb'}`;
         } else {
           statusEl.textContent = 'Mage not running';
         }
-      } catch {
+      } catch (error) {
+        logCaughtError('refreshMageStatus', error);
         statusEl.textContent = 'Local runtime offline';
       }
       if (typeof refreshTarotDevMenu === 'function') {
@@ -2814,7 +2878,8 @@ ${aspectLines || 'none within orb'}`;
         let data;
         try {
           data = await callLocalRuntime('/local/mage/launch', { mode: 'http' });
-        } catch {
+        } catch (error) {
+          logCaughtError('launchMageServer.http-mode-fallback', error);
           statusEl.textContent = 'HTTP launch unavailable, trying local mode...';
           data = await callLocalRuntime('/local/mage/launch', { mode: 'auto' });
         }
@@ -2925,7 +2990,8 @@ If the tool supports image output, return the image directly and keep any text r
             cites.style.display = 'none';
           }
         }
-      } catch {
+      } catch (error) {
+        logCaughtError('loadPrecomputedForecast', error);
         // Keep panel hidden when no precomputed data exists.
       }
     }
@@ -3612,7 +3678,8 @@ ${skyContext}`
       try {
         await navigator.clipboard.writeText(caption.value);
         setStatus('Caption copied.');
-      } catch {
+      } catch (error) {
+        logCaughtError('copyCaption', error);
         caption.select();
         setStatus('Caption selected — copy manually.');
       }
@@ -3666,7 +3733,8 @@ ${skyContext}`
       try {
         await navigator.clipboard.writeText(window.location.href);
         setStatus('Page link copied.');
-      } catch {
+      } catch (error) {
+        logCaughtError('sharePage.copyLinkFallback', error);
         setStatus('Copy the browser URL to share this page.');
       }
     });
@@ -3676,15 +3744,7 @@ ${skyContext}`
     // Tabs
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById(`${btn.dataset.tab}Tab`).classList.add('active');
-        if (btn.dataset.tab === 'calendar') renderCalendar();
-        if (btn.dataset.tab === 'journal') journalInitView();
-        if (btn.dataset.tab === 'settings') syncSettingsFields();
-        if (btn.dataset.tab === 'tarot') initTarotTab();
-        if (btn.dataset.tab === 'skies') renderZodiacWheel();
+        activateTab(btn.dataset.tab, { pushHistory: true });
       });
     });
 
@@ -3857,7 +3917,10 @@ ${skyContext}`
               <span class="dasha-years">${fmt(d.startMs)} – ${fmt(d.endMs)}</span>
             </div>`).join('')}` : ''}
         `;
-      } catch { el.classList.add('hidden'); }
+      } catch (error) {
+        logCaughtError('renderDashaPanel', error);
+        el.classList.add('hidden');
+      }
     }
 
     // ── Journal: AES-GCM-256 encrypted local storage ──
@@ -3970,7 +4033,8 @@ ${skyContext}`
       let payload;
       try {
         payload = await journalDecrypt(journalKey, stored.iv, stored.ct);
-      } catch {
+      } catch (error) {
+        logCaughtError('journalUnlock.decrypt', error);
         journalKey = null;
         journalUnlockAttempts++;
         if (journalUnlockAttempts >= 5) {
@@ -4818,28 +4882,28 @@ ${skyContext}`
 
     async function fetchTarotDeckCatalog() {
       const merged = [...baseDeckCatalog()];
-      try {
-        const resp = await fetch('/api/decks', { cache: 'no-store' });
-        if (resp.ok) {
+      const localCatalogUrl = `${getLocalRuntimeUrl()}/local/decks/catalog`;
+      const preferLocalCatalog = isStandaloneDev || isLocalHost || location.protocol === 'file:';
+      const catalogCandidates = preferLocalCatalog
+        ? [localCatalogUrl, '/api/decks']
+        : ['/api/decks', localCatalogUrl];
+
+      for (const catalogUrl of catalogCandidates) {
+        try {
+          const resp = await fetch(catalogUrl, { cache: 'no-store' });
+          if (!resp.ok) continue;
+
           const data = await resp.json();
-          const remote = Array.isArray(data?.decks) ? data.decks.map(normalizeDeckEntry).filter(Boolean) : [];
-          remote.forEach((deck) => {
+          const decks = Array.isArray(data?.decks) ? data.decks.map(normalizeDeckEntry).filter(Boolean) : [];
+          decks.forEach((deck) => {
             if (!merged.some((existing) => existing.slug === deck.slug)) merged.push(deck);
           });
-        }
-      } catch {
-        try {
-          const base = getLocalRuntimeUrl();
-          const resp = await fetch(`${base}/local/decks/catalog`, { cache: 'no-store' });
-          if (resp.ok) {
-            const data = await resp.json();
-            const localDecks = Array.isArray(data?.decks) ? data.decks.map(normalizeDeckEntry).filter(Boolean) : [];
-            localDecks.forEach((deck) => {
-              if (!merged.some((existing) => existing.slug === deck.slug)) merged.push(deck);
-            });
-          }
-        } catch {
-          // Keep built-in only when no catalog endpoint is available.
+          break;
+        } catch (error) {
+          const scope = catalogUrl === '/api/decks'
+            ? 'fetchTarotDeckCatalog.api-decks'
+            : 'fetchTarotDeckCatalog.local-catalog';
+          logCaughtError(scope, error);
         }
       }
 
@@ -4909,7 +4973,8 @@ ${skyContext}`
             setStatus(`Deck saved locally: ${name}. Configure /api/decks for cloud publish.`);
             return;
           }
-        } catch {
+        } catch (innerError) {
+          logCaughtError('publishTarotDeckToLive.local-publish-fallback', innerError);
           // Fall through to final error status.
         }
         setStatus(error.message || 'Could not upload deck to live options.');
@@ -5085,7 +5150,8 @@ ${skyContext}`
         }
 
         return { running, launchable, data };
-      } catch {
+      } catch (error) {
+        logCaughtError('refreshTarotDevMenu', error);
         panel.classList.add('hidden');
         launchBtn.disabled = true;
         generateBtn.disabled = true;
@@ -5883,7 +5949,8 @@ ${skyContext}`
         try {
           await navigator.clipboard.writeText(manifest);
           setStatus('Tarot source manifest copied.');
-        } catch {
+        } catch (error) {
+          logCaughtError('tarotCopyManifest', error);
           setStatus('Could not copy the tarot source manifest.');
         }
       });
