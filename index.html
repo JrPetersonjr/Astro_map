@@ -1056,31 +1056,25 @@
       scroll-margin-top: 84px;
     }
 
-    body[data-view="sky-controls"] .map-shell,
-    body[data-view="sky-controls"] .planet-legend,
-    body[data-view="sky-controls"] .side,
-    body[data-view="chart"] .sky-controls,
-    body[data-view="chart"] .side,
-    body[data-view="chart"] .planet-legend,
-    body[data-view="calendar"] .sky-controls,
-    body[data-view="calendar"] .map-shell,
-    body[data-view="calendar"] .planet-legend,
     body[data-view="journal"] .sky-controls,
     body[data-view="journal"] .map-shell,
     body[data-view="journal"] .planet-legend,
+    body[data-view="journal"] .side,
     body[data-view="settings"] .sky-controls,
     body[data-view="settings"] .map-shell,
     body[data-view="settings"] .planet-legend,
+    body[data-view="settings"] .side,
     body[data-view="tarot"] .sky-controls,
     body[data-view="tarot"] .map-shell,
     body[data-view="tarot"] .planet-legend,
+    body[data-view="tarot"] .side,
     body[data-view="skies"] .sky-controls,
     body[data-view="skies"] .map-shell,
-    body[data-view="skies"] .planet-legend {
+    body[data-view="skies"] .planet-legend,
+    body[data-view="skies"] .side {
       display: none;
     }
 
-    body[data-view="calendar"] .tabs,
     body[data-view="journal"] .tabs,
     body[data-view="settings"] .tabs,
     body[data-view="tarot"] .tabs,
@@ -1088,10 +1082,6 @@
       display: none;
     }
 
-    body[data-view="calendar"] #journalTab,
-    body[data-view="calendar"] #settingsTab,
-    body[data-view="calendar"] #tarotTab,
-    body[data-view="calendar"] #skiesTab,
     body[data-view="journal"] #calendarTab,
     body[data-view="journal"] #settingsTab,
     body[data-view="journal"] #tarotTab,
@@ -1111,22 +1101,6 @@
       display: none !important;
     }
 
-    body[data-view="chart"] .side {
-      display: none;
-    }
-
-    body[data-view="chart"] main {
-      grid-template-columns: 1fr;
-    }
-
-    body[data-view="sky-controls"] main,
-    body[data-view="chart"] main {
-      grid-template-columns: 1fr;
-    }
-
-    body[data-view="sky-controls"] .sky-controls,
-    body[data-view="chart"] .map-shell,
-    body[data-view="calendar"] #calendarTab,
     body[data-view="journal"] #journalTab,
     body[data-view="settings"] #settingsTab,
     body[data-view="tarot"] #tarotTab,
@@ -1134,7 +1108,21 @@
       display: grid;
     }
 
-    body[data-view="calendar"] main,
+    body[data-view="chart"] #journalTab,
+    body[data-view="chart"] #settingsTab,
+    body[data-view="chart"] #tarotTab,
+    body[data-view="chart"] #skiesTab {
+      display: none !important;
+    }
+
+    body[data-view="chart"] .sky-controls,
+    body[data-view="chart"] .map-shell,
+    body[data-view="chart"] .side,
+    body[data-view="chart"] .planet-legend,
+    body[data-view="chart"] #calendarTab {
+      display: grid;
+    }
+
     body[data-view="journal"] main,
     body[data-view="settings"] main,
     body[data-view="tarot"] main,
@@ -1142,7 +1130,6 @@
       grid-template-columns: 1fr;
     }
 
-    body[data-view="calendar"] .map-shell,
     body[data-view="journal"] .map-shell,
     body[data-view="settings"] .map-shell,
     body[data-view="tarot"] .map-shell,
@@ -1150,7 +1137,6 @@
       display: none;
     }
 
-    body[data-view="calendar"] .sky-controls,
     body[data-view="journal"] .sky-controls,
     body[data-view="settings"] .sky-controls,
     body[data-view="tarot"] .sky-controls,
@@ -1837,9 +1823,7 @@
   </header>
 
   <nav class="page-nav" aria-label="Page sections">
-    <button type="button" class="secondary active" data-view="sky-controls">Sky Controls</button>
-    <button type="button" class="secondary" data-view="chart">Chart</button>
-    <button type="button" class="secondary" data-view="calendar">Calendar</button>
+    <button type="button" class="secondary active" data-view="chart">Chart</button>
     <button type="button" class="secondary" data-view="journal">Journal</button>
     <button type="button" class="secondary" data-view="settings">Settings</button>
     <button type="button" class="secondary" data-view="tarot">Tarot</button>
@@ -2382,13 +2366,20 @@
     const status = document.getElementById('status');
     const chatInput = document.getElementById('chatInput');
     const chatLog = document.getElementById('chatLog');
-    const pageView = new URLSearchParams(window.location.search).get('view') || 'sky-controls';
+    let pageView = new URLSearchParams(window.location.search).get('view') || 'chart';
+    const legacyChartViews = new Set(['sky-controls', 'calendar']);
+    if (legacyChartViews.has(pageView)) {
+      pageView = 'chart';
+      const normalizedUrl = new URL(window.location.href);
+      normalizedUrl.searchParams.set('view', 'chart');
+      window.history.replaceState({}, '', normalizedUrl.toString());
+    }
 
     document.body.dataset.view = pageView;
 
     function navigateToView(view) {
       const url = new URL(window.location.href);
-      url.searchParams.set('view', view || 'sky-controls');
+      url.searchParams.set('view', view || 'chart');
       window.location.href = url.toString();
     }
 
@@ -2399,7 +2390,7 @@
     }
 
     function initializePageView() {
-      if (pageView === 'calendar') document.querySelector('[data-tab="calendar"]')?.click();
+      if (pageView === 'chart') document.querySelector('[data-tab="calendar"]')?.click();
       if (pageView === 'journal') document.querySelector('[data-tab="journal"]')?.click();
       if (pageView === 'settings') document.querySelector('[data-tab="settings"]')?.click();
       if (pageView === 'tarot') document.querySelector('[data-tab="tarot"]')?.click();
