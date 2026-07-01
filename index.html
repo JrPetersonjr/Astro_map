@@ -506,6 +506,8 @@
     .tarot-card-result .t-card-kw { font-size: 0.71rem; color: var(--violet); margin: 3px 0; }
     .tarot-card-result .t-card-desc { color: var(--muted); margin-top: 4px; font-size: 0.79rem; }
     .tarot-card-result .t-sky-note { font-size: 0.73rem; color: var(--soft); margin-top: 4px; font-style: italic; }
+    .tarot-card-result .t-card-cite { font-size: 0.63rem; color: var(--soft); margin-top: 6px; padding-top: 5px; border-top: 1px solid rgba(255,255,255,0.07); line-height: 1.45; }
+    .tarot-card-result .t-card-cite .cite-label { color: var(--gold); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.57rem; margin-right: 5px; }
     .tarot-align-bar { font-size: 0.76rem; font-weight: 800; letter-spacing: 0.05em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
     .tarot-section-divider { border: none; border-top: 1px solid var(--line); margin: 16px 0; }
     .tarot-card-kw-row { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.04); flex-wrap: wrap; }
@@ -5440,6 +5442,9 @@ ${skyContext}`
 
       let html = `<div class="tarot-align-bar">Reading Alignment: ${overallScore}% — Moon ${signature.phaseName} in ${signature.moon.sign.name}</div>`;
 
+      // Card meanings are grounded in the Rider-Waite-Smith canon (see standalone/interpretation-sources.json).
+      const TAROT_MEANING_CITE = 'Waite, The Pictorial Key to the Tarot (1910) · Pollack, Seventy-Eight Degrees of Wisdom (1980)';
+
       cardResults.forEach(r => {
         if (r.error) {
           html += `<div class="tarot-card-result"><div class="t-card-pos">${r.pos.label}</div><div class="t-card-desc" style="color:var(--coral);">${r.error}</div></div>`;
@@ -5463,6 +5468,7 @@ ${skyContext}`
               <div class="t-card-kw">${r.keywords.join(' · ')}</div>
               <div class="t-card-desc">${escapeHtml(r.card.description)}</div>
               <div class="t-sky-note">${skyNote}</div>
+              <div class="t-card-cite"><span class="cite-label">Grounded in</span>${TAROT_MEANING_CITE}</div>
             </div>
           </div>
         </div>`;
