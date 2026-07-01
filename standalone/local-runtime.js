@@ -3,13 +3,15 @@ const fs = require('fs');
 const fsp = require('fs/promises');
 const path = require('path');
 const url = require('url');
-const { spawn } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
 const CONFIG_PATH = path.join(__dirname, 'contexts.json');
 const INDEX_DIR = path.join(__dirname, '.indexes');
 const MAGE_STATE_PATH = path.join(__dirname, '.mage-process.json');
 const DECK_DIR = path.join(ROOT, 'data', 'decks');
+const LIVE_DECK_INDEX_PATH = path.join(ROOT, 'data', 'decks', 'live-index.json');
+const LIVE_DECK_DIR = path.join(ROOT, 'data', 'decks', 'live');
 
 function loadConfig() {
   const raw = fs.readFileSync(CONFIG_PATH, 'utf8');
@@ -18,6 +20,15 @@ function loadConfig() {
 
 let config = loadConfig();
 let mageProcess = null;
+
+function getMageHttpConfig() {
+  const httpCfg = config.mage?.http || {};
+  return {
+    model: String(httpCfg.model || 'lfm2-1.2b'),
+    baseUrl: String(httpCfg.baseUrl || 'http://127.0.0.1:8081').replace(/\/+$/, ''),
+    path: String(httpCfg.path || '/v1/chat/completions')
+  };
+}
 
 function fileExistsSync(target) {
   try {
@@ -67,17 +78,42 @@ function detectMageLaunch() {
   }
 
   const defaultRoots = [
-    'H:/airlock/homeplanetstudio',
-    'H:/airlock/flowstate_mage'
+    'H:/AIRLOCK/HomePlanetStudio',
+    'H:/AIRLOCK/FlowState_Mage',
+    'H:/AIRLOCK/ASTRO/LuminaSynodic'
   ];
   const roots = Array.isArray(launchCfg.roots) && launchCfg.roots.length ? launchCfg.roots : defaultRoots;
 
   for (const root of roots) {
+    const mcpJson = path.join(root, '.mcp.json');
+    if (fileExistsSync(mcpJson)) {
+      try {
+        const mcp = JSON.parse(fs.readFileSync(mcpJson, 'utf8'));
+        const server = mcp?.mcpServers?.['mage-local'] || mcp?.mcpServers?.mage || null;
+        if (server?.command) {
+          return {
+            command: server.command,
+            args: Array.isArray(server.args) ? server.args : [],
+            cwd: server.cwd || root,
+            env: server.env && typeof server.env === 'object' ? server.env : null,
+            detectedFrom: `${mcpJson}::mcpServers.mage-local`
+          };
+        }
+      } catch {
+        // Ignore broken MCP config and continue detection.
+      }
+    }
+
     const startPs1 = path.join(root, 'start-mage.ps1');
     const scriptsStartPs1 = path.join(root, 'scripts', 'start-mage.ps1');
     const runMagePs1 = path.join(root, 'run-mage.ps1');
     const startCmd = path.join(root, 'start-mage.cmd');
+    const mageCmd = path.join(root, 'mage.cmd');
+    const launchRunnerBat = path.join(root, 'Launch Mage Runner.bat');
+    const startFlowstateBat = path.join(root, 'START_FLOWSTATE.bat');
+    const imageGenCmd = path.join(root, 'Image Gen Server.cmd');
     const mageServerJs = path.join(root, 'mage-server.js');
+    const mcpServerJs = path.join(root, 'mcp_server.js');
     const packageJson = path.join(root, 'package.json');
 
     if (fileExistsSync(startPs1)) {
@@ -85,6 +121,7 @@ function detectMageLaunch() {
         command: 'powershell',
         args: ['-ExecutionPolicy', 'Bypass', '-File', startPs1],
         cwd: root,
+        env: null,
         detectedFrom: startPs1
       };
     }
@@ -93,6 +130,7 @@ function detectMageLaunch() {
         command: 'powershell',
         args: ['-ExecutionPolicy', 'Bypass', '-File', scriptsStartPs1],
         cwd: root,
+        env: null,
         detectedFrom: scriptsStartPs1
       };
     }
@@ -101,6 +139,7 @@ function detectMageLaunch() {
         command: 'powershell',
         args: ['-ExecutionPolicy', 'Bypass', '-File', runMagePs1],
         cwd: root,
+        env: null,
         detectedFrom: runMagePs1
       };
     }
@@ -109,7 +148,44 @@ function detectMageLaunch() {
         command: startCmd,
         args: [],
         cwd: root,
+        env: null,
         detectedFrom: startCmd
+      };
+    }
+    if (fileExistsSync(mageCmd)) {
+      return {
+        command: 'cmd',
+        args: ['/c', mageCmd, 'serve', 'lfm2-1.2b'],
+        cwd: root,
+        env: null,
+        detectedFrom: mageCmd
+      };
+    }
+    if (fileExistsSync(launchRunnerBat)) {
+      return {
+        command: 'cmd',
+        args: ['/c', launchRunnerBat, 'lfm2-1.2b'],
+        cwd: root,
+        env: null,
+        detectedFrom: launchRunnerBat
+      };
+    }
+    if (fileExistsSync(startFlowstateBat)) {
+      return {
+        command: 'cmd',
+        args: ['/c', startFlowstateBat],
+        cwd: root,
+        env: null,
+        detectedFrom: startFlowstateBat
+      };
+    }
+    if (fileExistsSync(imageGenCmd)) {
+      return {
+        command: 'cmd',
+        args: ['/c', imageGenCmd],
+        cwd: root,
+        env: null,
+        detectedFrom: imageGenCmd
       };
     }
     if (fileExistsSync(mageServerJs)) {
@@ -117,36 +193,166 @@ function detectMageLaunch() {
         command: 'node',
         args: [mageServerJs],
         cwd: root,
+        env: null,
         detectedFrom: mageServerJs
       };
     }
-    if (fileExistsSync(packageJson)) {
+    if (fileExistsSync(mcpServerJs)) {
       return {
-        command: 'npm',
-        args: ['run', 'mage'],
+        command: 'node',
+        args: [mcpServerJs],
         cwd: root,
-        detectedFrom: packageJson
+        env: null,
+        detectedFrom: mcpServerJs
       };
+    }
+    if (fileExistsSync(packageJson)) {
+      try {
+        const pkg = JSON.parse(fs.readFileSync(packageJson, 'utf8'));
+        const scripts = pkg?.scripts || {};
+        const preferred = ['mage', 'serve', 'start', 'dev'];
+        const script = preferred.find((name) => scripts[name]);
+        if (script) {
+          return {
+            command: 'npm',
+            args: ['run', script],
+            cwd: root,
+            env: null,
+            detectedFrom: `${packageJson}::scripts.${script}`
+          };
+        }
+      } catch {
+        // Ignore malformed package.json.
+      }
     }
   }
 
   return null;
 }
 
-function currentMageStatus() {
+function detectMageHttpLaunch() {
+  const launchCfg = config.mage?.launch || {};
+  const model = getMageHttpConfig().model;
+
+  const defaultRoots = [
+    'H:/AIRLOCK/FlowState_Mage',
+    'H:/AIRLOCK/HomePlanetStudio'
+  ];
+  const roots = Array.isArray(launchCfg.roots) && launchCfg.roots.length ? launchCfg.roots : defaultRoots;
+
+  for (const root of roots) {
+    const mageCmd = path.join(root, 'mage.cmd');
+    if (fileExistsSync(mageCmd)) {
+      return {
+        command: 'cmd',
+        args: ['/c', mageCmd, 'serve', model],
+        cwd: root,
+        env: null,
+        mode: 'http',
+        detectedFrom: `${mageCmd}::serve ${model}`
+      };
+    }
+
+    const packageJson = path.join(root, 'package.json');
+    if (fileExistsSync(packageJson)) {
+      try {
+        const pkg = JSON.parse(fs.readFileSync(packageJson, 'utf8'));
+        const scripts = pkg?.scripts || {};
+        const script = scripts.serve ? 'serve' : scripts.mage ? 'mage' : null;
+        if (script) {
+          return {
+            command: 'npm',
+            args: ['run', script],
+            cwd: root,
+            env: null,
+            mode: 'http',
+            detectedFrom: `${packageJson}::scripts.${script}`
+          };
+        }
+      } catch {
+        // Ignore malformed package.json.
+      }
+    }
+  }
+
+  return null;
+}
+
+function detectMageCliRoot() {
+  const launchCfg = config.mage?.launch || {};
+  const defaultRoots = [
+    'H:/AIRLOCK/FlowState_Mage',
+    'H:/AIRLOCK/HomePlanetStudio'
+  ];
+  const roots = Array.isArray(launchCfg.roots) && launchCfg.roots.length ? launchCfg.roots : defaultRoots;
+  for (const root of roots) {
+    const mageCmd = path.join(root, 'mage.cmd');
+    if (fileExistsSync(mageCmd)) {
+      return { root, mageCmd };
+    }
+  }
+  return null;
+}
+
+async function mageHttpHealthy() {
+  const cfg = getMageHttpConfig();
+  const modelsUrl = `${cfg.baseUrl}/v1/models`;
+  try {
+    const response = await fetch(modelsUrl, { method: 'GET' });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+async function currentMageStatus() {
+  const httpReady = await mageHttpHealthy();
   if (mageProcess?.pid && isPidAlive(mageProcess.pid)) {
     return {
       running: true,
       launchable: true,
+      httpReady,
       pid: mageProcess.pid,
       startedAt: mageProcess.startedAt,
       cwd: mageProcess.cwd,
       command: mageProcess.command,
       args: mageProcess.args,
+      mode: mageProcess.mode || 'auto',
       detectedFrom: mageProcess.detectedFrom
     };
   }
 
+  const persisted = readMageState();
+  if (persisted?.pid && isPidAlive(persisted.pid)) {
+    return {
+      running: true,
+      launchable: true,
+      httpReady,
+      pid: persisted.pid,
+      startedAt: persisted.startedAt,
+      cwd: persisted.cwd,
+      command: persisted.command,
+      args: persisted.args,
+      mode: persisted.mode || 'auto',
+      detectedFrom: persisted.detectedFrom
+    };
+  }
+
+  const detected = detectMageLaunch();
+  const detectedHttp = detectMageHttpLaunch();
+  return {
+    running: false,
+    launchable: Boolean(detected || detectedHttp),
+    httpReady,
+    detectedFrom: detected?.detectedFrom || null,
+    detectedHttpFrom: detectedHttp?.detectedFrom || null,
+    cwd: detected?.cwd || null,
+    command: detected?.command || null,
+    args: detected?.args || []
+  };
+}
+
+function launchMageProcess(mode = 'auto') {
   const persisted = readMageState();
   if (persisted?.pid && isPidAlive(persisted.pid)) {
     return {
@@ -157,32 +363,22 @@ function currentMageStatus() {
       cwd: persisted.cwd,
       command: persisted.command,
       args: persisted.args,
+      mode: persisted.mode || 'auto',
       detectedFrom: persisted.detectedFrom
     };
   }
 
-  const detected = detectMageLaunch();
-  return {
-    running: false,
-    launchable: Boolean(detected),
-    detectedFrom: detected?.detectedFrom || null,
-    cwd: detected?.cwd || null,
-    command: detected?.command || null,
-    args: detected?.args || []
-  };
-}
-
-function launchMageProcess() {
-  const status = currentMageStatus();
-  if (status.running) return status;
-
-  const launch = detectMageLaunch();
+  const launch = mode === 'http' ? detectMageHttpLaunch() : detectMageLaunch();
   if (!launch) {
-    throw new Error('Could not detect Mage launch command. Configure standalone/contexts.json -> mage.launch.');
+    throw new Error(`Could not detect Mage launch command for mode '${mode}'. Configure standalone/contexts.json -> mage.launch.`);
   }
 
   const child = spawn(launch.command, launch.args || [], {
     cwd: launch.cwd || ROOT,
+    env: {
+      ...process.env,
+      ...(launch.env || {})
+    },
     detached: true,
     stdio: 'ignore',
     shell: true
@@ -195,6 +391,8 @@ function launchMageProcess() {
     cwd: launch.cwd || ROOT,
     command: launch.command,
     args: launch.args || [],
+    env: launch.env || null,
+    mode,
     detectedFrom: launch.detectedFrom || 'auto-detect'
   };
 
@@ -203,8 +401,10 @@ function launchMageProcess() {
 }
 
 function stopMageProcess() {
-  const status = currentMageStatus();
-  if (!status.running) return { running: false, stopped: false };
+  const status = mageProcess?.pid && isPidAlive(mageProcess.pid)
+    ? mageProcess
+    : readMageState();
+  if (!status?.pid || !isPidAlive(status.pid)) return { running: false, stopped: false };
 
   try {
     process.kill(status.pid);
@@ -281,9 +481,9 @@ async function requestJson(endpoint, method, headers, payload) {
   return data;
 }
 
-async function runMageBridge(prompt, skyContext, contextHints) {
+async function runMageBridge(prompt, skyContext, contextHints, intentOverride) {
   const endpoint = config.mage?.mcpUrl;
-  if (!endpoint) throw new Error('Mage MCP URL is not configured');
+  const useMcp = Boolean(endpoint);
 
   const headers = { 'Content-Type': 'application/json' };
   const token = config.mage?.apiKey;
@@ -293,13 +493,70 @@ async function runMageBridge(prompt, skyContext, contextHints) {
   }
 
   const payload = {
-    intent: config.mage?.intent || 'astrology-reading',
+    intent: intentOverride || config.mage?.intent || 'astrology-reading',
     prompt,
     skyContext: skyContext || '',
     contextHints: contextHints || []
   };
 
-  const data = await requestJson(endpoint, 'POST', headers, payload);
+  if (useMcp) {
+    try {
+      const data = await requestJson(endpoint, 'POST', headers, payload);
+      const text = parseTextResponse(data);
+      if (text) return text;
+    } catch {
+      // Fall back to local HTTP runner bridge when MCP transport is unavailable.
+    }
+  }
+
+  // Prefer Mage's own CLI path so RaidBrain + Faux cache + hot model switching remain authoritative.
+  try {
+    const cli = detectMageCliRoot();
+    if (cli) {
+      const http = getMageHttpConfig();
+      const systemPrefix = skyContext
+        ? `Sky context for grounding:\n${skyContext}\n\n`
+        : '';
+      const routedPrompt = `${systemPrefix}${prompt}`;
+      const cliResult = spawnSync('cmd', ['/c', cli.mageCmd, 'ask', '-m', http.model, '--json', '-'], {
+        cwd: cli.root,
+        input: routedPrompt,
+        encoding: 'utf8',
+        timeout: 600000,
+        maxBuffer: 20 * 1024 * 1024,
+        windowsHide: true
+      });
+
+      if (cliResult.status === 0 && cliResult.stdout) {
+        try {
+          const parsed = JSON.parse(cliResult.stdout.trim());
+          const text = parseTextResponse(parsed) || parsed?.reply;
+          if (typeof text === 'string' && text.trim()) return text;
+        } catch {
+          const raw = cliResult.stdout.trim();
+          if (raw) return raw;
+        }
+      }
+    }
+  } catch {
+    // Fall through to HTTP runner path.
+  }
+
+  const http = getMageHttpConfig();
+  const runnerPayload = {
+    model: http.model,
+    temperature: 0.55,
+    messages: [
+      {
+        role: 'system',
+        content: skyContext
+          ? `You are LuminaSynodic's local Mage model. Use this context when useful.\n\n${skyContext}`
+          : `You are LuminaSynodic's local Mage model.`
+      },
+      { role: 'user', content: prompt }
+    ]
+  };
+  const data = await requestJson(`${http.baseUrl}${http.path}`, 'POST', { 'Content-Type': 'application/json' }, runnerPayload);
   const text = parseTextResponse(data);
   return text || JSON.stringify(data);
 }
@@ -510,6 +767,68 @@ async function saveDeckManifest(payload) {
   };
 }
 
+async function readLiveDeckIndex() {
+  try {
+    const raw = await fsp.readFile(LIVE_DECK_INDEX_PATH, 'utf8');
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+async function writeLiveDeckIndex(rows) {
+  await fsp.mkdir(path.dirname(LIVE_DECK_INDEX_PATH), { recursive: true });
+  await fsp.writeFile(LIVE_DECK_INDEX_PATH, `${JSON.stringify(rows, null, 2)}\n`, 'utf8');
+}
+
+async function publishLocalDeck(payload) {
+  const name = String(payload?.name || '').trim();
+  const slug = safeDeckSlug(payload?.slug || name || 'tarot-deck');
+  const manifestRaw = payload?.manifest;
+  if (!name) throw new Error('Missing deck name');
+  if (manifestRaw === undefined || manifestRaw === null) throw new Error('Missing deck manifest payload');
+
+  const manifestText = typeof manifestRaw === 'string' ? manifestRaw : JSON.stringify(manifestRaw, null, 2);
+  await fsp.mkdir(LIVE_DECK_DIR, { recursive: true });
+
+  const fileName = `${slug}-${Date.now()}.json`;
+  const filePath = path.join(LIVE_DECK_DIR, fileName);
+  await fsp.writeFile(filePath, manifestText, 'utf8');
+
+  const entry = {
+    slug,
+    name,
+    source: String(payload?.source || 'tarot-atelier-dev-local'),
+    summary: String(payload?.summary || 'Published via local runtime fallback.'),
+    createdAt: new Date().toISOString(),
+    manifestPath: `data/decks/live/${fileName}`
+  };
+
+  const current = await readLiveDeckIndex();
+  const next = [entry, ...current.filter((item) => item.slug !== slug)];
+  await writeLiveDeckIndex(next);
+
+  return { entry, decks: next };
+}
+
+async function buildDeckCatalogPayload() {
+  const live = await readLiveDeckIndex();
+  return {
+    ok: true,
+    decks: [
+      {
+        slug: 'classic-source',
+        name: 'Classic Source Deck',
+        source: 'builtin',
+        summary: 'Built-in LuminaSynodic source deck.',
+        createdAt: null
+      },
+      ...live
+    ]
+  };
+}
+
 async function serveStatic(reqPath, res) {
   const cleanPath = reqPath === '/' ? '/index.html' : reqPath;
   const fsPath = path.join(ROOT, decodeURIComponent(cleanPath));
@@ -565,13 +884,17 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (parsed.pathname === '/local/mage/status' && req.method === 'GET') {
-    sendJson(res, 200, { ok: true, ...currentMageStatus() });
+    const status = await currentMageStatus();
+    sendJson(res, 200, { ok: true, ...status });
     return;
   }
 
   if (parsed.pathname === '/local/mage/launch' && req.method === 'POST') {
     try {
-      const result = launchMageProcess();
+      const raw = await readBody(req);
+      const body = raw ? JSON.parse(raw) : {};
+      const mode = String(body.mode || 'auto').toLowerCase();
+      const result = launchMageProcess(mode === 'http' ? 'http' : 'auto');
       sendJson(res, 200, { ok: true, ...result });
     } catch (error) {
       sendJson(res, 500, { error: error.message || 'Failed to launch Mage' });
@@ -615,6 +938,7 @@ const server = http.createServer(async (req, res) => {
       const prompt = body.prompt;
       const skyContext = body.skyContext || '';
       const contextHints = body.contextHints || [];
+      const intent = typeof body.intent === 'string' && body.intent.trim() ? body.intent.trim() : null;
 
       if (!prompt || typeof prompt !== 'string') {
         sendJson(res, 400, { error: 'Missing prompt' });
@@ -623,7 +947,7 @@ const server = http.createServer(async (req, res) => {
 
       let data;
       if (provider === 'mage-local' || provider === 'mage') {
-        data = await runMageBridge(prompt, skyContext, contextHints);
+        data = await runMageBridge(prompt, skyContext, contextHints, intent);
       } else if (provider === 'gguf-local' || provider === 'gguf') {
         data = await runGgufBridge(prompt, skyContext);
       } else if (provider === 'homeplanet-local' || provider === 'homeplanet') {
@@ -648,6 +972,29 @@ const server = http.createServer(async (req, res) => {
       sendJson(res, 200, { ok: true, saved });
     } catch (error) {
       sendJson(res, 500, { error: error.message || 'Failed to save deck manifest' });
+    }
+    return;
+  }
+
+  if (parsed.pathname === '/local/decks/catalog' && req.method === 'GET') {
+    try {
+      const payload = await buildDeckCatalogPayload();
+      sendJson(res, 200, payload);
+    } catch (error) {
+      sendJson(res, 500, { error: error.message || 'Failed to load deck catalog' });
+    }
+    return;
+  }
+
+  if (parsed.pathname === '/local/decks/publish' && req.method === 'POST') {
+    try {
+      const raw = await readBody(req);
+      const body = raw ? JSON.parse(raw) : {};
+      const result = await publishLocalDeck(body || {});
+      const payload = await buildDeckCatalogPayload();
+      sendJson(res, 200, { ok: true, published: result.entry, decks: payload.decks });
+    } catch (error) {
+      sendJson(res, 500, { error: error.message || 'Failed to publish deck locally' });
     }
     return;
   }

@@ -16,16 +16,14 @@ What it does:
 - Adds a "Use My Location" option for local altitude/azimuth horizon context.
 - Includes a local life mapping analyzer for themes like loss, gain, tension, new love, money, career, family/home, health, spiritual confusion, and sudden change. It maps user-entered life themes to the current tropical chart, approximate sidereal/Vedic positions, nakshatras, Moon context, and local astronomy context.
 - Supports a Netlify function proxy for optional AI query integration. Add `QUERY_API_KEY` as an environment variable in Netlify to keep the secret off the client.
-- Supports a provider bridge for a la carte AI/astrology integrations (Gemini, VedAstro MCP-compatible endpoints, and Kerykeion-compatible APIs).
+- Supports a provider bridge for dev-side AI/astrology integrations and the local Mage runtime path.
 
 AI/Astrology integrations:
 
 - Frontend provider selector is in `Journal -> Password/Settings`.
 - Providers:
-  - `Auto` = local Gemini key first, then server bridge.
-  - `Gemini` = direct browser call using your local API key.
-  - `VedAstro MCP` = server bridge (`/api/astro-bridge` or `/.netlify/functions/astro-bridge`).
-  - `Kerykeion API` = server bridge with Kerykeion-compatible payload forwarding.
+  - `Mage Local` = the only end-user interpretation path; uses the local runtime bridge and repo/context hints.
+- No API key is required for the normal user flow.
 - New bridge functions:
   - `api/astro-bridge.js` (Vercel)
   - `netlify/functions/astro-bridge.js` (Netlify)
@@ -41,7 +39,7 @@ Standalone local app (Mage MCP / GGUF / Homeplanet):
   - `node standalone/local-runtime.js`
   - open `http://127.0.0.1:8787/index.html?standalone=1`
 - In app settings (`Journal -> Password/Settings`):
-  - set provider to `Mage Local`, `GGUF Local`, or `Homeplanet Local`
+  - keep `Mage Local` selected for end-user interpretations
   - verify `Local runtime URL` (default `http://127.0.0.1:8787`)
   - use `Launch Mage (Dev)` to auto-detect and start Mage from local roots
   - use `Mage Status` to confirm local process status
@@ -86,6 +84,25 @@ Notes on Kerykeion:
 
 - Kerykeion is AGPL for direct library embedding. For closed-source/private deployments, prefer their hosted API model as documented in their README.
 - LuminaSynodic integration here is API-bridge based, so you can plug in either a hosted Kerykeion endpoint or your own compatible service.
+
+Future runner direction:
+
+- A lightweight standalone interp runner can package VedAstro, Kerykeion, and the model stack behind a single local installer/runtime.
+- The end-user experience should stay local-first: either copy/paste an interp, download a guarded custom interp model, or request a dev-side interp/session.
+- If a reading path cannot be made accurate, prefer repo-catalogued sources and known-good local models over cloud AI shortcuts.
+- Response times may vary depending on local model size and device speed.
+- Discord or adjacent support channels can sit beside the app as an optional human fallback for 1:1 sessions.
+
+Offline interpretation pack:
+
+- The app now includes a downloadable text guide, JSON index, and source catalog derived from the tarot source deck and curated reference list:
+  - `data/interpretation-guide.md`
+  - `data/interpretation-index.json`
+- `standalone/interpretation-sources.json`
+- Regenerate them with:
+  - `node standalone/build-interpretation-index.js`
+- These files are intended for the old-fashioned use case: a plain-text reference you can read without the UI, plus a structured index and bibliography you can ship with a standalone runner.
+- The pack uses reputable tarot, astrology, dreamwork, and ephemeris references as metadata and synthesis anchors; it does not copy book passages.
 
 Publishing notes:
 

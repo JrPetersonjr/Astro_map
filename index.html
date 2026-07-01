@@ -15,20 +15,22 @@
   <style>
     :root {
       color-scheme: dark;
-      --bg: #101012;
-      --panel: #19191d;
-      --panel-2: #232229;
-      --text: #f8f5ec;
-      --muted: #beb8a8;
-      --soft: #888273;
-      --line: rgba(255, 255, 255, 0.13);
+      --bg: #120c1f;
+      --panel: #1f1431;
+      --panel-2: #2a1a42;
+      --text: #f8f2df;
+      --muted: #d0c3a0;
+      --soft: #9d8db7;
+      --line: rgba(255, 226, 170, 0.18);
       --gold: #e7bb66;
+      --gold-soft: #f1d79a;
       --coral: #df665d;
       --teal: #70cec2;
-      --violet: #aa97e8;
+      --violet: #b8a0ff;
       --blue: #76a9e8;
       --green: #95d08b;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --sparkle: rgba(255, 230, 158, 0.52);
+      font-family: "Cormorant Garamond", "Cinzel", "Palatino Linotype", "Book Antiqua", serif;
     }
 
     * { box-sizing: border-box; }
@@ -37,28 +39,79 @@
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at 18% 10%, rgba(231, 187, 102, 0.13), transparent 27rem),
-        radial-gradient(circle at 82% 18%, rgba(112, 206, 194, 0.11), transparent 24rem),
-        linear-gradient(135deg, #101012 0%, #16141a 48%, #111a1a 100%);
+        radial-gradient(circle at 14% 8%, rgba(231, 187, 102, 0.18), transparent 26rem),
+        radial-gradient(circle at 85% 14%, rgba(176, 146, 251, 0.2), transparent 24rem),
+        linear-gradient(140deg, #0f0a19 0%, #1a0f2d 44%, #221137 76%, #130d21 100%);
       color: var(--text);
     }
 
     .app-header {
-      width: min(1560px, calc(100% - 28px));
+      width: min(1600px, calc(100% - 24px));
       margin: 0 auto;
-      padding: 22px 0 10px;
+      padding: 18px 0 12px;
       text-align: center;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .app-header::before {
+      content: '';
+      position: absolute;
+      inset: -8px 6% auto;
+      height: 120px;
+      background:
+        radial-gradient(circle at 20% 34%, var(--sparkle) 0 3px, transparent 4px),
+        radial-gradient(circle at 47% 18%, var(--sparkle) 0 2px, transparent 3px),
+        radial-gradient(circle at 74% 38%, var(--sparkle) 0 2px, transparent 3px),
+        radial-gradient(circle at 82% 22%, rgba(186, 161, 255, 0.55) 0 2px, transparent 3px);
+      opacity: 0.55;
+      pointer-events: none;
+      animation: headerSparkle 6.2s ease-in-out infinite;
+      z-index: -1;
+      filter: blur(0.2px);
+    }
+
+    .page-nav {
+      position: sticky;
+      top: 8px;
+      z-index: 30;
+      width: min(1600px, calc(100% - 24px));
+      margin: 0 auto 12px;
+      padding: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      border: 1px solid rgba(231, 187, 102, 0.18);
+      border-radius: 16px;
+      background: rgba(18, 12, 31, 0.76);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+    }
+
+    .page-nav button {
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+    }
+
+    .page-nav button.active {
+      background: rgba(231, 187, 102, 0.14);
+      color: var(--gold);
+      border-color: rgba(231, 187, 102, 0.42);
     }
 
     main {
-      width: min(1560px, calc(100% - 28px));
+      width: min(1600px, calc(100% - 24px));
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 300px minmax(380px, 1fr) minmax(360px, 460px);
+      grid-template-columns: minmax(300px, 340px) minmax(520px, 1fr) minmax(380px, 500px);
       grid-template-rows: auto auto;
       align-items: start;
-      gap: 20px;
-      padding: 8px 0 28px;
+      gap: 18px;
+      padding: 4px 0 28px;
     }
 
     .sky-controls {
@@ -75,10 +128,12 @@
       min-width: 0;
       aspect-ratio: 1;
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: 14px;
       overflow: hidden;
-      background: rgba(12, 12, 14, 0.72);
-      box-shadow: 0 22px 80px rgba(0, 0, 0, 0.38);
+      background:
+        radial-gradient(circle at 50% 28%, rgba(164, 125, 255, 0.11), transparent 46%),
+        rgba(10, 8, 16, 0.86);
+      box-shadow: 0 26px 90px rgba(0, 0, 0, 0.45);
     }
 
     .side {
@@ -146,6 +201,7 @@
       min-width: 0;
       display: grid;
       gap: 16px;
+      align-content: start;
     }
 
     .eyebrow {
@@ -172,11 +228,62 @@
 
     .panel {
       display: grid;
-      gap: 12px;
-      padding: 16px;
+      gap: 10px;
+      padding: 14px;
       border: 1px solid var(--line);
-      border-radius: 8px;
-      background: linear-gradient(180deg, rgba(35, 34, 41, 0.92), rgba(25, 25, 29, 0.92));
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(42, 26, 66, 0.92), rgba(28, 18, 44, 0.95));
+    }
+
+    .accordion-panel {
+      padding: 0;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .accordion-panel > summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      user-select: none;
+    }
+
+    .accordion-panel > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .accordion-panel > summary::after {
+      content: '▸';
+      color: var(--gold);
+      font-size: 0.85rem;
+      transition: transform 0.18s ease;
+    }
+
+    .accordion-panel[open] > summary::after {
+      transform: rotate(90deg);
+    }
+
+    .accordion-body {
+      display: grid;
+      gap: 10px;
+      padding: 0 14px 14px;
+    }
+
+    .accordion-body.compact {
+      gap: 8px;
+    }
+
+    .accordion-summary-meta {
+      color: var(--soft);
+      font-size: 0.72rem;
+      font-weight: 600;
     }
 
     .tabs {
@@ -214,6 +321,7 @@
 
     .tab-content.active {
       display: grid;
+      gap: 14px;
     }
 
     .calendar-grid {
@@ -490,8 +598,40 @@
     .j-enc-notice.privacy { text-align: left; line-height: 1.6; }
     .j-enc-notice.privacy strong { color: var(--gold); display: block; margin-bottom: 4px; }
 
-    .logo-header { display: flex; flex-direction: column; gap: 4px; }
-    .logo-svg { display: block; width: 100%; max-width: 280px; height: auto; }
+    .logo-header { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .logo-svg { display: block; width: 100%; max-width: 300px; height: auto; }
+    .logo-generated {
+      width: 100%;
+      max-width: 300px;
+      aspect-ratio: 1.2;
+      object-fit: contain;
+      border-radius: 12px;
+      border: 1px solid rgba(231, 187, 102, 0.28);
+      background: rgba(20, 14, 30, 0.6);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+      display: none;
+    }
+    .logo-generated.visible { display: block; }
+    .brand-dictionary {
+      width: min(700px, 100%);
+      margin-top: 2px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      text-align: left;
+    }
+    .brand-def {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(231, 187, 102, 0.2);
+      background: rgba(18, 12, 28, 0.68);
+      font-size: 0.68rem;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+    .brand-def .def-word { color: var(--gold-soft); font-weight: 700; letter-spacing: 0.03em; }
+    .brand-def .def-pos { color: var(--soft); font-size: 0.6rem; margin-left: 0.28em; }
+    .brand-def .def-pron { color: var(--soft); margin-left: 0.26em; font-style: italic; }
     .logo-defs { margin: 2px 0 0; display: flex; flex-direction: column; gap: 3px; }
     .logo-def { font-size: 0.63rem; color: var(--soft); line-height: 1.35; letter-spacing: 0.01em; }
     .logo-def .def-word { color: var(--muted); font-weight: 600; letter-spacing: 0.04em; }
@@ -502,8 +642,38 @@
     .logo-details summary::-webkit-details-marker { display: none; }
     .logo-details summary::before { content: '▸ '; font-size: 0.55rem; }
     .logo-details[open] summary::before { content: '▾ '; }
-    .lede { margin: 0; color: var(--muted); font-size: 0.88rem; line-height: 1.45; opacity: 0.8; }
+    .lede { margin: 0; color: var(--muted); font-size: 0.92rem; line-height: 1.5; opacity: 0.9; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+    .ephemeris-mode-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .ephemeris-mode-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(231, 187, 102, 0.35);
+      background: rgba(231, 187, 102, 0.09);
+      color: var(--gold-soft);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-family: "Segoe UI", sans-serif;
+      font-weight: 700;
+    }
+
+    @keyframes headerSparkle {
+      0%, 100% { opacity: 0.3; transform: translateY(0); }
+      50% { opacity: 0.62; transform: translateY(2px); }
+    }
 
     .j-unlock-welcome {
       font-size: 0.88rem;
@@ -711,7 +881,7 @@
     }
 
     .j-chat-panel {
-      margin-top: 10px;
+      margin-top: 0;
       border-top: 1px solid var(--line);
       padding-top: 14px;
     }
@@ -868,16 +1038,131 @@
     }
     .sky-share-panel .caption-preview.visible { display: block; }
     #installAppBtn.hidden-install { display: none; }
-    .logo-header { display:inline-flex; flex-direction:column; align-items:center; gap:4px; }
+    .logo-header { display:inline-flex; flex-direction:column; align-items:center; gap:5px; }
     .panel-spaced { margin-top: 12px; }
     .mb-12 { margin-bottom: 12px; }
     .flex-1 { flex: 1; }
     .forecast-hidden { display: none; }
 
+    .sky-controls,
+    .map-shell,
+    .side,
+    .tabs,
+    #calendarTab,
+    #journalTab,
+    #settingsTab,
+    #tarotTab,
+    #skiesTab {
+      scroll-margin-top: 84px;
+    }
+
+    body[data-view="sky-controls"] .map-shell,
+    body[data-view="sky-controls"] .planet-legend,
+    body[data-view="sky-controls"] .side,
+    body[data-view="chart"] .sky-controls,
+    body[data-view="chart"] .side,
+    body[data-view="chart"] .planet-legend,
+    body[data-view="calendar"] .sky-controls,
+    body[data-view="calendar"] .map-shell,
+    body[data-view="calendar"] .planet-legend,
+    body[data-view="journal"] .sky-controls,
+    body[data-view="journal"] .map-shell,
+    body[data-view="journal"] .planet-legend,
+    body[data-view="settings"] .sky-controls,
+    body[data-view="settings"] .map-shell,
+    body[data-view="settings"] .planet-legend,
+    body[data-view="tarot"] .sky-controls,
+    body[data-view="tarot"] .map-shell,
+    body[data-view="tarot"] .planet-legend,
+    body[data-view="skies"] .sky-controls,
+    body[data-view="skies"] .map-shell,
+    body[data-view="skies"] .planet-legend {
+      display: none;
+    }
+
+    body[data-view="calendar"] .tabs,
+    body[data-view="journal"] .tabs,
+    body[data-view="settings"] .tabs,
+    body[data-view="tarot"] .tabs,
+    body[data-view="skies"] .tabs {
+      display: none;
+    }
+
+    body[data-view="calendar"] #journalTab,
+    body[data-view="calendar"] #settingsTab,
+    body[data-view="calendar"] #tarotTab,
+    body[data-view="calendar"] #skiesTab,
+    body[data-view="journal"] #calendarTab,
+    body[data-view="journal"] #settingsTab,
+    body[data-view="journal"] #tarotTab,
+    body[data-view="journal"] #skiesTab,
+    body[data-view="settings"] #calendarTab,
+    body[data-view="settings"] #journalTab,
+    body[data-view="settings"] #tarotTab,
+    body[data-view="settings"] #skiesTab,
+    body[data-view="tarot"] #calendarTab,
+    body[data-view="tarot"] #journalTab,
+    body[data-view="tarot"] #settingsTab,
+    body[data-view="tarot"] #skiesTab,
+    body[data-view="skies"] #calendarTab,
+    body[data-view="skies"] #journalTab,
+    body[data-view="skies"] #settingsTab,
+    body[data-view="skies"] #tarotTab {
+      display: none !important;
+    }
+
+    body[data-view="chart"] .side {
+      display: none;
+    }
+
+    body[data-view="chart"] main {
+      grid-template-columns: 1fr;
+    }
+
+    body[data-view="sky-controls"] main,
+    body[data-view="chart"] main {
+      grid-template-columns: 1fr;
+    }
+
+    body[data-view="sky-controls"] .sky-controls,
+    body[data-view="chart"] .map-shell,
+    body[data-view="calendar"] #calendarTab,
+    body[data-view="journal"] #journalTab,
+    body[data-view="settings"] #settingsTab,
+    body[data-view="tarot"] #tarotTab,
+    body[data-view="skies"] #skiesTab {
+      display: grid;
+    }
+
+    body[data-view="calendar"] main,
+    body[data-view="journal"] main,
+    body[data-view="settings"] main,
+    body[data-view="tarot"] main,
+    body[data-view="skies"] main {
+      grid-template-columns: 1fr;
+    }
+
+    body[data-view="calendar"] .map-shell,
+    body[data-view="journal"] .map-shell,
+    body[data-view="settings"] .map-shell,
+    body[data-view="tarot"] .map-shell,
+    body[data-view="skies"] .map-shell {
+      display: none;
+    }
+
+    body[data-view="calendar"] .sky-controls,
+    body[data-view="journal"] .sky-controls,
+    body[data-view="settings"] .sky-controls,
+    body[data-view="tarot"] .sky-controls,
+    body[data-view="skies"] .sky-controls {
+      display: none;
+    }
+
     /* ── Tarot redesign ── */
     .tarot-shell {
       display: grid;
       gap: 14px;
+      align-content: start;
     }
 
     .tarot-hero {
@@ -1450,7 +1735,7 @@
     .sky-caption-area { margin-top: 10px; }
 
     @media (max-width: 1200px) {
-      main { grid-template-columns: 240px minmax(340px, 1fr) minmax(320px, 420px); gap: 16px; }
+      main { grid-template-columns: minmax(260px, 300px) minmax(380px, 1fr) minmax(320px, 440px); gap: 16px; }
     }
     @media (max-width: 950px) {
       main { grid-template-columns: 1fr; padding-top: 14px; }
@@ -1458,20 +1743,33 @@
       .map-shell { grid-column: 1; grid-row: auto; }
       .planet-legend { grid-column: 1; grid-row: auto; }
       .side { grid-column: 1; grid-row: auto; }
+      .app-header { width: min(100% - 20px, 1560px); }
+      .page-nav { width: min(100% - 20px, 1560px); top: 6px; }
+      .brand-dictionary { grid-template-columns: 1fr; width: min(560px, 100%); }
+    }
+    @media (max-width: 700px) {
+      .map-shell { aspect-ratio: 1 / 1; }
+      .sky-share-panel .share-row { flex-wrap: wrap; }
+      .sky-share-panel .share-row > * { flex: 1 1 46%; }
+      .brand-def { font-size: 0.7rem; }
     }
     @media (max-width: 560px) {
       main { width: min(100% - 20px, 1560px); gap: 14px; }
       h1 { font-size: 2.25rem; }
+      .logo-svg, .logo-generated { max-width: 240px; }
       .controls { grid-template-columns: 1fr; }
       .row { grid-template-columns: 74px 1fr; }
       .row span:last-child { grid-column: 2; }
       .actions > * { flex: 1 1 150px; }
+      .ephemeris-mode-row { font-size: 0.76rem; }
+      .ephemeris-mode-pill { font-size: 0.68rem; }
     }
   </style>
 </head>
 <body>
   <header class="app-header">
     <div class="logo-header">
+        <img id="generatedBrandLogo" class="logo-generated" alt="Generated LuminaSynodic logo">
         <svg class="logo-svg" viewBox="0 0 220 178" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
             <radialGradient id="lsSunGrad" cx="38%" cy="34%" r="62%">
@@ -1512,11 +1810,25 @@
                 letter-spacing="-0.2">LuminaSynodic</text>
         </svg>
         <h1 class="sr-only">LuminaSynodic</h1>
+        <div class="brand-dictionary" aria-label="LuminaSynodic dictionary definition">
+          <div class="brand-def">
+            <span class="def-word">lu·mi·na</span>
+            <span class="def-pron">/ˈluːmɪnə/</span>
+            <span class="def-pos">noun</span>
+            lights, luminous bodies, and the measured flow of visible radiance.
+          </div>
+          <div class="brand-def">
+            <span class="def-word">syn·od·ic</span>
+            <span class="def-pron">/sɪˈnɒdɪk/</span>
+            <span class="def-pos">adjective</span>
+            relating to recurring celestial alignments observed from Earth.
+          </div>
+        </div>
         <details class="logo-details">
-          <summary>Etymology</summary>
+          <summary>Etymology Notes</summary>
           <div class="logo-defs">
-            <div class="logo-def"><span class="def-word">lu·mi·na</span> <span class="def-pron">/ˈlo͞o·mə·nə/</span> <span class="def-pos">n.</span> plural of lumen; the SI unit of luminous flux — also (Latin) lights; the eyes as organs of sight</div>
-            <div class="logo-def"><span class="def-word">syn·od·ic</span> <span class="def-pron">/si·ˈnä·dik/</span> <span class="def-pos">adj.</span> of or relating to the period between two successive conjunctions of the same celestial bodies</div>
+            <div class="logo-def"><span class="def-word">lumina</span> traces to Latin roots for light and sight, grounding the app in perception and clarity.</div>
+            <div class="logo-def"><span class="def-word">synodic</span> comes from periodic conjunction cycles, tying interpretation to orbital timing.</div>
           </div>
         </details>
         <div class="eyebrow" id="dateEyebrow">Today</div>
@@ -1524,8 +1836,18 @@
       <p class="lede">Live ephemeris positions with date travel, major aspects, retrogrades, and optional local horizon context.</p>
   </header>
 
+  <nav class="page-nav" aria-label="Page sections">
+    <button type="button" class="secondary active" data-view="sky-controls">Sky Controls</button>
+    <button type="button" class="secondary" data-view="chart">Chart</button>
+    <button type="button" class="secondary" data-view="calendar">Calendar</button>
+    <button type="button" class="secondary" data-view="journal">Journal</button>
+    <button type="button" class="secondary" data-view="settings">Settings</button>
+    <button type="button" class="secondary" data-view="tarot">Tarot</button>
+    <button type="button" class="secondary" data-view="skies">Skies</button>
+  </nav>
+
   <main>
-    <section class="sky-controls">
+    <section class="sky-controls" id="skyControls">
       <section class="panel controls">
         <label>Date
           <input id="dateInput" type="date">
@@ -1544,49 +1866,86 @@
           <button type="button" class="secondary" data-shift="7">+7d</button>
           <button type="button" class="secondary" id="locationBtn">Use My Location</button>
         </div>
-      </section>
-
-      <section class="panel insight" aria-live="polite">
-        <h2 id="insightTitle">Current Sky</h2>
-        <p id="insightText"></p>
-      </section>
-
-      <section class="panel forecast-panel forecast-hidden" id="precomputedForecastPanel">
-        <div class="forecast-title">Today's Forecast</div>
-        <div class="forecast-source" id="precomputedForecastSource"></div>
-        <div class="forecast-body" id="precomputedForecastBody"></div>
-      </section>
-
-      <section class="panel">
-        <div class="table" id="planetTable" aria-label="Planet positions"></div>
-      </section>
-
-      <section class="panel">
-        <label>What's going on in your life?
-          <textarea class="chat-input" id="chatInput" placeholder="Example: loss, a new relationship, money pressure, job tension, family conflict, a move, or a sudden opportunity."></textarea>
-        </label>
-        <div class="actions">
-          <button type="button" id="analyzeChat">Map to Sky</button>
-          <button type="button" class="secondary" id="clearChat">Clear</button>
-          <button type="button" class="secondary hidden" id="saveToJournalBtn">Save to Journal</button>
+        <div class="ephemeris-mode-row wide">
+          <span>Ephemeris Visual Layer</span>
+          <span class="ephemeris-mode-pill" id="ephemerisModeLabel">Glyph</span>
+          <button type="button" class="secondary" id="ephemerisModeBtn">Cycle View</button>
         </div>
-        <div class="chat-log" id="chatLog" aria-live="polite"></div>
       </section>
-      <section class="panel sky-share-panel">
-        <textarea class="caption" id="caption" aria-label="Sky caption"></textarea>
-        <div class="share-row">
-          <button type="button" class="secondary hidden-install" id="installAppBtn">Install App</button>
-          <button type="button" id="copyCaption">Copy Caption</button>
-          <button type="button" class="secondary" id="sharePage">Share Link</button>
-          <a class="button secondary" href="sky-map-social.png" download>Download Preview</a>
+
+      <details class="panel accordion-panel insight" aria-live="polite" open>
+        <summary>
+          <span id="insightTitle">Current Sky</span>
+          <span class="accordion-summary-meta">Quick read</span>
+        </summary>
+        <div class="accordion-body compact">
+          <p id="insightText"></p>
         </div>
-        <div class="caption-preview" id="captionPreview"></div>
-        <p class="source-note">Ephemeris: Astronomy Engine, an MIT-licensed library based on VSOP87 and NOVAS models. Location is used for local horizon altitude/azimuth, not stored or sent anywhere.</p>
-        <div class="status" id="status"></div>
-      </section>
+      </details>
+
+      <details class="panel accordion-panel forecast-panel forecast-hidden" id="precomputedForecastPanel">
+        <summary>
+          <span>Today's Forecast</span>
+          <span class="accordion-summary-meta">Optional detail</span>
+        </summary>
+        <div class="accordion-body">
+          <div class="forecast-source" id="precomputedForecastSource"></div>
+          <div class="forecast-body" id="precomputedForecastBody"></div>
+        </div>
+      </details>
+
+      <details class="panel accordion-panel" open>
+        <summary>
+          <span>Planet Positions</span>
+          <span class="accordion-summary-meta">Live ephemeris</span>
+        </summary>
+        <div class="accordion-body">
+          <div class="table" id="planetTable" aria-label="Planet positions"></div>
+        </div>
+      </details>
+
+      <details class="panel accordion-panel" id="lifePromptPanel">
+        <summary>
+          <span>Life Prompt</span>
+          <span class="accordion-summary-meta">Map a situation</span>
+        </summary>
+        <div class="accordion-body">
+          <label>What's going on in your life?
+            <textarea class="chat-input" id="chatInput" placeholder="Example: loss, a new relationship, money pressure, job tension, family conflict, a move, or a sudden opportunity."></textarea>
+          </label>
+          <div class="actions">
+            <button type="button" id="analyzeChat">Map to Sky</button>
+            <button type="button" class="secondary" id="clearChat">Clear</button>
+            <button type="button" class="secondary hidden" id="saveToJournalBtn">Save to Journal</button>
+          </div>
+          <div class="chat-log" id="chatLog" aria-live="polite"></div>
+        </div>
+      </details>
+
+      <details class="panel accordion-panel sky-share-panel" id="sharePanel">
+        <summary>
+          <span>Share & Export</span>
+          <span class="accordion-summary-meta">Links, downloads, preview</span>
+        </summary>
+        <div class="accordion-body">
+          <textarea class="caption" id="caption" aria-label="Sky caption"></textarea>
+          <div class="share-row">
+            <button type="button" class="secondary hidden-install" id="installAppBtn">Install App</button>
+            <button type="button" id="copyCaption">Copy Caption</button>
+            <button type="button" class="secondary" id="sharePage">Share Link</button>
+            <a class="button secondary" href="data/interpretation-guide.md" download>Download Interp Guide</a>
+            <a class="button secondary" href="data/interpretation-index.json" download>Download Interp Index</a>
+            <a class="button secondary" href="standalone/interpretation-sources.json" download>Download Source Catalog</a>
+            <a class="button secondary" href="sky-map-social.png" download>Download Preview</a>
+          </div>
+          <div class="caption-preview" id="captionPreview"></div>
+          <p class="source-note">Ephemeris: Astronomy Engine, an MIT-licensed library based on VSOP87 and NOVAS models. Location is used for local horizon altitude/azimuth, not stored or sent anywhere.</p>
+          <div class="status" id="status"></div>
+        </div>
+      </details>
     </section>
 
-    <section class="map-shell" aria-label="Live astrological sky map">
+    <section class="map-shell" id="chartSection" aria-label="Live astrological sky map">
       <svg id="chart" viewBox="-70 -70 860 860" role="img" aria-labelledby="chartTitle chartDesc">
         <title id="chartTitle">LuminaSynodic - Daily Astrological Sky Map</title>
         <desc id="chartDesc">Live zodiac wheel with calculated planet positions and major aspects.</desc>
@@ -1594,10 +1953,11 @@
     </section>
     <div id="planetLegend" class="planet-legend"></div>
 
-    <aside class="side">
+    <aside class="side" id="tabArea">
       <div class="tabs">
         <button type="button" class="tab-btn active" data-tab="calendar">Calendar</button>
         <button type="button" class="tab-btn" data-tab="journal">Journal</button>
+        <button type="button" class="tab-btn" data-tab="settings">Settings</button>
         <button type="button" class="tab-btn" data-tab="tarot">Tarot</button>
         <button type="button" class="tab-btn" data-tab="skies">Skies</button>
       </div>
@@ -1668,7 +2028,7 @@
               </div>
               <div class="j-btn-row">
                 <button type="button" class="secondary btn-sm" id="journalSwitchBtn">Switch</button>
-                <button type="button" class="secondary btn-sm" id="journalChangePwdBtn">Password</button>
+                <button type="button" class="secondary btn-sm" id="journalChangePwdBtn">Settings</button>
                 <button type="button" class="secondary btn-sm" id="journalLockBtn">Lock</button>
               </div>
             </div>
@@ -1723,60 +2083,6 @@
             </div>
           </section>
 
-          <!-- Change password panel -->
-          <section class="panel hidden" id="journalChangePwdPanel">
-            <h2 class="j-subheading">Settings</h2>
-            <label>AI provider <small class="j-label-hint">(auto tries local Gemini key, then server bridge)</small>
-              <select id="aiProviderSelect">
-                <option value="auto">Auto</option>
-                <option value="gemini">Gemini</option>
-                <option value="mage-local">Mage Local</option>
-                <option value="gguf-local">GGUF Local</option>
-                <option value="homeplanet-local">Homeplanet Local</option>
-                <option value="vedastro">VedAstro MCP</option>
-                <option value="kerykeion">Kerykeion API</option>
-              </select>
-            </label>
-            <label>Gemini API key <small class="j-label-hint">(stored locally — optional in auto mode)</small>
-              <input type="password" id="geminiApiKeyInput" placeholder="AIza..." autocomplete="off">
-            </label>
-            <label>Bridge endpoint <small class="j-label-hint">(optional override for VedAstro/Kerykeion)</small>
-              <input type="url" id="astroBridgeEndpointInput" placeholder="https://..." autocomplete="off">
-            </label>
-            <label>Local runtime URL <small class="j-label-hint">(for Mage/GGUF/Homeplanet local bridge)</small>
-              <input type="url" id="localRuntimeUrlInput" placeholder="http://127.0.0.1:8787" autocomplete="off">
-            </label>
-            <div class="mage-launch-row">
-              <button type="button" id="launchMageBtn" class="secondary btn-sm">Launch Mage (Dev)</button>
-              <button type="button" id="mageStatusBtn" class="secondary btn-sm">Mage Status</button>
-              <span id="mageLaunchStatus" class="source-note j-key-status"></span>
-            </div>
-            <label>Bridge API key <small class="j-label-hint">(stored locally, sent only to your selected endpoint)</small>
-              <input type="password" id="astroBridgeApiKeyInput" placeholder="Optional key/token" autocomplete="off">
-            </label>
-            <div class="actions j-actions j-key-row">
-              <button type="button" id="saveGeminiKeyBtn" class="secondary btn-sm">Save AI Settings</button>
-              <span id="geminiKeyStatus" class="source-note j-key-status"></span>
-            </div>
-            <label>Display name <small class="j-label-hint">(stored encrypted, optional)</small>
-              <input type="text" id="journalDisplayNameEdit" placeholder="Your name" autocomplete="off">
-            </label>
-            <label>Birth date <small class="j-label-hint">(for Vimshottari Dasha — stored encrypted)</small>
-              <input type="date" id="journalBirthDateEdit" autocomplete="bday">
-            </label>
-            <label>Birth time <small class="j-label-hint">(optional — improves Dasha precision)</small>
-              <input type="time" id="journalBirthTimeEdit" step="60" autocomplete="bday-hour">
-            </label>
-            <h2 class="j-subheading j-settings-divider">Change Password</h2>
-            <label>Current password <input type="password" id="journalCurrentPwd" autocomplete="current-password"></label>
-            <label>New password <input type="password" id="journalNewPwd" autocomplete="new-password"></label>
-            <label>Confirm new <input type="password" id="journalConfirmNewPwd" autocomplete="new-password"></label>
-            <div class="actions j-actions">
-              <button type="button" id="journalConfirmChangePwdBtn">Update</button>
-              <button type="button" class="secondary" id="journalCancelChangePwdBtn">Cancel</button>
-            </div>
-          </section>
-
           <!-- Clear-all confirmation panel -->
           <section class="panel hidden" id="journalClearPanel">
             <h2 class="j-subheading">Clear All Entries</h2>
@@ -1791,6 +2097,52 @@
           </section>
         </div>
 
+      </div>
+
+      <div id="settingsTab" class="tab-content">
+        <section class="panel" id="journalSettingsSection">
+          <div class="j-header">
+            <div>
+              <h2 class="j-subheading">Settings</h2>
+              <p class="j-entry-count">Journal privacy, local runtime, and account details</p>
+            </div>
+          </div>
+          <label>Interpretation source <small class="j-label-hint">(Mage local only for end users)</small>
+            <select id="aiProviderSelect">
+              <option value="mage-local" selected>Mage Local</option>
+            </select>
+          </label>
+          <label>Local runtime URL <small class="j-label-hint">(Mage local bridge)</small>
+            <input type="url" id="localRuntimeUrlInput" placeholder="http://127.0.0.1:8787" autocomplete="off">
+          </label>
+          <div class="mage-launch-row">
+            <button type="button" id="launchMageBtn" class="secondary btn-sm">Launch Mage (Dev)</button>
+            <button type="button" id="mageStatusBtn" class="secondary btn-sm">Mage Status</button>
+            <button type="button" id="generateBrandLogoBtn" class="secondary btn-sm">Generate Brand Logo</button>
+            <span id="mageLaunchStatus" class="source-note j-key-status"></span>
+          </div>
+          <div class="actions j-actions j-key-row">
+            <button type="button" id="saveGeminiKeyBtn" class="secondary btn-sm">Save Local Settings</button>
+            <span id="geminiKeyStatus" class="source-note j-key-status"></span>
+          </div>
+          <label>Display name <small class="j-label-hint">(stored encrypted, optional)</small>
+            <input type="text" id="journalDisplayNameEdit" placeholder="Your name" autocomplete="off">
+          </label>
+          <label>Birth date <small class="j-label-hint">(for Vimshottari Dasha — stored encrypted)</small>
+            <input type="date" id="journalBirthDateEdit" autocomplete="bday">
+          </label>
+          <label>Birth time <small class="j-label-hint">(optional — improves Dasha precision)</small>
+            <input type="time" id="journalBirthTimeEdit" step="60" autocomplete="bday-hour">
+          </label>
+          <h2 class="j-subheading j-settings-divider">Change Password</h2>
+          <label>Current password <input type="password" id="journalCurrentPwd" autocomplete="current-password"></label>
+          <label>New password <input type="password" id="journalNewPwd" autocomplete="new-password"></label>
+          <label>Confirm new <input type="password" id="journalConfirmNewPwd" autocomplete="new-password"></label>
+          <div class="actions j-actions">
+            <button type="button" id="journalConfirmChangePwdBtn">Update</button>
+            <button type="button" class="secondary" id="journalCancelChangePwdBtn">Cancel</button>
+          </div>
+        </section>
       </div>
 
       <!-- ── Tarot Tab ── -->
@@ -1831,6 +2183,28 @@
             <button type="button" id="tarotGenerateDeckBtn">Generate Deck from Source Art</button>
             <button type="button" class="secondary btn-sm" id="tarotRegenerateCardBtn">Regenerate Single Card</button>
             <button type="button" class="secondary btn-sm" id="tarotCopyManifestBtn">Copy Source Manifest</button>
+          </div>
+          <div class="tarot-dev-meta">
+            <label class="tarot-search">Deck option (all users)
+              <select id="tarotDeckOptionSelect"></select>
+            </label>
+            <div class="actions">
+              <button type="button" class="secondary btn-sm" id="tarotRefreshDeckOptionsBtn">Refresh Deck Options</button>
+            </div>
+          </div>
+          <div class="tarot-dev-meta">
+            <label class="tarot-search">Publish deck name
+              <input id="tarotPublishDeckName" type="text" placeholder="Lumina Synodic - Velvet Gold">
+            </label>
+            <label class="tarot-search">Publish slug
+              <input id="tarotPublishDeckSlug" type="text" placeholder="velvet-gold">
+            </label>
+            <label class="tarot-search">Admin key
+              <input id="tarotPublishAdminKey" type="password" placeholder="deck publish key">
+            </label>
+            <div class="actions">
+              <button type="button" id="tarotPublishDeckBtn">Upload to Live Deck Options</button>
+            </div>
           </div>
           <div class="tarot-dev-meta">
             <label class="tarot-search">Card to regenerate
@@ -2008,6 +2382,30 @@
     const status = document.getElementById('status');
     const chatInput = document.getElementById('chatInput');
     const chatLog = document.getElementById('chatLog');
+    const pageView = new URLSearchParams(window.location.search).get('view') || 'sky-controls';
+
+    document.body.dataset.view = pageView;
+
+    function navigateToView(view) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('view', view || 'sky-controls');
+      window.location.href = url.toString();
+    }
+
+    function syncPageNavActive() {
+      document.querySelectorAll('.page-nav [data-view]').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.view === pageView);
+      });
+    }
+
+    function initializePageView() {
+      if (pageView === 'calendar') document.querySelector('[data-tab="calendar"]')?.click();
+      if (pageView === 'journal') document.querySelector('[data-tab="journal"]')?.click();
+      if (pageView === 'settings') document.querySelector('[data-tab="settings"]')?.click();
+      if (pageView === 'tarot') document.querySelector('[data-tab="tarot"]')?.click();
+      if (pageView === 'skies') document.querySelector('[data-tab="skies"]')?.click();
+      syncPageNavActive();
+    }
 
     // ︎ = Unicode text variation selector — forces symbol rendering, not emoji
     const TV = '︎';
@@ -2061,11 +2459,26 @@
     let selected = 'Sun';
     let observer = null;
     let latestData = [];
-    let wheelScale = 1.0;
+    let wheelScale = 1.03;
     let latestAspects = [];
     let latestDate = new Date();
     let dialDrag = null;
     let dateRingMode = 'days';
+    const EPHEMERIS_MODES = ['glyph', 'rich', 'aether3d'];
+    let ephemerisVisualMode = localStorage.getItem('lumina_ephemeris_mode') || 'glyph';
+    if (!EPHEMERIS_MODES.includes(ephemerisVisualMode)) ephemerisVisualMode = 'glyph';
+    const PLANET_RICH_MARKERS = {
+      Sun: '☀',
+      Moon: '☾',
+      Mercury: '☿',
+      Venus: '♀',
+      Mars: '♂',
+      Jupiter: '♃',
+      Saturn: '♄',
+      Uranus: '⛢',
+      Neptune: '♆',
+      Pluto: '♇'
+    };
     function isMultOf(v, u) { const r = Math.abs(v) % u; return r < u * 0.012 || (u - r) < u * 0.012; }
     const DATE_MODE_CONF = {
       days:   { halfRange: 30, ticks: 120, tickStep: 0.5,  majorEvery: 5,  minorEvery: 1,   msPerUnit: 86400000,          label: 'DAYS' },
@@ -2090,6 +2503,17 @@
     function point(longitude, radius) {
       const rad = (longitude - 90) * Math.PI / 180;
       return { x: 360 + radius * Math.cos(rad), y: 360 + radius * Math.sin(rad) };
+    }
+    function updateEphemerisModeLabel() {
+      const label = document.getElementById('ephemerisModeLabel');
+      const btn = document.getElementById('ephemerisModeBtn');
+      const modeLabel = {
+        glyph: 'Glyph',
+        rich: 'Rich',
+        aether3d: 'Aether 3D'
+      }[ephemerisVisualMode] || 'Glyph';
+      if (label) label.textContent = modeLabel;
+      if (btn) btn.textContent = 'Cycle View';
     }
     function signInfo(longitude) {
       const lon = normalize(longitude);
@@ -2317,7 +2741,7 @@ ${aspectLines || 'none within orb'}`;
     }
 
     function getAiProvider() {
-      return localStorage.getItem('lumina_ai_provider') || 'auto';
+      return localStorage.getItem('lumina_ai_provider') || 'mage-local';
     }
 
     function getBridgeEndpoint() {
@@ -2382,6 +2806,70 @@ ${aspectLines || 'none within orb'}`;
       }
     }
 
+    function restoreGeneratedBrandLogo() {
+      const img = document.getElementById('generatedBrandLogo');
+      const svg = document.querySelector('.logo-svg');
+      if (!img || !svg) return;
+      const stored = localStorage.getItem('lumina_brand_logo_src');
+      if (!stored) return;
+      img.src = stored;
+      img.classList.add('visible');
+      svg.style.display = 'none';
+    }
+
+    async function generateBrandLogoFromMage() {
+      const statusEl = document.getElementById('mageLaunchStatus');
+      const img = document.getElementById('generatedBrandLogo');
+      const svg = document.querySelector('.logo-svg');
+      if (!statusEl) return;
+
+      statusEl.textContent = 'Generating a loose logo concept via Mage...';
+      try {
+        const prompt = `Create one playful but polished logo concept for LuminaSynodic.
+
+Keep it simple. Use a purple and gold celestial mood with a moon, sun, or orbit motif.
+Favor a clean silhouette over fine detail. Avoid overworked composition.
+If the tool supports image output, return the image directly and keep any text response brief.`;
+
+        const result = await callLocalRuntime('/local/bridge', {
+          provider: 'mage-local',
+          prompt,
+          skyContext: '',
+          intent: 'brand-logo',
+          contextHints: ['brand-logo']
+        });
+
+        const payload = result?.data ?? result;
+        let imageSrc = '';
+        if (typeof payload === 'string') {
+          if (/^data:image\//i.test(payload) || /^https?:\/\//i.test(payload)) imageSrc = payload;
+        } else if (payload && typeof payload === 'object') {
+          const rawBase64 = payload.imageBase64 || payload.base64 || payload.imageData || '';
+          const mime = payload.mimeType || 'image/png';
+          if (payload.imageUrl) imageSrc = payload.imageUrl;
+          else if (rawBase64) imageSrc = `data:${mime};base64,${rawBase64}`;
+        }
+
+        const manifestText = typeof payload === 'string' ? payload : JSON.stringify(payload, null, 2);
+        await saveTarotDeckManifest(manifestText, 'brand-logo-concept');
+
+        if (imageSrc && img && svg) {
+          img.src = imageSrc;
+          img.classList.add('visible');
+          svg.style.display = 'none';
+          localStorage.setItem('lumina_brand_logo_src', imageSrc);
+          statusEl.textContent = 'Generated logo loaded from Mage output.';
+          setStatus('Mage returned a logo image and it is now active in the header.');
+        } else {
+          statusEl.textContent = 'Logo brief generated. No direct image returned by Mage.';
+          setStatus('Saved brand logo brief. Configure Mage image output to return URL/base64 for auto-preview.');
+        }
+      } catch (error) {
+        statusEl.textContent = error.message || 'Brand logo generation failed';
+        setStatus(error.message || 'Could not generate brand logo via Mage.');
+      }
+    }
+
     async function loadPrecomputedForecast() {
       const panel = document.getElementById('precomputedForecastPanel');
       const source = document.getElementById('precomputedForecastSource');
@@ -2409,15 +2897,14 @@ ${aspectLines || 'none within orb'}`;
       const div = document.createElement('div');
       div.className = 'j-bubble ai j-no-key-card';
       div.innerHTML = `
-        <strong>AI not connected</strong>
-        <p>You can connect Gemini, VedAstro MCP, or a Kerykeion-compatible API from Journal settings.</p>
+        <strong>Mage not connected</strong>
+        <p>Interpretations now run through the local Mage runtime only.</p>
         <ol>
-          <li>Open <strong>Journal → Password/Settings</strong></li>
-          <li>Choose an <strong>AI provider</strong></li>
-          <li>For Gemini: add your <code>AIza...</code> key</li>
-          <li>For VedAstro/Kerykeion: optionally set endpoint + API key</li>
+          <li>Open <strong>Settings</strong></li>
+          <li>Keep <strong>Mage Local</strong> selected</li>
+          <li>Launch Mage from Dev or request a dev-side interp</li>
         </ol>
-        <p style="margin-top:6px;font-size:0.78rem;color:var(--soft);">All personal keys are stored only on this device and sent only when you query AI.</p>
+        <p style="margin-top:6px;font-size:0.78rem;color:var(--soft);">No cloud keys are used in the normal flow.</p>
       `;
       if (chatLogEl) chatLogEl.appendChild(div);
       return div;
@@ -2443,64 +2930,22 @@ ${aspectLines || 'none within orb'}`;
     }
 
     async function querySkyAssistant(prompt, skyContext) {
-      const provider = getAiProvider();
-      const userKey = getGeminiKey();
-      const bridgeEndpoint = getBridgeEndpoint();
-      const bridgeApiKey = getBridgeApiKey();
+      const provider = 'mage-local';
       const localRuntimeUrl = getLocalRuntimeUrl();
 
-      // Local runtime providers (Mage / GGUF / Homeplanet).
-      if (provider === 'mage-local' || provider === 'gguf-local' || provider === 'homeplanet-local') {
-        const localResult = await postJsonWithFallback(
-          [`${localRuntimeUrl}/local/bridge`, '/local/bridge'],
-          {
-            provider,
-            prompt,
-            skyContext: skyContext || '',
-            contextHints: ['archivist-projects', 'mage-system', 'indra-system']
-          }
-        );
-        if (localResult.ok && localResult.data?.data) return localResult.data.data;
-        throw new Error('Local runtime unavailable. Start standalone/local-runtime.js first.');
-      }
-
-      // Gemini-only mode requires a local Gemini key.
-      if (provider === 'gemini' && !userKey) {
-        throw new Error('NO_KEY');
-      }
-
-      // Try local Gemini key directly when selected or in auto mode.
-      if (userKey && (provider === 'gemini' || provider === 'auto')) {
-        return await _callGeminiDirect(prompt, skyContext, userKey);
-      }
-
-      // Try the multi-provider bridge for VedAstro, Kerykeion, or auto fallback.
-      if (provider === 'vedastro' || provider === 'kerykeion' || provider === 'auto') {
-        const bridgeResult = await postJsonWithFallback(
-          ['/api/astro-bridge', '/.netlify/functions/astro-bridge'],
-          {
-            provider,
-            prompt,
-            skyContext: skyContext || '',
-            bridgeEndpoint: bridgeEndpoint || undefined,
-            bridgeApiKey: bridgeApiKey || undefined
-          }
-        );
-        if (bridgeResult.ok && bridgeResult.data?.data) return bridgeResult.data.data;
-      }
-
-      // Legacy Gemini proxy fallback.
-      const proxyResult = await postJsonWithFallback(
-        ['/api/query', '/.netlify/functions/query'],
-        { prompt, skyContext: skyContext || '' }
+      const localResult = await postJsonWithFallback(
+        [`${localRuntimeUrl}/local/bridge`, '/local/bridge'],
+        {
+          provider,
+          prompt,
+          skyContext: skyContext || '',
+          intent: 'interpret-current-sky',
+          contextHints: ['archivist-projects', 'mage-system', 'indra-system']
+        }
       );
-      if (proxyResult.ok && proxyResult.data?.data) return proxyResult.data.data;
+      if (localResult.ok && localResult.data?.data) return localResult.data.data;
 
-      if (provider === 'gemini' || provider === 'auto') {
-        throw new Error('NO_KEY');
-      }
-
-      throw new Error('NO_KEY');
+      throw new Error('Mage local runtime unavailable. Start standalone/local-runtime.js first or request a dev-side interp.');
     }
 
     async function _callGeminiDirect(prompt, skyContext, apiKey) {
@@ -2789,17 +3234,74 @@ ${skyContext}`
         group.addEventListener('mouseleave', hideTooltip);
         group.addEventListener('touchstart', () => showTooltip(planet, aspectData, svgRect, dot), { passive: true });
         group.addEventListener('touchend', hideTooltip, { passive: true });
-        group.append(
-          el('circle', { cx: dot.x, cy: dot.y, r: 14, fill: 'transparent' }),
-          el('circle', {
-            cx: dot.x, cy: dot.y,
-            r: isSelected ? 7 : 5,
-            fill: planet.color,
-            stroke: isSelected ? '#fff' : 'none',
-            'stroke-width': isSelected ? 1.5 : 0,
-            opacity: isSelected ? 1 : 0.85
-          })
-        );
+        if (ephemerisVisualMode === 'aether3d') {
+          group.append(
+            el('circle', { cx: dot.x, cy: dot.y, r: 19, fill: 'transparent' }),
+            el('circle', {
+              cx: dot.x + 1.8, cy: dot.y + 2.2,
+              r: isSelected ? 11.6 : 10.2,
+              fill: 'rgba(5,4,10,0.52)',
+              opacity: 0.9
+            }),
+            el('circle', {
+              cx: dot.x, cy: dot.y,
+              r: isSelected ? 11 : 9.6,
+              fill: 'rgba(20,14,34,0.95)',
+              stroke: planet.color,
+              'stroke-width': isSelected ? 2.6 : 1.8,
+              opacity: 0.98
+            }),
+            el('circle', {
+              cx: dot.x - 2.1, cy: dot.y - 2.1,
+              r: isSelected ? 3.1 : 2.6,
+              fill: 'rgba(255,245,220,0.28)'
+            }),
+            el('text', {
+              x: dot.x,
+              y: dot.y + 0.2,
+              'text-anchor': 'middle',
+              'dominant-baseline': 'middle',
+              fill: planet.color,
+              'font-size': isSelected ? 10.9 : 9.8,
+              'font-weight': 700,
+              'font-family': "'Noto Sans Symbols 2','Segoe UI Symbol',Symbol,sans-serif"
+            }, PLANET_RICH_MARKERS[planet.key] || planet.glyph)
+          );
+        } else if (ephemerisVisualMode === 'rich') {
+          group.append(
+            el('circle', { cx: dot.x, cy: dot.y, r: 16, fill: 'transparent' }),
+            el('circle', {
+              cx: dot.x, cy: dot.y,
+              r: isSelected ? 10 : 8.8,
+              fill: 'rgba(18,12,28,0.92)',
+              stroke: planet.color,
+              'stroke-width': isSelected ? 2.4 : 1.6,
+              opacity: 0.96
+            }),
+            el('text', {
+              x: dot.x,
+              y: dot.y,
+              'text-anchor': 'middle',
+              'dominant-baseline': 'middle',
+              fill: planet.color,
+              'font-size': isSelected ? 10.5 : 9.4,
+              'font-weight': 700,
+              'font-family': "'Noto Sans Symbols 2','Segoe UI Symbol',Symbol,sans-serif"
+            }, PLANET_RICH_MARKERS[planet.key] || planet.glyph)
+          );
+        } else {
+          group.append(
+            el('circle', { cx: dot.x, cy: dot.y, r: 14, fill: 'transparent' }),
+            el('circle', {
+              cx: dot.x, cy: dot.y,
+              r: isSelected ? 7 : 5,
+              fill: planet.color,
+              stroke: isSelected ? '#fff' : 'none',
+              'stroke-width': isSelected ? 1.5 : 0,
+              opacity: isSelected ? 1 : 0.85
+            })
+          );
+        }
         wg.append(group);
       });
 
@@ -3143,10 +3645,19 @@ ${skyContext}`
         document.getElementById(`${btn.dataset.tab}Tab`).classList.add('active');
         if (btn.dataset.tab === 'calendar') renderCalendar();
         if (btn.dataset.tab === 'journal') journalInitView();
+        if (btn.dataset.tab === 'settings') syncSettingsFields();
         if (btn.dataset.tab === 'tarot') initTarotTab();
         if (btn.dataset.tab === 'skies') renderZodiacWheel();
       });
     });
+
+    document.querySelectorAll('.page-nav [data-view]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        navigateToView(btn.dataset.view);
+      });
+    });
+
+    initializePageView();
 
     // (profile/login removed — identity is managed by the encrypted journal)
 
@@ -3666,6 +4177,14 @@ ${skyContext}`
       renderDashaPanel();
     }
 
+    function syncSettingsFields() {
+      document.getElementById('journalDisplayNameEdit').value = journalName;
+      document.getElementById('journalBirthDateEdit').value = journalBirthDate;
+      document.getElementById('journalBirthTimeEdit').value = journalBirthTime;
+      document.getElementById('aiProviderSelect').value = 'mage-local';
+      document.getElementById('localRuntimeUrlInput').value = getLocalRuntimeUrl();
+    }
+
     document.getElementById('journalSetupBtn').addEventListener('click', async () => {
       const name = document.getElementById('journalDisplayName').value.trim();
       const pwd = document.getElementById('journalPwdNew').value;
@@ -3698,7 +4217,6 @@ ${skyContext}`
       journalBirthDate = '';
       journalBirthTime = '';
       journalActiveId = null;
-      document.getElementById('journalChangePwdPanel').classList.add('hidden');
       document.getElementById('journalClearPanel').classList.add('hidden');
       journalInitView();
     });
@@ -3710,7 +4228,6 @@ ${skyContext}`
       journalBirthDate = '';
       journalBirthTime = '';
       journalActiveId = null;
-      document.getElementById('journalChangePwdPanel').classList.add('hidden');
       document.getElementById('journalClearPanel').classList.add('hidden');
       journalInitView();
     });
@@ -3781,41 +4298,21 @@ ${skyContext}`
     });
 
     document.getElementById('saveGeminiKeyBtn').addEventListener('click', () => {
-      const key = document.getElementById('geminiApiKeyInput').value.trim();
       const aiProvider = document.getElementById('aiProviderSelect').value;
-      const bridgeEndpoint = document.getElementById('astroBridgeEndpointInput').value.trim();
       const localRuntimeUrl = document.getElementById('localRuntimeUrlInput').value.trim();
-      const bridgeApiKey = document.getElementById('astroBridgeApiKeyInput').value.trim();
       const status = document.getElementById('geminiKeyStatus');
 
-      localStorage.setItem('lumina_ai_provider', aiProvider || 'auto');
-
-      if (!key) localStorage.removeItem('lumina_gemini_key');
-      else localStorage.setItem('lumina_gemini_key', key);
-
-      if (!bridgeEndpoint) localStorage.removeItem('lumina_bridge_endpoint');
-      else localStorage.setItem('lumina_bridge_endpoint', bridgeEndpoint);
+      localStorage.setItem('lumina_ai_provider', aiProvider || 'mage-local');
 
       if (!localRuntimeUrl) localStorage.removeItem('lumina_local_runtime_url');
       else localStorage.setItem('lumina_local_runtime_url', localRuntimeUrl);
 
-      if (!bridgeApiKey) localStorage.removeItem('lumina_bridge_api_key');
-      else localStorage.setItem('lumina_bridge_api_key', bridgeApiKey);
-
-      document.getElementById('geminiApiKeyInput').value = '';
-      document.getElementById('astroBridgeApiKeyInput').value = '';
-      status.textContent = 'AI settings saved.';
+      status.textContent = 'Mage local settings saved.';
       setTimeout(() => { status.textContent = ''; }, 3000);
     });
 
     document.getElementById('journalChangePwdBtn').addEventListener('click', () => {
-      document.getElementById('journalChangePwdPanel').classList.remove('hidden');
-      document.getElementById('journalDisplayNameEdit').value = journalName;
-      document.getElementById('journalBirthDateEdit').value = journalBirthDate;
-      document.getElementById('journalBirthTimeEdit').value = journalBirthTime;
-      document.getElementById('aiProviderSelect').value = getAiProvider();
-      document.getElementById('astroBridgeEndpointInput').value = getBridgeEndpoint();
-      document.getElementById('localRuntimeUrlInput').value = getLocalRuntimeUrl();
+      document.querySelector('[data-tab="settings"]')?.click();
     });
 
     // ── PWA install + service worker (standalone mode) ──
@@ -3854,7 +4351,6 @@ ${skyContext}`
     })();
 
     document.getElementById('journalCancelChangePwdBtn').addEventListener('click', () => {
-      document.getElementById('journalChangePwdPanel').classList.add('hidden');
       ['journalCurrentPwd', 'journalNewPwd', 'journalConfirmNewPwd'].forEach(id => {
         document.getElementById(id).value = '';
       });
@@ -3872,7 +4368,6 @@ ${skyContext}`
         journalBirthDate = document.getElementById('journalBirthDateEdit').value;
         journalBirthTime = document.getElementById('journalBirthTimeEdit').value;
         await journalPersist();
-        document.getElementById('journalChangePwdPanel').classList.add('hidden');
         journalUpdateMeta();
         renderDashaPanel();
         setStatus('Name updated.');
@@ -3886,7 +4381,6 @@ ${skyContext}`
         journalBirthDate = document.getElementById('journalBirthDateEdit').value;
         journalBirthTime = document.getElementById('journalBirthTimeEdit').value;
         await journalChangePassword(current, next);
-        document.getElementById('journalChangePwdPanel').classList.add('hidden');
         ['journalCurrentPwd', 'journalNewPwd', 'journalConfirmNewPwd'].forEach(id => {
           document.getElementById(id).value = '';
         });
@@ -4227,6 +4721,161 @@ ${skyContext}`
     let tarotSearchQuery = '';
     let tarotDeckPromptPack = '';
     let tarotDevVisible = false;
+    let tarotDeckCatalog = [];
+    let tarotActiveDeckSlug = localStorage.getItem('lumina_tarot_deck_slug') || 'classic-source';
+
+    function slugifyDeck(input) {
+      return String(input || 'tarot-deck')
+        .toLowerCase()
+        .replace(/[^a-z0-9_-]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 48) || 'tarot-deck';
+    }
+
+    function baseDeckCatalog() {
+      return [{
+        slug: 'classic-source',
+        name: 'Classic Source Deck',
+        summary: 'Built-in LuminaSynodic tarot source deck.',
+        source: 'builtin',
+        createdAt: null
+      }];
+    }
+
+    function normalizeDeckEntry(raw) {
+      if (!raw || typeof raw !== 'object') return null;
+      const slug = slugifyDeck(raw.slug || raw.name || 'tarot-deck');
+      return {
+        slug,
+        name: String(raw.name || slug),
+        summary: String(raw.summary || ''),
+        source: String(raw.source || 'published'),
+        createdAt: raw.createdAt || raw.savedAt || null,
+        manifestPath: raw.manifestPath || raw.filePath || null,
+        manifest: raw.manifest || null
+      };
+    }
+
+    function getActiveDeckEntry() {
+      return tarotDeckCatalog.find((item) => item.slug === tarotActiveDeckSlug) || tarotDeckCatalog[0] || null;
+    }
+
+    function updateTarotDeckSelector() {
+      const select = document.getElementById('tarotDeckOptionSelect');
+      if (!select) return;
+      select.innerHTML = '';
+      tarotDeckCatalog.forEach((deck) => {
+        const opt = document.createElement('option');
+        opt.value = deck.slug;
+        opt.textContent = deck.name;
+        select.appendChild(opt);
+      });
+      if (!tarotDeckCatalog.some((deck) => deck.slug === tarotActiveDeckSlug)) {
+        tarotActiveDeckSlug = tarotDeckCatalog[0]?.slug || 'classic-source';
+      }
+      select.value = tarotActiveDeckSlug;
+      localStorage.setItem('lumina_tarot_deck_slug', tarotActiveDeckSlug);
+    }
+
+    async function fetchTarotDeckCatalog() {
+      const merged = [...baseDeckCatalog()];
+      try {
+        const resp = await fetch('/api/decks', { cache: 'no-store' });
+        if (resp.ok) {
+          const data = await resp.json();
+          const remote = Array.isArray(data?.decks) ? data.decks.map(normalizeDeckEntry).filter(Boolean) : [];
+          remote.forEach((deck) => {
+            if (!merged.some((existing) => existing.slug === deck.slug)) merged.push(deck);
+          });
+        }
+      } catch {
+        try {
+          const base = getLocalRuntimeUrl();
+          const resp = await fetch(`${base}/local/decks/catalog`, { cache: 'no-store' });
+          if (resp.ok) {
+            const data = await resp.json();
+            const localDecks = Array.isArray(data?.decks) ? data.decks.map(normalizeDeckEntry).filter(Boolean) : [];
+            localDecks.forEach((deck) => {
+              if (!merged.some((existing) => existing.slug === deck.slug)) merged.push(deck);
+            });
+          }
+        } catch {
+          // Keep built-in only when no catalog endpoint is available.
+        }
+      }
+
+      tarotDeckCatalog = merged;
+      updateTarotDeckSelector();
+      return tarotDeckCatalog;
+    }
+
+    async function publishTarotDeckToLive() {
+      const nameInput = document.getElementById('tarotPublishDeckName');
+      const slugInput = document.getElementById('tarotPublishDeckSlug');
+      const keyInput = document.getElementById('tarotPublishAdminKey');
+      const notes = document.getElementById('tarotMageDeckNotes');
+      if (!nameInput || !slugInput || !keyInput) return;
+
+      const name = (nameInput.value || '').trim();
+      const slug = slugifyDeck((slugInput.value || '').trim() || name);
+      const adminKey = (keyInput.value || '').trim();
+      const manifestPayload = tarotDeckPromptPack || (notes?.textContent || '').trim();
+
+      if (!name) {
+        setStatus('Set a publish deck name first.');
+        return;
+      }
+      if (!manifestPayload) {
+        setStatus('Generate a deck brief first, then publish it.');
+        return;
+      }
+      if (!adminKey) {
+        setStatus('Admin key required for live deck publish.');
+        return;
+      }
+
+      const body = {
+        name,
+        slug,
+        source: 'tarot-atelier-dev',
+        summary: 'Published from Tarot Atelier dev panel.',
+        manifest: manifestPayload
+      };
+
+      try {
+        const resp = await fetch('/api/decks', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-deck-admin-key': adminKey
+          },
+          body: JSON.stringify(body)
+        });
+        const data = await resp.json();
+        if (!resp.ok) {
+          throw new Error(data?.error || 'Live deck publish failed');
+        }
+
+        tarotActiveDeckSlug = slug;
+        localStorage.setItem('lumina_tarot_deck_slug', tarotActiveDeckSlug);
+        await fetchTarotDeckCatalog();
+        setStatus(`Deck published to live options: ${name}`);
+      } catch (error) {
+        try {
+          const local = await callLocalRuntime('/local/decks/publish', body);
+          if (local?.ok) {
+            tarotActiveDeckSlug = slug;
+            localStorage.setItem('lumina_tarot_deck_slug', tarotActiveDeckSlug);
+            await fetchTarotDeckCatalog();
+            setStatus(`Deck saved locally: ${name}. Configure /api/decks for cloud publish.`);
+            return;
+          }
+        } catch {
+          // Fall through to final error status.
+        }
+        setStatus(error.message || 'Could not upload deck to live options.');
+      }
+    }
 
     function tarotCardMeta(card) {
       const upright = (card.keywords.upright || []).slice(0, 3).join(' · ');
@@ -4334,8 +4983,16 @@ ${skyContext}`
 
     function buildTarotSourceManifest() {
       const cards = window._TAROT_CARDS || [];
+      const activeDeck = getActiveDeckEntry();
       return {
         deckTheme: 'Edgy, tasteful witch deck with velvet purples, brass gold, candlelit chiaroscuro, recurring characters, and cohesive occult symbolism.',
+        selectedDeckOption: activeDeck ? {
+          slug: activeDeck.slug,
+          name: activeDeck.name,
+          summary: activeDeck.summary,
+          source: activeDeck.source,
+          manifestPath: activeDeck.manifestPath || null
+        } : null,
         visualRules: [
           'Preserve a consistent cast of archetypal characters across the deck.',
           'Keep wardrobe, face structure, hand styling, and framing coherent card to card.',
@@ -4415,7 +5072,11 @@ ${skyContext}`
       notes.textContent = 'Generating a source-art tarot deck brief with Mage...';
       try {
         const manifest = buildTarotSourceManifest();
-        const prompt = `You are connected to a Mage image generation server with the tools required to create a tarot deck. Use the current source art deck as the reference bible and generate a production-ready deck plan.\n\nTask:\n- Create a full 78-card deck generation brief from the supplied source deck.\n- Preserve character consistency, visual language, wardrobe logic, palette discipline, and occult symbolism across the full deck.\n- Use deep purple, brass gold, ink black, candle glow, velvet shadows, and premium editorial fantasy illustration quality.\n- Assume the downstream image tools are available to you through Mage. If possible, prepare the response so it can be used directly by those tools.\n\nRequired response shape:\n- Start with a short deck-level art direction summary.\n- Then output valid JSON only with: styleGuide, recurringCharacters, and cards.\n- Each card entry must include: name, sourceArt, prompt, negativePrompt, compositionNotes, paletteNotes, characterContinuityNotes.\n\nSource deck manifest:\n${JSON.stringify(manifest, null, 2)}`;
+        const activeDeck = getActiveDeckEntry();
+        const continuitySeed = activeDeck && activeDeck.slug !== 'classic-source'
+          ? `\n\nContinuity seed from active deck option:\n- name: ${activeDeck.name}\n- slug: ${activeDeck.slug}\n- summary: ${activeDeck.summary || 'n/a'}\n- source: ${activeDeck.source || 'published'}\nUse this as style continuity guidance.`
+          : '';
+        const prompt = `You are connected to a Mage image generation server with the tools required to create a tarot deck. Use the current source art deck as the reference bible and generate a production-ready deck plan.\n\nTask:\n- Create a full 78-card deck generation brief from the supplied source deck.\n- Preserve character consistency, visual language, wardrobe logic, palette discipline, and occult symbolism across the full deck.\n- Use deep purple, brass gold, ink black, candle glow, velvet shadows, and premium editorial fantasy illustration quality.\n- Assume the downstream image tools are available to you through Mage. If possible, prepare the response so it can be used directly by those tools.\n\nRequired response shape:\n- Start with a short deck-level art direction summary.\n- Then output valid JSON only with: styleGuide, recurringCharacters, and cards.\n- Each card entry must include: name, sourceArt, prompt, negativePrompt, compositionNotes, paletteNotes, characterContinuityNotes.${continuitySeed}\n\nSource deck manifest:\n${JSON.stringify(manifest, null, 2)}`;
         const result = await callLocalRuntime('/local/bridge', {
           provider: 'mage-local',
           prompt,
@@ -5151,6 +5812,21 @@ ${skyContext}`
         document.getElementById('tarotCards')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
 
+      document.getElementById('tarotDeckOptionSelect')?.addEventListener('change', (event) => {
+        const nextSlug = event.target.value;
+        tarotActiveDeckSlug = nextSlug;
+        localStorage.setItem('lumina_tarot_deck_slug', tarotActiveDeckSlug);
+        const active = getActiveDeckEntry();
+        setStatus(active ? `Active deck option: ${active.name}` : 'Active deck option updated.');
+      });
+
+      document.getElementById('tarotRefreshDeckOptionsBtn')?.addEventListener('click', async () => {
+        await fetchTarotDeckCatalog();
+        setStatus('Deck options refreshed.');
+      });
+
+      document.getElementById('tarotPublishDeckBtn')?.addEventListener('click', publishTarotDeckToLive);
+
       document.getElementById('tarotDevToggleBtn')?.addEventListener('click', toggleTarotDevMenu);
       document.getElementById('tarotDevLaunchMageBtn')?.addEventListener('click', async () => {
         await launchMageServer();
@@ -5178,6 +5854,7 @@ ${skyContext}`
       });
 
       updateTarotCardsGrid();
+      fetchTarotDeckCatalog();
       refreshTarotDevMenu();
 
       // Collapsible period headers
@@ -5294,6 +5971,16 @@ ${skyContext}`
     // Deferred initial renders — must run after all let/const declarations above
     document.getElementById('launchMageBtn')?.addEventListener('click', launchMageServer);
     document.getElementById('mageStatusBtn')?.addEventListener('click', refreshMageStatus);
+    document.getElementById('generateBrandLogoBtn')?.addEventListener('click', generateBrandLogoFromMage);
+    document.getElementById('ephemerisModeBtn')?.addEventListener('click', () => {
+      const idx = EPHEMERIS_MODES.indexOf(ephemerisVisualMode);
+      ephemerisVisualMode = EPHEMERIS_MODES[(idx + 1) % EPHEMERIS_MODES.length];
+      localStorage.setItem('lumina_ephemeris_mode', ephemerisVisualMode);
+      updateEphemerisModeLabel();
+      render();
+    });
+    updateEphemerisModeLabel();
+    restoreGeneratedBrandLogo();
     loadPrecomputedForecast();
     refreshMageStatus();
     renderCalendar();

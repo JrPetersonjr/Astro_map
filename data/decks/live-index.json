@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "gothic-velvet-cathedral-rev2",
+    "name": "Lumina Synodic - Gothic Velvet Cathedral Rev 2",
+    "source": "tarot-atelier-revision",
+    "summary": "Full 78-card continuity revision generated via Mage hot-cache path.",
+    "createdAt": "2026-07-01T05:29:10.866Z",
+    "manifestPath": "data/decks/live/gothic-velvet-cathedral-rev2-1782883750865.json"
+  },
+  {
+    "slug": "gothic-velvet-cathedral-rev1",
+    "name": "Lumina Synodic - Gothic Velvet Cathedral Rev 1",
+    "source": "tarot-atelier-revision",
+    "summary": "Continuity revision pack (anchor cards) generated via Mage hot-cache path.",
+    "createdAt": "2026-07-01T05:27:16.128Z",
+    "manifestPath": "data/decks/live/gothic-velvet-cathedral-rev1-1782883636126.json"
+  },
+  {
+    "slug": "gothic-velvet-cathedral",
+    "name": "Lumina Synodic - Gothic Velvet Cathedral",
+    "source": "tarot-atelier-local-seed",
+    "summary": "Continuity-first themed deck brief generated from built-in classic source card images.",
+    "createdAt": "2026-07-01T05:17:33.645Z",
+    "manifestPath": "data/decks/live/gothic-velvet-cathedral-1782883053644.json"
+  }
+]

@@ -1,0 +1,3238 @@
+{
+  "generatedAt": "2026-07-01T04:30:59.383Z",
+  "source": {
+    "tarotCardsFile": "data/tarotCards.js",
+    "sourcesFile": "standalone/interpretation-sources.json",
+    "guide": "standalone/build-interpretation-index.js"
+  },
+  "sources": {
+    "tarot": [
+      {
+        "id": "tarot_waite_pictorial_key",
+        "title": "The Pictorial Key to the Tarot",
+        "author": "Arthur Edward Waite",
+        "type": "book",
+        "year": 1910,
+        "repute": "classic tarot reference",
+        "url": "https://archive.org/details/pictorialkeytota00wait",
+        "use": "Rider-Waite-Smith symbolic baseline and card family structure."
+      },
+      {
+        "id": "tarot_pollack_78_degrees",
+        "title": "Seventy-Eight Degrees of Wisdom",
+        "author": "Rachel Pollack",
+        "type": "book",
+        "year": 1980,
+        "repute": "highly regarded tarot interpretation text",
+        "url": "https://books.google.com/books?id=7R8QDwAAQBAJ",
+        "use": "Nuanced modern tarot symbolism, evolution, and reading practice."
+      },
+      {
+        "id": "tarot_greer_taro_for_self",
+        "title": "Tarot for Your Self",
+        "author": "Mary K. Greer",
+        "type": "book",
+        "year": 1984,
+        "repute": "respected practical tarot guide",
+        "url": "https://www.llewellyn.com/product.php?ean=9780875425851",
+        "use": "Reflective reading method and question-based interpretation."
+      },
+      {
+        "id": "tarot_arrien_handbook",
+        "title": "The Tarot Handbook",
+        "author": "Angeles Arrien",
+        "type": "book",
+        "year": 1988,
+        "repute": "classic symbolic tarot guide",
+        "url": "https://books.google.com/books?id=tG9xQgAACAAJ",
+        "use": "Archetypal, action-oriented reading frame."
+      }
+    ],
+    "astrology": [
+      {
+        "id": "astro_forrest_inner_sky",
+        "title": "The Inner Sky",
+        "author": "Steven Forrest",
+        "type": "book",
+        "year": 1984,
+        "repute": "well-regarded modern astrology text",
+        "url": "https://www.stevenforrest.com/books/the-inner-sky/",
+        "use": "Psychological astrology framing and planet-sign meaning."
+      },
+      {
+        "id": "astro_hand_planets_transit",
+        "title": "Planets in Transit",
+        "author": "Robert Hand",
+        "type": "book",
+        "year": 1976,
+        "repute": "standard transit reference",
+        "url": "https://www.astrologybyjudithryan.com/products/planets-in-transit-by-robert-hand",
+        "use": "Transit timing and planetary weather language."
+      },
+      {
+        "id": "astro_brady_eagle_lark",
+        "title": "The Eagle and the Lark",
+        "author": "Bernadette Brady",
+        "type": "book",
+        "year": 1999,
+        "repute": "respectable predictive astrology reference",
+        "url": "https://www.fishpond.com/Books/Eagle-and-Lark-Bernadette-Brady/9781902405206",
+        "use": "Narrative timing, cycles, and pattern language."
+      },
+      {
+        "id": "astro_arroyo_elements",
+        "title": "Astrology, Psychology, and the Four Elements",
+        "author": "Stephen Arroyo",
+        "type": "book",
+        "year": 1975,
+        "repute": "classic astrology-psychology bridge text",
+        "url": "https://www.goodreads.com/book/show/414016.Astrology_Psychology_and_the_Four_Elements",
+        "use": "Temperament, balance, and elemental interpretation."
+      },
+      {
+        "id": "astro_light_on_life",
+        "title": "Light on Life",
+        "author": "Hart de Fouw and Robert Svoboda",
+        "type": "book",
+        "year": 1996,
+        "repute": "well-regarded Vedic astrology text",
+        "url": "https://www.goodreads.com/book/show/850024.Light_on_Life",
+        "use": "Sidereal and Vedic astrology grounding."
+      }
+    ],
+    "dream": [
+      {
+        "id": "dream_jung_symbols",
+        "title": "Man and His Symbols",
+        "author": "C. G. Jung",
+        "type": "book",
+        "year": 1964,
+        "repute": "foundational symbolic psychology text",
+        "url": "https://books.google.com/books?id=H8bPAAAAMAAJ",
+        "use": "Archetypal symbolism and image-based dream interpretation."
+      },
+      {
+        "id": "dream_inner_work",
+        "title": "Inner Work",
+        "author": "Robert A. Johnson",
+        "type": "book",
+        "year": 1986,
+        "repute": "highly regarded dreamwork guide",
+        "url": "https://www.goodreads.com/book/show/11029.Inner_Work",
+        "use": "Practical dream journaling and active imagination."
+      },
+      {
+        "id": "dream_interpretation_of_dreams",
+        "title": "The Interpretation of Dreams",
+        "author": "Sigmund Freud",
+        "type": "book",
+        "year": 1899,
+        "repute": "historically important dream theory text",
+        "url": "https://archive.org/details/interpretationof00freu",
+        "use": "Classic dream-association framing, used cautiously and selectively."
+      }
+    ],
+    "repos": [
+      {
+        "id": "repo_astronomy_engine",
+        "title": "Astronomy Engine",
+        "author": "Don Cross / cosinekitty",
+        "type": "repository",
+        "year": 2019,
+        "repute": "widely used astronomy computation library",
+        "url": "https://github.com/cosinekitty/astronomy",
+        "use": "Actual ephemeris and planetary position computation."
+      },
+      {
+        "id": "repo_kerykeion",
+        "title": "Kerykeion",
+        "author": "g-battaglia",
+        "type": "repository",
+        "year": 2020,
+        "repute": "popular astrology chart library",
+        "url": "https://github.com/g-battaglia/Kerykeion",
+        "use": "Charting/reference implementation for astrology computations."
+      },
+      {
+        "id": "repo_vedastro",
+        "title": "VedAstro",
+        "author": "VedAstro contributors",
+        "type": "repository",
+        "year": 2023,
+        "repute": "Vedic astrology tooling and service stack",
+        "url": "https://github.com/VedAstro/VedAstro",
+        "use": "Vedic astrology tooling and MCP-style service patterns."
+      }
+    ]
+  },
+  "themeIndex": [
+    {
+      "key": "balance",
+      "label": "Balance / Integration",
+      "description": "Moderation, proportion, and the work of bringing opposites together.",
+      "sourceRefs": [
+        "tarot_arrien_handbook",
+        "astro_arroyo_elements"
+      ],
+      "cards": [
+        "Temperance"
+      ]
+    },
+    {
+      "key": "career",
+      "label": "Career / Work / Responsibility",
+      "description": "Direction, discipline, goals, labor, and the shape of contribution.",
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "astro_hand_planets_transit",
+        "astro_forrest_inner_sky"
+      ],
+      "cards": [
+        "The Magician",
+        "The Emperor",
+        "The Chariot",
+        "Justice",
+        "King of Cups",
+        "Ace of Pentacles",
+        "Two of Pentacles",
+        "Three of Pentacles",
+        "Four of Pentacles",
+        "Six of Pentacles",
+        "Seven of Pentacles",
+        "Eight of Pentacles",
+        "Nine of Pentacles",
+        "Page of Pentacles",
+        "Knight of Pentacles",
+        "King of Pentacles",
+        "Queen of Swords",
+        "King of Swords",
+        "Ace of Wands",
+        "Two of Wands",
+        "Three of Wands",
+        "Six of Wands",
+        "Seven of Wands",
+        "Ten of Wands",
+        "Page of Wands",
+        "Knight of Wands",
+        "Queen of Wands",
+        "King of Wands"
+      ]
+    },
+    {
+      "key": "completion",
+      "label": "Completion / Closure",
+      "description": "A cycle finishing, integration, and the compost of what came before.",
+      "sourceRefs": [
+        "tarot_pollack_78_degrees",
+        "astro_brady_eagle_lark"
+      ],
+      "cards": [
+        "The World",
+        "Nine of Cups",
+        "Ten of Cups",
+        "Nine of Pentacles",
+        "Ten of Pentacles",
+        "Knight of Pentacles",
+        "Four of Wands"
+      ]
+    },
+    {
+      "key": "family_home",
+      "label": "Family / Home / Belonging",
+      "description": "Roots, kinship, domestic life, and the need to feel held.",
+      "sourceRefs": [
+        "tarot_pollack_78_degrees",
+        "dream_jung_symbols"
+      ],
+      "cards": [
+        "The Empress",
+        "The Emperor",
+        "The Hierophant",
+        "Two of Cups",
+        "Three of Cups",
+        "Six of Cups",
+        "Ten of Cups",
+        "Queen of Cups",
+        "Six of Pentacles",
+        "Ten of Pentacles",
+        "Queen of Pentacles",
+        "King of Pentacles",
+        "Four of Wands"
+      ]
+    },
+    {
+      "key": "health",
+      "label": "Health / Body / Burnout",
+      "description": "Rest, recovery, body awareness, and the limits of endurance.",
+      "sourceRefs": [
+        "tarot_arrien_handbook",
+        "astro_arroyo_elements"
+      ],
+      "cards": [
+        "Strength",
+        "Temperance",
+        "The Sun",
+        "Queen of Pentacles",
+        "Four of Swords",
+        "Six of Swords",
+        "Nine of Swords",
+        "Nine of Wands"
+      ]
+    },
+    {
+      "key": "loss",
+      "label": "Loss / Grief / Ending",
+      "description": "Farewell, release, mourning, and the reality of something finishing.",
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "dream_inner_work",
+        "astro_brady_eagle_lark"
+      ],
+      "cards": [
+        "The Devil",
+        "The Tower",
+        "Five of Cups",
+        "Five of Pentacles",
+        "Three of Swords",
+        "Five of Swords",
+        "Ten of Swords"
+      ]
+    },
+    {
+      "key": "love_interest",
+      "label": "Love / Attraction / Reconnection",
+      "description": "Connection, chemistry, desire, and the choices that shape intimacy.",
+      "sourceRefs": [
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "astro_forrest_inner_sky"
+      ],
+      "cards": [
+        "The Empress",
+        "The Lovers",
+        "Ace of Cups",
+        "Two of Cups",
+        "Three of Cups",
+        "Six of Cups",
+        "Nine of Cups",
+        "Ten of Cups",
+        "Page of Cups",
+        "Knight of Cups",
+        "Queen of Cups",
+        "King of Cups",
+        "Queen of Wands"
+      ]
+    },
+    {
+      "key": "new_beginnings",
+      "label": "New Beginnings",
+      "description": "Fresh starts, first steps, open potential, and the spark before structure.",
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "astro_forrest_inner_sky"
+      ],
+      "cards": [
+        "The Fool",
+        "The Magician",
+        "The Empress",
+        "Wheel of Fortune",
+        "Death",
+        "The Star",
+        "The Sun",
+        "Judgement",
+        "The World",
+        "Ace of Cups",
+        "Eight of Cups",
+        "Page of Cups",
+        "Knight of Cups",
+        "Ace of Pentacles",
+        "Three of Pentacles",
+        "Eight of Pentacles",
+        "Page of Pentacles",
+        "Ace of Swords",
+        "Page of Swords",
+        "Ace of Wands",
+        "Two of Wands",
+        "Three of Wands",
+        "Six of Wands",
+        "Eight of Wands",
+        "Page of Wands",
+        "King of Wands"
+      ]
+    },
+    {
+      "key": "spiritual",
+      "label": "Spiritual / Dream / Intuition",
+      "description": "Inner knowing, symbols, mystery, and the language of the unseen.",
+      "sourceRefs": [
+        "dream_jung_symbols",
+        "dream_inner_work",
+        "tarot_pollack_78_degrees"
+      ],
+      "cards": [
+        "The High Priestess",
+        "The Hierophant",
+        "The Hermit",
+        "The Hanged Man",
+        "The Star",
+        "The Moon",
+        "Judgement",
+        "Four of Cups",
+        "Seven of Cups",
+        "Seven of Pentacles",
+        "Two of Swords",
+        "Four of Swords",
+        "Eight of Swords"
+      ]
+    },
+    {
+      "key": "sudden_change",
+      "label": "Sudden Change / Breakthrough",
+      "description": "Shifts, disruption, liberation, and the crack that lets new air in.",
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "astro_brady_eagle_lark"
+      ],
+      "cards": [
+        "The Fool",
+        "The Chariot",
+        "Wheel of Fortune",
+        "Death",
+        "The Tower",
+        "Eight of Cups",
+        "Ace of Swords",
+        "Six of Swords",
+        "Seven of Swords",
+        "Ten of Swords",
+        "Knight of Swords",
+        "Five of Wands",
+        "Eight of Wands",
+        "Knight of Wands"
+      ]
+    },
+    {
+      "key": "tension",
+      "label": "Tension / Conflict / Pressure",
+      "description": "Stress, struggle, opposition, and the heat that reveals form.",
+      "sourceRefs": [
+        "astro_hand_planets_transit",
+        "tarot_arrien_handbook"
+      ],
+      "cards": [
+        "The High Priestess",
+        "The Lovers",
+        "Strength",
+        "The Hermit",
+        "Justice",
+        "The Hanged Man",
+        "The Devil",
+        "The Moon",
+        "Four of Cups",
+        "Five of Cups",
+        "Seven of Cups",
+        "Two of Pentacles",
+        "Four of Pentacles",
+        "Five of Pentacles",
+        "Two of Swords",
+        "Three of Swords",
+        "Five of Swords",
+        "Seven of Swords",
+        "Eight of Swords",
+        "Nine of Swords",
+        "Page of Swords",
+        "Knight of Swords",
+        "Queen of Swords",
+        "King of Swords",
+        "Five of Wands",
+        "Seven of Wands",
+        "Nine of Wands",
+        "Ten of Wands"
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "id": 0,
+      "name": "The Fool",
+      "arcana": "Major",
+      "number": 0,
+      "suit": null,
+      "meaning": "New beginnings, open potential, leap of faith.",
+      "description": "The Fool steps off the cliff before the map is drawn — trusting the air. This card arrives at the edge of a new chapter, when potential is still wider than any plan.",
+      "keywords": {
+        "upright": [
+          "new beginnings",
+          "innocence",
+          "spontaneity",
+          "leap of faith",
+          "open potential"
+        ],
+        "reversed": [
+          "recklessness",
+          "naivety",
+          "poor timing",
+          "hesitation"
+        ]
+      },
+      "themes": [
+        "new_beginnings",
+        "sudden_change"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees"
+      ]
+    },
+    {
+      "id": 1,
+      "name": "The Magician",
+      "arcana": "Major",
+      "number": 1,
+      "suit": null,
+      "meaning": "Skill, willpower, and the ability to make things happen.",
+      "description": "Everything needed is already on the table. The Magician is the moment when scattered ability becomes directed will — when you stop waiting and begin.",
+      "keywords": {
+        "upright": [
+          "willpower",
+          "skill",
+          "resourcefulness",
+          "manifestation",
+          "focus"
+        ],
+        "reversed": [
+          "manipulation",
+          "poor planning",
+          "scattered energy",
+          "deception"
+        ]
+      },
+      "themes": [
+        "career",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "The High Priestess",
+      "arcana": "Major",
+      "number": 2,
+      "suit": null,
+      "meaning": "Intuition, mystery, and trusting what you already know.",
+      "description": "The High Priestess sits between what is seen and what is sensed. The answer is already present — she asks you to sit with what you do not yet understand rather than forcing clarity.",
+      "keywords": {
+        "upright": [
+          "intuition",
+          "mystery",
+          "inner knowing",
+          "patience",
+          "the unconscious"
+        ],
+        "reversed": [
+          "hidden agendas",
+          "ignoring inner voice",
+          "secrets",
+          "disconnection"
+        ]
+      },
+      "themes": [
+        "spiritual",
+        "tension"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "The Empress",
+      "arcana": "Major",
+      "number": 3,
+      "suit": null,
+      "meaning": "Abundance, fertility, and growth through tending.",
+      "description": "The Empress is what flourishes when it is tended without being forced. She represents the intelligence of the body, the richness of the natural world, and the creativity that comes from feeling at home in your own life.",
+      "keywords": {
+        "upright": [
+          "abundance",
+          "fertility",
+          "nurturing",
+          "the body's wisdom",
+          "creative growth"
+        ],
+        "reversed": [
+          "neglect",
+          "creative block",
+          "dependency",
+          "stagnation"
+        ]
+      },
+      "themes": [
+        "love_interest",
+        "family_home",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "The Emperor",
+      "arcana": "Major",
+      "number": 4,
+      "suit": null,
+      "meaning": "Structure, authority, and the foundation things are built on.",
+      "description": "The Emperor knows that structure creates freedom. This card speaks to the part of life that requires order — boundaries, commitments, the unglamorous scaffolding that makes everything else possible.",
+      "keywords": {
+        "upright": [
+          "structure",
+          "authority",
+          "stability",
+          "discipline",
+          "fathering"
+        ],
+        "reversed": [
+          "rigidity",
+          "domination",
+          "control issues",
+          "lack of discipline"
+        ]
+      },
+      "themes": [
+        "career",
+        "family_home"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "The Hierophant",
+      "arcana": "Major",
+      "number": 5,
+      "suit": null,
+      "meaning": "Tradition, mentorship, and the comfort of shared structure.",
+      "description": "The Hierophant holds the map before the territory — inherited wisdom, cultural containers, the traditions that give shape to meaning. Depending on the context, he may be a teacher or a ceiling.",
+      "keywords": {
+        "upright": [
+          "tradition",
+          "guidance",
+          "shared belief",
+          "mentorship",
+          "ritual"
+        ],
+        "reversed": [
+          "dogma",
+          "blind conformity",
+          "rebellion",
+          "questioning received wisdom"
+        ]
+      },
+      "themes": [
+        "spiritual",
+        "family_home"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "The Lovers",
+      "arcana": "Major",
+      "number": 6,
+      "suit": null,
+      "meaning": "Alignment, meaningful choice, and connection at the level of values.",
+      "description": "The Lovers is rarely just about romance — it is about any choice that defines who you are becoming. Two paths, both real, both calling. The card asks what you are actually aligned with.",
+      "keywords": {
+        "upright": [
+          "alignment",
+          "meaningful choice",
+          "connection",
+          "values",
+          "partnership"
+        ],
+        "reversed": [
+          "misalignment",
+          "conflict",
+          "values clash",
+          "avoidance of choice"
+        ]
+      },
+      "themes": [
+        "love_interest",
+        "tension"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "The Chariot",
+      "arcana": "Major",
+      "number": 7,
+      "suit": null,
+      "meaning": "Determination, momentum, and victory through self-discipline.",
+      "description": "The Chariot moves forward by holding two opposing horses in tension — not by eliminating conflict but by directing it. This card signals that forward motion is possible right now, if the will is focused.",
+      "keywords": {
+        "upright": [
+          "determination",
+          "willpower",
+          "victory",
+          "momentum",
+          "discipline"
+        ],
+        "reversed": [
+          "lack of direction",
+          "aggression",
+          "loss of control",
+          "opposition"
+        ]
+      },
+      "themes": [
+        "career",
+        "sudden_change"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Strength",
+      "arcana": "Major",
+      "number": 8,
+      "suit": null,
+      "meaning": "Courage, compassion, and the kind of strength that does not need to be loud.",
+      "description": "Strength opens the lion's mouth with a calm hand. The hardest battles are not won by force — this card speaks to composure, to meeting difficulty with something steadier than aggression.",
+      "keywords": {
+        "upright": [
+          "courage",
+          "compassion",
+          "inner strength",
+          "patience",
+          "gentle authority"
+        ],
+        "reversed": [
+          "self-doubt",
+          "weakness",
+          "loss of nerve",
+          "force without wisdom"
+        ]
+      },
+      "themes": [
+        "health",
+        "tension"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "The Hermit",
+      "arcana": "Major",
+      "number": 9,
+      "suit": null,
+      "meaning": "Solitude, inner guidance, and deliberate withdrawal to find clarity.",
+      "description": "The Hermit carries a lantern that lights only the next step — and that is enough. This card arrives when the way forward is found not by asking others, but by going somewhere quiet and listening.",
+      "keywords": {
+        "upright": [
+          "solitude",
+          "inner guidance",
+          "contemplation",
+          "withdrawal",
+          "wisdom"
+        ],
+        "reversed": [
+          "isolation",
+          "withdrawal as avoidance",
+          "loneliness",
+          "lost"
+        ]
+      },
+      "themes": [
+        "spiritual",
+        "tension"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Wheel of Fortune",
+      "arcana": "Major",
+      "number": 10,
+      "suit": null,
+      "meaning": "Cycles turning, fate in motion, and the chance hidden inside change.",
+      "description": "The Wheel turns whether you are ready or not. This card marks a genuine shift in momentum — something that was stuck begins to move, or something that seemed solid begins to loosen. The wisdom is in riding what moves rather than resisting it.",
+      "keywords": {
+        "upright": [
+          "cycles",
+          "turning point",
+          "fate",
+          "momentum",
+          "luck"
+        ],
+        "reversed": [
+          "resistance to change",
+          "bad luck",
+          "clinging to what was",
+          "disrupted cycles"
+        ]
+      },
+      "themes": [
+        "sudden_change",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Justice",
+      "arcana": "Major",
+      "number": 11,
+      "suit": null,
+      "meaning": "Truth, accountability, and the honest reckoning of cause and effect.",
+      "description": "Justice holds the scales and does not look away. This card signals that a fair consequence is arriving, or that the situation calls for an honest appraisal — not wishful, not harsh, but clear.",
+      "keywords": {
+        "upright": [
+          "truth",
+          "fairness",
+          "accountability",
+          "cause and effect",
+          "clarity"
+        ],
+        "reversed": [
+          "injustice",
+          "bias",
+          "dishonesty",
+          "avoiding consequences"
+        ]
+      },
+      "themes": [
+        "career",
+        "tension"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "The Hanged Man",
+      "arcana": "Major",
+      "number": 12,
+      "suit": null,
+      "meaning": "Suspension, surrender, and the perspective that only comes from hanging upside-down.",
+      "description": "The Hanged Man chose the pause. He is not stuck — he is waiting with purpose, and the view from that angle is changing something. This card asks you to stop pushing and let understanding arrive on its own.",
+      "keywords": {
+        "upright": [
+          "suspension",
+          "surrender",
+          "new perspective",
+          "letting go",
+          "willing pause"
+        ],
+        "reversed": [
+          "delay",
+          "resistance",
+          "stalling",
+          "refusing to yield"
+        ]
+      },
+      "themes": [
+        "spiritual",
+        "tension"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Death",
+      "arcana": "Major",
+      "number": 13,
+      "suit": null,
+      "meaning": "Transformation — the ending that makes room for what comes next.",
+      "description": "Death is rarely literal; it is the card of necessary completion. Something that cannot continue, ends. The space it leaves is not empty — it is the condition for whatever comes next. Fighting this card costs more than accepting it.",
+      "keywords": {
+        "upright": [
+          "transformation",
+          "endings",
+          "necessary change",
+          "release",
+          "transition"
+        ],
+        "reversed": [
+          "resistance to change",
+          "stagnation",
+          "clinging to the past",
+          "fear of endings"
+        ]
+      },
+      "themes": [
+        "sudden_change",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees"
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Temperance",
+      "arcana": "Major",
+      "number": 14,
+      "suit": null,
+      "meaning": "Balance, patience, and the slow work of integrating opposites.",
+      "description": "Temperance pours between two cups — not choosing one over the other, but finding the proportion that works. This card is about the middle path: not as compromise, but as the discovery of something neither extreme could reach alone.",
+      "keywords": {
+        "upright": [
+          "balance",
+          "patience",
+          "moderation",
+          "integration",
+          "flow"
+        ],
+        "reversed": [
+          "imbalance",
+          "excess",
+          "inner conflict",
+          "rushing the process"
+        ]
+      },
+      "themes": [
+        "health",
+        "balance"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees"
+      ]
+    },
+    {
+      "id": 15,
+      "name": "The Devil",
+      "arcana": "Major",
+      "number": 15,
+      "suit": null,
+      "meaning": "Bondage, compulsion, and the chains that look tighter than they are.",
+      "description": "The Devil's chains are loose — they could be slipped. This card surfaces the patterns, attachments, or compulsions that hold you in place. Naming what has power over you is the first step toward choosing differently.",
+      "keywords": {
+        "upright": [
+          "bondage",
+          "compulsion",
+          "shadow self",
+          "materialism",
+          "what you feed"
+        ],
+        "reversed": [
+          "release",
+          "reclaiming power",
+          "breaking free",
+          "awareness of chains"
+        ]
+      },
+      "themes": [
+        "tension",
+        "loss"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 16,
+      "name": "The Tower",
+      "arcana": "Major",
+      "number": 16,
+      "suit": null,
+      "meaning": "Sudden upheaval and the breakdown of structures that could not stand.",
+      "description": "The Tower falls fast. What looked like solid ground reveals itself as a structure built on an unexamined assumption — and the lightning does not ask permission. The destruction, while jarring, is honest. What is left after is real.",
+      "keywords": {
+        "upright": [
+          "sudden upheaval",
+          "revelation",
+          "collapse of false structures",
+          "breakthrough"
+        ],
+        "reversed": [
+          "avoidance of breakdown",
+          "delayed collapse",
+          "suppressed disruption"
+        ]
+      },
+      "themes": [
+        "sudden_change",
+        "loss"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees"
+      ]
+    },
+    {
+      "id": 17,
+      "name": "The Star",
+      "arcana": "Major",
+      "number": 17,
+      "suit": null,
+      "meaning": "Hope, renewal, and the quiet return of trust after difficulty.",
+      "description": "After the Tower falls, the Star appears. This is the card of soft recovery — not triumph, but the gentle restoration of faith. The water pours freely; there is enough. Something good is still happening, even now.",
+      "keywords": {
+        "upright": [
+          "hope",
+          "renewal",
+          "inspiration",
+          "calm after storm",
+          "faith restored"
+        ],
+        "reversed": [
+          "despair",
+          "loss of faith",
+          "disconnection",
+          "feeling lost"
+        ]
+      },
+      "themes": [
+        "new_beginnings",
+        "spiritual"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 18,
+      "name": "The Moon",
+      "arcana": "Major",
+      "number": 18,
+      "suit": null,
+      "meaning": "Illusion, the unconscious, and what stirs when the rational mind sleeps.",
+      "description": "The Moon illuminates nothing clearly — only enough to see that shapes are moving in the dark. This card arrives when the territory is uncertain, when fear and intuition are tangled, and when a dream may be closer to truth than a plan.",
+      "keywords": {
+        "upright": [
+          "illusion",
+          "the unconscious",
+          "dreams",
+          "fear",
+          "hidden currents"
+        ],
+        "reversed": [
+          "clarity returning",
+          "releasing fear",
+          "truth emerging",
+          "dissipating confusion"
+        ]
+      },
+      "themes": [
+        "spiritual",
+        "tension"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "dream_jung_symbols",
+        "dream_inner_work",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 19,
+      "name": "The Sun",
+      "arcana": "Major",
+      "number": 19,
+      "suit": null,
+      "meaning": "Vitality, clarity, and uncomplicated joy — things working the way they should.",
+      "description": "The Sun is the straightforward card: things are good. Vitality, creative energy, and a genuine sense that life is going well. When this card appears, the light is real — trust it without looking for the catch.",
+      "keywords": {
+        "upright": [
+          "vitality",
+          "clarity",
+          "joy",
+          "success",
+          "warmth"
+        ],
+        "reversed": [
+          "blocked energy",
+          "sadness",
+          "overconfidence",
+          "temporary setback"
+        ]
+      },
+      "themes": [
+        "new_beginnings",
+        "health"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees"
+      ]
+    },
+    {
+      "id": 20,
+      "name": "Judgement",
+      "arcana": "Major",
+      "number": 20,
+      "suit": null,
+      "meaning": "Reckoning, awakening, and answering the call that was always meant for you.",
+      "description": "Judgement is the moment of clear-eyed reckoning — not punishment, but honest accounting. Something long dormant is being called back to life. The call has always been there; this card marks the moment you are ready to hear it.",
+      "keywords": {
+        "upright": [
+          "reckoning",
+          "awakening",
+          "calling",
+          "honest evaluation",
+          "renewal through truth"
+        ],
+        "reversed": [
+          "self-doubt",
+          "ignoring the call",
+          "harsh self-judgment",
+          "inability to forgive"
+        ]
+      },
+      "themes": [
+        "new_beginnings",
+        "spiritual"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 21,
+      "name": "The World",
+      "arcana": "Major",
+      "number": 21,
+      "suit": null,
+      "meaning": "Completion, wholeness, and a genuine arrival before the next journey.",
+      "description": "The World is the last card before The Fool steps off the cliff again. A cycle has genuinely completed — not abandoned, not escaped, but finished. The dancer at the center has earned the wreath.",
+      "keywords": {
+        "upright": [
+          "completion",
+          "wholeness",
+          "accomplishment",
+          "integration",
+          "a genuine arrival"
+        ],
+        "reversed": [
+          "incompleteness",
+          "unfinished business",
+          "lack of closure",
+          "shortcuts"
+        ]
+      },
+      "themes": [
+        "completion",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees"
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Ace of Cups",
+      "arcana": "Minor",
+      "number": 1,
+      "suit": "Cups",
+      "meaning": "A new emotional opening, offered freely.",
+      "description": "The Ace of Cups is the first wave of feeling — pure, unformed, not yet shaped into a story. Something tender is being offered. Whether it is love, creativity, or compassion, the invitation is real.",
+      "keywords": {
+        "upright": [
+          "new love",
+          "emotional opening",
+          "compassion",
+          "creative potential",
+          "offered feeling"
+        ],
+        "reversed": [
+          "emotional blockage",
+          "closed off",
+          "repressed feeling",
+          "missed connection"
+        ]
+      },
+      "themes": [
+        "love_interest",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "dream_jung_symbols",
+        "dream_inner_work"
+      ]
+    },
+    {
+      "id": 23,
+      "name": "Two of Cups",
+      "arcana": "Minor",
+      "number": 2,
+      "suit": "Cups",
+      "meaning": "Partnership, mutual recognition, and the start of something real.",
+      "description": "Two of Cups is the moment two people see each other clearly and equally. It is the beginning of a genuine bond — romantic or otherwise — built on reciprocity and honest recognition.",
+      "keywords": {
+        "upright": [
+          "partnership",
+          "mutual attraction",
+          "connection",
+          "recognition",
+          "beginning of something real"
+        ],
+        "reversed": [
+          "imbalance",
+          "broken connection",
+          "mistrust",
+          "one-sided feeling"
+        ]
+      },
+      "themes": [
+        "love_interest",
+        "family_home"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "dream_jung_symbols",
+        "dream_inner_work"
+      ]
+    },
+    {
+      "id": 24,
+      "name": "Three of Cups",
+      "arcana": "Minor",
+      "number": 3,
+      "suit": "Cups",
+      "meaning": "Celebration, community, and the warmth of genuine belonging.",
+      "description": "Three of Cups is the card of gathering — friends raising glasses, shared laughter, the particular warmth of people who genuinely like each other. This is joy that multiplies in company.",
+      "keywords": {
+        "upright": [
+          "celebration",
+          "community",
+          "friendship",
+          "joy",
+          "belonging"
+        ],
+        "reversed": [
+          "isolation",
+          "overindulgence",
+          "gossip",
+          "disconnection from community"
+        ]
+      },
+      "themes": [
+        "love_interest",
+        "family_home"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "dream_jung_symbols",
+        "dream_inner_work"
+      ]
+    },
+    {
+      "id": 25,
+      "name": "Four of Cups",
+      "arcana": "Minor",
+      "number": 4,
+      "suit": "Cups",
+      "meaning": "Apathy or discernment — and the offered cup you may not have noticed.",
+      "description": "Four of Cups sits with arms folded while a fourth cup appears from the clouds unnoticed. This card asks whether you are exercising genuine discernment or missing something good because you are too absorbed in what is missing.",
+      "keywords": {
+        "upright": [
+          "apathy",
+          "contemplation",
+          "reevaluation",
+          "withdrawn",
+          "missing what is offered"
+        ],
+        "reversed": [
+          "new perspective",
+          "awakening",
+          "noticing what is here",
+          "emerging from withdrawal"
+        ]
+      },
+      "themes": [
+        "tension",
+        "spiritual"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "dream_jung_symbols",
+        "dream_inner_work",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 26,
+      "name": "Five of Cups",
+      "arcana": "Minor",
+      "number": 5,
+      "suit": "Cups",
+      "meaning": "Grief over what spilled, while two cups still stand behind.",
+      "description": "Five of Cups stands looking at the three spilled cups, not the two that remain. This is a card of real grief — the loss is genuine — but the invitation is to slowly turn around toward what is still here.",
+      "keywords": {
+        "upright": [
+          "grief",
+          "loss",
+          "regret",
+          "focusing on what spilled",
+          "mourning"
+        ],
+        "reversed": [
+          "acceptance",
+          "moving forward",
+          "turning toward what remains",
+          "healing"
+        ]
+      },
+      "themes": [
+        "loss",
+        "tension"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "dream_jung_symbols",
+        "dream_inner_work",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 27,
+      "name": "Six of Cups",
+      "arcana": "Minor",
+      "number": 6,
+      "suit": "Cups",
+      "meaning": "Nostalgia, past kindness, and memory flowing forward.",
+      "description": "Six of Cups brings the past forward gently — a childhood place, an old kindness, the simpler feeling of an earlier time. The memory is real and warm. The question is whether it is nourishing you or holding you in place.",
+      "keywords": {
+        "upright": [
+          "nostalgia",
+          "innocence",
+          "past kindness",
+          "simple joy",
+          "childhood"
+        ],
+        "reversed": [
+          "living in the past",
+          "naivety",
+          "unhealthy attachment",
+          "inability to move on"
+        ]
+      },
+      "themes": [
+        "family_home",
+        "love_interest"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "dream_jung_symbols",
+        "dream_inner_work"
+      ]
+    },
+    {
+      "id": 28,
+      "name": "Seven of Cups",
+      "arcana": "Minor",
+      "number": 7,
+      "suit": "Cups",
+      "meaning": "Wishful thinking, illusion, and the mind spinning with possibilities not all of them real.",
+      "description": "Seven of Cups offers seven visions, each more seductive than the last — and most of them are smoke. This card cautions against mistaking fantasy for possibility, and asks which of the visions you can actually walk toward.",
+      "keywords": {
+        "upright": [
+          "illusion",
+          "too many choices",
+          "wishful thinking",
+          "fantasy",
+          "confusion"
+        ],
+        "reversed": [
+          "clarity",
+          "choosing",
+          "grounding",
+          "cutting through illusion"
+        ]
+      },
+      "themes": [
+        "tension",
+        "spiritual"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "dream_jung_symbols",
+        "dream_inner_work",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 29,
+      "name": "Eight of Cups",
+      "arcana": "Minor",
+      "number": 8,
+      "suit": "Cups",
+      "meaning": "Walking away from what no longer feeds you, toward something unnamed.",
+      "description": "Eight of Cups leaves eight full cups behind and walks into the dark toward the mountains. The cups were real — but something more necessary is calling. This card marks the moment you choose growth over comfort.",
+      "keywords": {
+        "upright": [
+          "walking away",
+          "seeking deeper meaning",
+          "leaving what no longer feeds",
+          "transition"
+        ],
+        "reversed": [
+          "staying despite emptiness",
+          "stagnation",
+          "fear of moving on",
+          "avoidance"
+        ]
+      },
+      "themes": [
+        "sudden_change",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "dream_jung_symbols",
+        "dream_inner_work"
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Nine of Cups",
+      "arcana": "Minor",
+      "number": 9,
+      "suit": "Cups",
+      "meaning": "Satisfaction, wish fulfilled, and genuine emotional contentment.",
+      "description": "Nine of Cups is the wish card — the one where what you hoped for has actually arrived. The satisfaction is real and earned. This card asks you to receive it fully, without immediately reaching for the next thing.",
+      "keywords": {
+        "upright": [
+          "satisfaction",
+          "wish fulfilled",
+          "emotional contentment",
+          "pleasure",
+          "abundance"
+        ],
+        "reversed": [
+          "dissatisfaction",
+          "smugness",
+          "unfulfilled desire",
+          "chasing the next thing"
+        ]
+      },
+      "themes": [
+        "love_interest",
+        "completion"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "dream_jung_symbols",
+        "dream_inner_work"
+      ]
+    },
+    {
+      "id": 31,
+      "name": "Ten of Cups",
+      "arcana": "Minor",
+      "number": 10,
+      "suit": "Cups",
+      "meaning": "Lasting happiness, harmony, and the life that feels genuinely complete.",
+      "description": "Ten of Cups is the rainbow after everything — not the wish, but the reality that settled in and stayed. Family, belonging, emotional peace. This card represents happiness that is not contingent on anything changing.",
+      "keywords": {
+        "upright": [
+          "lasting happiness",
+          "harmony",
+          "emotional fulfillment",
+          "family",
+          "wholeness"
+        ],
+        "reversed": [
+          "discord",
+          "broken harmony",
+          "disconnection from family",
+          "misalignment"
+        ]
+      },
+      "themes": [
+        "love_interest",
+        "family_home",
+        "completion"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "dream_jung_symbols",
+        "dream_inner_work"
+      ]
+    },
+    {
+      "id": 32,
+      "name": "Page of Cups",
+      "arcana": "Minor",
+      "number": "Page",
+      "suit": "Cups",
+      "meaning": "A tender new feeling, a creative impulse, a message from the heart.",
+      "description": "The Page of Cups looks into a cup and a fish looks back — the unexpected visit of feeling or creative inspiration. This card marks the arrival of something emotionally new, asking only to be noticed before it is named.",
+      "keywords": {
+        "upright": [
+          "tender new feeling",
+          "creative impulse",
+          "emotional curiosity",
+          "intuitive message"
+        ],
+        "reversed": [
+          "emotional immaturity",
+          "moodiness",
+          "blocked creativity",
+          "poor emotional boundaries"
+        ]
+      },
+      "themes": [
+        "new_beginnings",
+        "love_interest"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "dream_jung_symbols",
+        "dream_inner_work"
+      ]
+    },
+    {
+      "id": 33,
+      "name": "Knight of Cups",
+      "arcana": "Minor",
+      "number": "Knight",
+      "suit": "Cups",
+      "meaning": "Following feeling wherever it leads — the romantic in motion.",
+      "description": "The Knight of Cups rides toward what moves him, cup raised, full of feeling. He is beautiful in his idealism and occasionally impractical in his pursuit of it. This card signals that the heart is in motion and looking for somewhere to land.",
+      "keywords": {
+        "upright": [
+          "romanticism",
+          "charm",
+          "following feeling",
+          "idealism",
+          "creative pursuit"
+        ],
+        "reversed": [
+          "moodiness",
+          "false promises",
+          "idealism unmoored",
+          "disappointment"
+        ]
+      },
+      "themes": [
+        "love_interest",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "dream_jung_symbols",
+        "dream_inner_work"
+      ]
+    },
+    {
+      "id": 34,
+      "name": "Queen of Cups",
+      "arcana": "Minor",
+      "number": "Queen",
+      "suit": "Cups",
+      "meaning": "Deep empathy, intuitive wisdom, and emotional containment without coldness.",
+      "description": "The Queen of Cups holds her cup but does not look into it — she holds the feeling of the room without being dissolved by it. This card speaks to the kind of emotional intelligence that can hold others without losing itself.",
+      "keywords": {
+        "upright": [
+          "deep empathy",
+          "intuitive wisdom",
+          "emotional containment",
+          "compassion",
+          "nurturing"
+        ],
+        "reversed": [
+          "emotional instability",
+          "self-neglect",
+          "moodiness",
+          "poor emotional boundaries"
+        ]
+      },
+      "themes": [
+        "love_interest",
+        "family_home"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "dream_jung_symbols",
+        "dream_inner_work"
+      ]
+    },
+    {
+      "id": 35,
+      "name": "King of Cups",
+      "arcana": "Minor",
+      "number": "King",
+      "suit": "Cups",
+      "meaning": "Emotional mastery — feeling everything without being ruled by it.",
+      "description": "The King of Cups sits on a throne that floats in open water and does not flinch. He has felt everything and learned to lead from it. This card signals emotional authority — the wisdom that comes from having moved through difficulty without becoming hard.",
+      "keywords": {
+        "upright": [
+          "emotional mastery",
+          "calm authority",
+          "wisdom",
+          "diplomatic",
+          "feeling without being ruled by it"
+        ],
+        "reversed": [
+          "emotional manipulation",
+          "moodiness",
+          "coldness",
+          "instability beneath the surface"
+        ]
+      },
+      "themes": [
+        "love_interest",
+        "career"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "dream_jung_symbols",
+        "dream_inner_work"
+      ]
+    },
+    {
+      "id": 36,
+      "name": "Ace of Pentacles",
+      "arcana": "Minor",
+      "number": 1,
+      "suit": "Pentacles",
+      "meaning": "A seed of real, material possibility — something that can actually be built.",
+      "description": "The Ace of Pentacles is the coin in the open hand — tangible, grounded, genuine. Unlike the Fool's potential, this one can be held. The opportunity is real; what it becomes depends on what you do next.",
+      "keywords": {
+        "upright": [
+          "new opportunity",
+          "material potential",
+          "a seed worth planting",
+          "prosperity beginning"
+        ],
+        "reversed": [
+          "missed opportunity",
+          "poor planning",
+          "instability",
+          "lack of follow-through"
+        ]
+      },
+      "themes": [
+        "career",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_arroyo_elements"
+      ]
+    },
+    {
+      "id": 37,
+      "name": "Two of Pentacles",
+      "arcana": "Minor",
+      "number": 2,
+      "suit": "Pentacles",
+      "meaning": "Juggling what matters — adaptability as a daily practice.",
+      "description": "Two of Pentacles keeps both coins moving with a slight smile — it is working, but only just. This card speaks to the ongoing practice of managing competing demands with grace, and the reminder that balance is motion, not stillness.",
+      "keywords": {
+        "upright": [
+          "balance",
+          "adaptability",
+          "juggling priorities",
+          "flexibility",
+          "resourcefulness"
+        ],
+        "reversed": [
+          "overwhelm",
+          "disorganization",
+          "dropped balls",
+          "imbalance"
+        ]
+      },
+      "themes": [
+        "career",
+        "tension"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_arroyo_elements",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 38,
+      "name": "Three of Pentacles",
+      "arcana": "Minor",
+      "number": 3,
+      "suit": "Pentacles",
+      "meaning": "Skilled work recognized and collaboration making something greater.",
+      "description": "Three of Pentacles shows the stonemason, the architect, and the clergy comparing plans in the cathedral doorway. This card marks the moment when distinct skills combine into something none could have made alone.",
+      "keywords": {
+        "upright": [
+          "collaboration",
+          "skilled work",
+          "recognition",
+          "teamwork",
+          "learning through doing"
+        ],
+        "reversed": [
+          "poor collaboration",
+          "lack of recognition",
+          "disharmony",
+          "working at cross-purposes"
+        ]
+      },
+      "themes": [
+        "career",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_arroyo_elements"
+      ]
+    },
+    {
+      "id": 39,
+      "name": "Four of Pentacles",
+      "arcana": "Minor",
+      "number": 4,
+      "suit": "Pentacles",
+      "meaning": "Holding on — knowing what you are protecting and what you are hoarding.",
+      "description": "Four of Pentacles clutches one coin to his chest, balances one on his head, and keeps one under each foot. The security is real, but at what cost to movement? This card asks whether you are protecting yourself or imprisoning yourself.",
+      "keywords": {
+        "upright": [
+          "holding on",
+          "security",
+          "conservation",
+          "control",
+          "stability through caution"
+        ],
+        "reversed": [
+          "generosity opening",
+          "releasing control",
+          "hoarding",
+          "fear driving decisions"
+        ]
+      },
+      "themes": [
+        "tension",
+        "career"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_arroyo_elements",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 40,
+      "name": "Five of Pentacles",
+      "arcana": "Minor",
+      "number": 5,
+      "suit": "Pentacles",
+      "meaning": "Hardship and the feeling of exclusion — the door is closer than it looks.",
+      "description": "Five of Pentacles shows two figures in the snow, moving past a lit church window. The warmth and help are real — but grief and habit sometimes keep us walking past the door. This card names real struggle while gesturing toward what remains available.",
+      "keywords": {
+        "upright": [
+          "hardship",
+          "poverty",
+          "exclusion",
+          "struggle",
+          "feeling left out in the cold"
+        ],
+        "reversed": [
+          "recovery",
+          "support found",
+          "turning point",
+          "help closer than it seems"
+        ]
+      },
+      "themes": [
+        "loss",
+        "tension"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_arroyo_elements",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 41,
+      "name": "Six of Pentacles",
+      "arcana": "Minor",
+      "number": 6,
+      "suit": "Pentacles",
+      "meaning": "Generosity in honest circulation — giving and receiving in fair proportion.",
+      "description": "Six of Pentacles holds the scales in one hand and distributes with the other. This card is about honest exchange: the pleasure of giving from abundance, and the ability to receive without shame. Both matter.",
+      "keywords": {
+        "upright": [
+          "generosity",
+          "fair exchange",
+          "sharing",
+          "reciprocity",
+          "giving and receiving"
+        ],
+        "reversed": [
+          "strings attached",
+          "inequality",
+          "selfishness",
+          "charity as control"
+        ]
+      },
+      "themes": [
+        "career",
+        "family_home"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_arroyo_elements"
+      ]
+    },
+    {
+      "id": 42,
+      "name": "Seven of Pentacles",
+      "arcana": "Minor",
+      "number": 7,
+      "suit": "Pentacles",
+      "meaning": "Patience in the middle of the process — what you planted is still growing.",
+      "description": "Seven of Pentacles leans on the handle and looks at what is growing. The work is done for now; it is the waiting that is required. This card arrives to confirm that slow progress is still progress, and that the harvest is not yet but is coming.",
+      "keywords": {
+        "upright": [
+          "patience",
+          "long-term view",
+          "tending what is planted",
+          "assessment",
+          "harvest coming"
+        ],
+        "reversed": [
+          "impatience",
+          "lack of reward",
+          "giving up too soon",
+          "poor long-term thinking"
+        ]
+      },
+      "themes": [
+        "career",
+        "spiritual"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_arroyo_elements",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 43,
+      "name": "Eight of Pentacles",
+      "arcana": "Minor",
+      "number": 8,
+      "suit": "Pentacles",
+      "meaning": "Craft, repetition, and the dignity of becoming good at something.",
+      "description": "Eight of Pentacles carves another pentacle, and then another. This is not glamorous work — it is the sustained, focused effort that actually produces mastery. The card speaks to the quiet devotion of the person who shows up and does the work.",
+      "keywords": {
+        "upright": [
+          "craft",
+          "dedication",
+          "skill development",
+          "mastery through repetition",
+          "focused work"
+        ],
+        "reversed": [
+          "perfectionism",
+          "lack of focus",
+          "slacking off",
+          "missing the bigger picture"
+        ]
+      },
+      "themes": [
+        "career",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_arroyo_elements"
+      ]
+    },
+    {
+      "id": 44,
+      "name": "Nine of Pentacles",
+      "arcana": "Minor",
+      "number": 9,
+      "suit": "Pentacles",
+      "meaning": "Self-sufficiency and abundance earned through your own hands.",
+      "description": "Nine of Pentacles stands alone in a garden of her own making, a falcon on her wrist. The comfort is real and entirely self-created. This card marks the satisfaction of not needing anyone to provide what you have built for yourself.",
+      "keywords": {
+        "upright": [
+          "self-sufficiency",
+          "independence",
+          "earned abundance",
+          "comfort",
+          "enjoying the fruits"
+        ],
+        "reversed": [
+          "financial insecurity",
+          "dependence",
+          "over-reliance on others",
+          "hollow success"
+        ]
+      },
+      "themes": [
+        "career",
+        "completion"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_arroyo_elements"
+      ]
+    },
+    {
+      "id": 45,
+      "name": "Ten of Pentacles",
+      "arcana": "Minor",
+      "number": 10,
+      "suit": "Pentacles",
+      "meaning": "Legacy, roots, and the stability that is passed forward.",
+      "description": "Ten of Pentacles shows three generations in a courtyard — the elders, the parents, the children, and the dogs. This card marks the long arc: not just success, but the kind of stability that outlasts you. What you build here becomes what others stand on.",
+      "keywords": {
+        "upright": [
+          "legacy",
+          "lasting wealth",
+          "family stability",
+          "roots",
+          "what endures"
+        ],
+        "reversed": [
+          "loss of wealth",
+          "family conflict",
+          "instability",
+          "inheritance issues"
+        ]
+      },
+      "themes": [
+        "family_home",
+        "completion"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_arroyo_elements"
+      ]
+    },
+    {
+      "id": 46,
+      "name": "Page of Pentacles",
+      "arcana": "Minor",
+      "number": "Page",
+      "suit": "Pentacles",
+      "meaning": "Practical curiosity and serious ambition beginning to take form.",
+      "description": "The Page of Pentacles holds the coin and studies it — not dreaming about what it could become, but genuinely interested in understanding it. This card marks the beginning of practical learning: focused, curious, and willing to start at the beginning.",
+      "keywords": {
+        "upright": [
+          "ambition",
+          "practical curiosity",
+          "new study",
+          "diligence",
+          "serious potential"
+        ],
+        "reversed": [
+          "lack of direction",
+          "procrastination",
+          "unrealistic expectations",
+          "blocked ambition"
+        ]
+      },
+      "themes": [
+        "career",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_arroyo_elements"
+      ]
+    },
+    {
+      "id": 47,
+      "name": "Knight of Pentacles",
+      "arcana": "Minor",
+      "number": "Knight",
+      "suit": "Pentacles",
+      "meaning": "Slow, steady, and fully committed to the work.",
+      "description": "The Knight of Pentacles does not gallop. He plods forward with his horse, examining the field, consistent in every condition. Reliability is his gift. This card is the slow march that actually gets there.",
+      "keywords": {
+        "upright": [
+          "reliability",
+          "steady effort",
+          "methodical",
+          "commitment",
+          "patience as devotion"
+        ],
+        "reversed": [
+          "stubbornness",
+          "stuck in a rut",
+          "unreliability",
+          "lack of progress"
+        ]
+      },
+      "themes": [
+        "career",
+        "completion"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_arroyo_elements"
+      ]
+    },
+    {
+      "id": 48,
+      "name": "Queen of Pentacles",
+      "arcana": "Minor",
+      "number": "Queen",
+      "suit": "Pentacles",
+      "meaning": "Practical nurturing — making the home, the body, and the everyday genuinely good.",
+      "description": "The Queen of Pentacles tends the garden and the table and the body. Her abundance is not extravagant — it is solid and warm and real. She knows that comfort is not a luxury; it is what makes the rest of life possible.",
+      "keywords": {
+        "upright": [
+          "practical nurturing",
+          "abundance",
+          "making things genuinely good",
+          "grounded care",
+          "home"
+        ],
+        "reversed": [
+          "neglect",
+          "workaholism",
+          "financial anxiety",
+          "putting others last"
+        ]
+      },
+      "themes": [
+        "family_home",
+        "health"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_arroyo_elements"
+      ]
+    },
+    {
+      "id": 49,
+      "name": "King of Pentacles",
+      "arcana": "Minor",
+      "number": "King",
+      "suit": "Pentacles",
+      "meaning": "Material mastery and the generosity of someone who has genuinely built something.",
+      "description": "The King of Pentacles sits in his vineyard like he grew from it. The wealth is real, the reliability is real, and the ability to provide is real. This card marks the kind of success that is not just accumulated but expressed through care for others.",
+      "keywords": {
+        "upright": [
+          "material mastery",
+          "dependability",
+          "built something real",
+          "generosity from strength",
+          "security"
+        ],
+        "reversed": [
+          "greed",
+          "stubbornness",
+          "materialism as identity",
+          "financial control"
+        ]
+      },
+      "themes": [
+        "career",
+        "family_home"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_arroyo_elements"
+      ]
+    },
+    {
+      "id": 50,
+      "name": "Ace of Swords",
+      "arcana": "Minor",
+      "number": 1,
+      "suit": "Swords",
+      "meaning": "A cut through confusion — truth arriving suddenly, sharp and clean.",
+      "description": "The Ace of Swords is the blade that cuts through fog. Something that was murky becomes clear; a decision that was impossible becomes obvious. The clarity may be uncomfortable, but it is accurate.",
+      "keywords": {
+        "upright": [
+          "clarity",
+          "breakthrough",
+          "truth",
+          "sharp insight",
+          "new understanding"
+        ],
+        "reversed": [
+          "confusion",
+          "miscommunication",
+          "unclear thinking",
+          "false start"
+        ]
+      },
+      "themes": [
+        "sudden_change",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_hand_planets_transit",
+        "astro_brady_eagle_lark"
+      ]
+    },
+    {
+      "id": 51,
+      "name": "Two of Swords",
+      "arcana": "Minor",
+      "number": 2,
+      "suit": "Swords",
+      "meaning": "The choice being avoided — blindfolded at a crossroads.",
+      "description": "Two of Swords sits with swords crossed and eyes covered. The decision is not being made because seeing it clearly would force a choice. This card names the stalemate honestly and asks what it would take to lower the swords and open your eyes.",
+      "keywords": {
+        "upright": [
+          "stalemate",
+          "avoidance",
+          "difficult choice",
+          "blindfolded at a crossroads",
+          "tension held"
+        ],
+        "reversed": [
+          "decision made",
+          "clarity breaking through",
+          "moving forward",
+          "removing the blindfold"
+        ]
+      },
+      "themes": [
+        "tension",
+        "spiritual"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_hand_planets_transit",
+        "astro_brady_eagle_lark",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 52,
+      "name": "Three of Swords",
+      "arcana": "Minor",
+      "number": 3,
+      "suit": "Swords",
+      "meaning": "Heartbreak, grief, and the painful truth that must be felt to move through.",
+      "description": "Three of Swords is three blades through a red heart in the rain. The image does not soften it — the hurt is real and the card does not offer comfort so much as honest recognition. Grief acknowledged heals; grief suppressed persists.",
+      "keywords": {
+        "upright": [
+          "heartbreak",
+          "grief",
+          "painful truth",
+          "loss",
+          "sorrow that must be felt"
+        ],
+        "reversed": [
+          "healing",
+          "moving through it",
+          "forgiveness",
+          "recovery after grief"
+        ]
+      },
+      "themes": [
+        "loss",
+        "tension"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_hand_planets_transit",
+        "astro_brady_eagle_lark",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 53,
+      "name": "Four of Swords",
+      "arcana": "Minor",
+      "number": 4,
+      "suit": "Swords",
+      "meaning": "Necessary rest after conflict — the body and mind asking to be still.",
+      "description": "Four of Swords lies in effigy with three swords on the wall and one beneath. The battle is paused, not abandoned. This card is permission — and sometimes instruction — to stop, recover, and let the mind go quiet before the next movement.",
+      "keywords": {
+        "upright": [
+          "rest",
+          "recovery",
+          "contemplation",
+          "retreat",
+          "deliberate stillness"
+        ],
+        "reversed": [
+          "restlessness",
+          "refusing to rest",
+          "burnout",
+          "forced return before ready"
+        ]
+      },
+      "themes": [
+        "health",
+        "spiritual"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_hand_planets_transit",
+        "astro_brady_eagle_lark",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 54,
+      "name": "Five of Swords",
+      "arcana": "Minor",
+      "number": 5,
+      "suit": "Swords",
+      "meaning": "The hollow victory — winning at a cost that was not worth it.",
+      "description": "Five of Swords collects the swords of the defeated while they walk away. He won — but something in his posture suggests he knows what winning cost. This card asks whether the fight was worth it, or whether a different outcome might have served everyone better.",
+      "keywords": {
+        "upright": [
+          "hollow victory",
+          "conflict",
+          "winning at a cost",
+          "defeat",
+          "pride before humility"
+        ],
+        "reversed": [
+          "reconciliation",
+          "aftermath",
+          "moving past the conflict",
+          "acknowledging the cost"
+        ]
+      },
+      "themes": [
+        "tension",
+        "loss"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_hand_planets_transit",
+        "astro_brady_eagle_lark",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 55,
+      "name": "Six of Swords",
+      "arcana": "Minor",
+      "number": 6,
+      "suit": "Swords",
+      "meaning": "Moving toward calmer waters — not healed yet, but moving.",
+      "description": "Six of Swords crosses quiet water with a figure huddled and a ferryman at the helm. The swords are still in the boat — the trouble came with them — but the water ahead is calmer. Transition is underway, and that is enough for now.",
+      "keywords": {
+        "upright": [
+          "transition",
+          "moving toward calmer waters",
+          "leaving behind",
+          "guided passage",
+          "healing in motion"
+        ],
+        "reversed": [
+          "stuck",
+          "unresolved issues",
+          "resisting the move",
+          "turbulence continuing"
+        ]
+      },
+      "themes": [
+        "sudden_change",
+        "health"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_hand_planets_transit",
+        "astro_brady_eagle_lark"
+      ]
+    },
+    {
+      "id": 56,
+      "name": "Seven of Swords",
+      "arcana": "Minor",
+      "number": 7,
+      "suit": "Swords",
+      "meaning": "Something being done alone, in secret, or with one eye over the shoulder.",
+      "description": "Seven of Swords slips away with five swords and a glance back. Whether the strategy is clever or dishonest depends on context — but this card always marks the territory of half-truths, solo plans, and the feeling of doing something that cannot be said aloud.",
+      "keywords": {
+        "upright": [
+          "deception",
+          "strategy",
+          "acting alone",
+          "hidden motives",
+          "something done in secret"
+        ],
+        "reversed": [
+          "truth revealed",
+          "coming clean",
+          "exposed",
+          "consequences of deception"
+        ]
+      },
+      "themes": [
+        "tension",
+        "sudden_change"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_hand_planets_transit",
+        "astro_brady_eagle_lark",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 57,
+      "name": "Eight of Swords",
+      "arcana": "Minor",
+      "number": 8,
+      "suit": "Swords",
+      "meaning": "Trapped by a story — the restriction is largely internal.",
+      "description": "Eight of Swords is blindfolded and bound in a circle of swords — but the bonds are loose and the swords are not touching her. The prison is real, but it is made more of belief than of walls. The way out begins with questioning the story.",
+      "keywords": {
+        "upright": [
+          "restriction",
+          "self-imposed limitation",
+          "trapped by belief",
+          "paralysis",
+          "the cage is partly imagined"
+        ],
+        "reversed": [
+          "freedom",
+          "releasing the story",
+          "empowerment",
+          "seeing the way out"
+        ]
+      },
+      "themes": [
+        "tension",
+        "spiritual"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_hand_planets_transit",
+        "astro_brady_eagle_lark",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 58,
+      "name": "Nine of Swords",
+      "arcana": "Minor",
+      "number": 9,
+      "suit": "Swords",
+      "meaning": "The 3am mind — anxiety spiraling in the dark.",
+      "description": "Nine of Swords sits bolt upright in bed with nine swords on the wall and hands over her face. The fear is real, but the nighttime always magnifies. This card asks: is this genuine danger, or is this the hour when the mind turns against itself?",
+      "keywords": {
+        "upright": [
+          "anxiety",
+          "nightmares",
+          "3am thinking",
+          "dread",
+          "worry spiraling in the dark"
+        ],
+        "reversed": [
+          "relief",
+          "dawn breaking",
+          "releasing fear",
+          "finding help",
+          "things not as bad as they seemed"
+        ]
+      },
+      "themes": [
+        "tension",
+        "health"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_hand_planets_transit",
+        "astro_brady_eagle_lark",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 59,
+      "name": "Ten of Swords",
+      "arcana": "Minor",
+      "number": 10,
+      "suit": "Swords",
+      "meaning": "Rock bottom — complete and final. The only direction now is up.",
+      "description": "Ten of Swords lies face-down with all ten blades in the back. The ending is total. But the sky at the horizon is brightening. This card does not soften the fall — it just reminds you that hitting bottom is still hitting ground, and ground can be stood on.",
+      "keywords": {
+        "upright": [
+          "rock bottom",
+          "dramatic ending",
+          "defeat",
+          "betrayal",
+          "the lowest point before dawn"
+        ],
+        "reversed": [
+          "recovery beginning",
+          "the worst is over",
+          "moving forward",
+          "slow healing"
+        ]
+      },
+      "themes": [
+        "loss",
+        "sudden_change"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_hand_planets_transit",
+        "astro_brady_eagle_lark"
+      ]
+    },
+    {
+      "id": 60,
+      "name": "Page of Swords",
+      "arcana": "Minor",
+      "number": "Page",
+      "suit": "Swords",
+      "meaning": "Quick, curious, alert — ideas arriving faster than plans.",
+      "description": "The Page of Swords stands on a hill in the wind, sword up, eyes sharp. She notices everything and is not sure yet what to do about it. This card marks the arrival of sharp energy and observation — before wisdom has had time to catch up.",
+      "keywords": {
+        "upright": [
+          "curiosity",
+          "alertness",
+          "quick thinking",
+          "new ideas arriving fast",
+          "watchful"
+        ],
+        "reversed": [
+          "scattered",
+          "hasty",
+          "all talk",
+          "careless with words",
+          "poor follow-through"
+        ]
+      },
+      "themes": [
+        "new_beginnings",
+        "tension"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_hand_planets_transit",
+        "astro_brady_eagle_lark",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 61,
+      "name": "Knight of Swords",
+      "arcana": "Minor",
+      "number": "Knight",
+      "suit": "Swords",
+      "meaning": "Charging in before fully thinking it through — brilliant or reckless, often both.",
+      "description": "The Knight of Swords rides full speed into the wind, sword raised, no hesitation. The energy is real and impressive and occasionally leaves a trail of damage behind it. This card asks whether the speed serves the situation or outpaces it.",
+      "keywords": {
+        "upright": [
+          "fast action",
+          "decisive",
+          "driven",
+          "charging in",
+          "brilliant or reckless"
+        ],
+        "reversed": [
+          "recklessness",
+          "aggression",
+          "no follow-through",
+          "burning bridges"
+        ]
+      },
+      "themes": [
+        "sudden_change",
+        "tension"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_hand_planets_transit",
+        "astro_brady_eagle_lark",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 62,
+      "name": "Queen of Swords",
+      "arcana": "Minor",
+      "number": "Queen",
+      "suit": "Swords",
+      "meaning": "Clarity, directness, and the courage to see things exactly as they are.",
+      "description": "The Queen of Swords has been through something and came out clearer for it. She does not deceive and does not tolerate being deceived. Her gift is the ability to look at difficult truth without flinching — and speak it with precision, not cruelty.",
+      "keywords": {
+        "upright": [
+          "clarity",
+          "directness",
+          "truth without cruelty",
+          "independent thinking",
+          "rational perception"
+        ],
+        "reversed": [
+          "cold",
+          "cutting",
+          "bitterness",
+          "using truth as a weapon"
+        ]
+      },
+      "themes": [
+        "career",
+        "tension"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_hand_planets_transit",
+        "astro_brady_eagle_lark",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 63,
+      "name": "King of Swords",
+      "arcana": "Minor",
+      "number": "King",
+      "suit": "Swords",
+      "meaning": "Intellectual authority — fair, principled, and impossible to manipulate.",
+      "description": "The King of Swords sits upright with the sword of truth held straight. He is not warm, but he is fair — and in his domain, the mind is sovereign. This card signals a time for clear thinking, principled decisions, and refusing to let emotion cloud what is actually true.",
+      "keywords": {
+        "upright": [
+          "intellectual authority",
+          "principled",
+          "fair judgment",
+          "clear thinking",
+          "disciplined mind"
+        ],
+        "reversed": [
+          "cold",
+          "manipulative",
+          "domineering",
+          "intellect without compassion"
+        ]
+      },
+      "themes": [
+        "career",
+        "tension"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_hand_planets_transit",
+        "astro_brady_eagle_lark",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 64,
+      "name": "Ace of Wands",
+      "arcana": "Minor",
+      "number": 1,
+      "suit": "Wands",
+      "meaning": "Creative fire igniting — the initial spark of will and vision.",
+      "description": "The Ace of Wands is a hand emerging from cloud holding a living branch — alive, budding, immediate. This is the moment before the project exists, when energy is pure and direction has not yet limited it. Something wants to be made.",
+      "keywords": {
+        "upright": [
+          "creative fire",
+          "inspiration",
+          "new passion",
+          "initial spark",
+          "will igniting"
+        ],
+        "reversed": [
+          "blocked creativity",
+          "false start",
+          "lost enthusiasm",
+          "potential untapped"
+        ]
+      },
+      "themes": [
+        "new_beginnings",
+        "career"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_hand_planets_transit"
+      ]
+    },
+    {
+      "id": 65,
+      "name": "Two of Wands",
+      "arcana": "Minor",
+      "number": 2,
+      "suit": "Wands",
+      "meaning": "Standing at the edge of possibility — the world is wider than this.",
+      "description": "Two of Wands holds the globe in one hand and leans on a staff with the other, looking out over everything. The plan is taking shape. The card asks you to think larger than your current horizon — the world in that small globe is not a metaphor, it is an instruction.",
+      "keywords": {
+        "upright": [
+          "planning",
+          "future vision",
+          "standing at the edge",
+          "the world is wider than this",
+          "expansion beginning"
+        ],
+        "reversed": [
+          "fear of the unknown",
+          "staying put",
+          "indecision",
+          "narrow thinking"
+        ]
+      },
+      "themes": [
+        "career",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_hand_planets_transit"
+      ]
+    },
+    {
+      "id": 66,
+      "name": "Three of Wands",
+      "arcana": "Minor",
+      "number": 3,
+      "suit": "Wands",
+      "meaning": "The plan in motion — ships on the horizon, expansion already underway.",
+      "description": "Three of Wands watches from the cliff as the ships go out. What was planned has been launched; what was hoped is now in motion. This card marks the particular patience of someone who has done the work and now waits for the world to respond.",
+      "keywords": {
+        "upright": [
+          "expansion",
+          "ships on the horizon",
+          "plans in motion",
+          "foresight",
+          "growth underway"
+        ],
+        "reversed": [
+          "delays",
+          "plans stalled",
+          "unexpected obstacles",
+          "overextension"
+        ]
+      },
+      "themes": [
+        "career",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_hand_planets_transit"
+      ]
+    },
+    {
+      "id": 67,
+      "name": "Four of Wands",
+      "arcana": "Minor",
+      "number": 4,
+      "suit": "Wands",
+      "meaning": "Celebration and coming home — a genuine moment of arrival.",
+      "description": "Four of Wands raises the garland between four staffs while figures dance in the distance. This card marks a real pause in the work — something finished, something celebrated, a moment of \"we made it here.\" Allow the arrival before moving on.",
+      "keywords": {
+        "upright": [
+          "celebration",
+          "homecoming",
+          "harmony",
+          "a moment of arrival",
+          "stability earned"
+        ],
+        "reversed": [
+          "tension at home",
+          "instability",
+          "incomplete celebration",
+          "disrupted harmony"
+        ]
+      },
+      "themes": [
+        "family_home",
+        "completion"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_hand_planets_transit"
+      ]
+    },
+    {
+      "id": 68,
+      "name": "Five of Wands",
+      "arcana": "Minor",
+      "number": 5,
+      "suit": "Wands",
+      "meaning": "Competition, friction, and everyone pushing at once — constructive or chaotic.",
+      "description": "Five of Wands is five figures all swinging staffs in different directions — not quite fighting, not quite playing. The energy is real but the direction is unclear. This card marks productive friction when it's generative, and exhausting conflict when it's not.",
+      "keywords": {
+        "upright": [
+          "competition",
+          "conflict",
+          "friction",
+          "everyone pushing at once",
+          "creative tension"
+        ],
+        "reversed": [
+          "cooperation found",
+          "conflict resolved",
+          "avoiding confrontation",
+          "suppressed aggression"
+        ]
+      },
+      "themes": [
+        "tension",
+        "sudden_change"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_hand_planets_transit",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 69,
+      "name": "Six of Wands",
+      "arcana": "Minor",
+      "number": 6,
+      "suit": "Wands",
+      "meaning": "Recognition earned and confidence restored — the return with victory.",
+      "description": "Six of Wands rides through a crowd with a laurel wreath. The recognition is real and deserved. This card marks the moment when effort becomes visible and is acknowledged — let it land rather than deflecting it.",
+      "keywords": {
+        "upright": [
+          "victory",
+          "recognition",
+          "confidence",
+          "earned success",
+          "public acknowledgment"
+        ],
+        "reversed": [
+          "lack of recognition",
+          "ego trouble",
+          "pride before a fall",
+          "hollow success"
+        ]
+      },
+      "themes": [
+        "career",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_hand_planets_transit"
+      ]
+    },
+    {
+      "id": 70,
+      "name": "Seven of Wands",
+      "arcana": "Minor",
+      "number": 7,
+      "suit": "Wands",
+      "meaning": "Holding your ground when everything is pushing back.",
+      "description": "Seven of Wands stands on higher ground fending off six staffs from below. The position is defensible, but it requires effort. This card asks you to examine whether what you are defending is worth the energy — and then, if it is, to hold.",
+      "keywords": {
+        "upright": [
+          "holding your ground",
+          "defensiveness",
+          "perseverance under pressure",
+          "conviction",
+          "worth defending"
+        ],
+        "reversed": [
+          "overwhelmed",
+          "giving up",
+          "backing down",
+          "exhaustion"
+        ]
+      },
+      "themes": [
+        "tension",
+        "career"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_hand_planets_transit",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 71,
+      "name": "Eight of Wands",
+      "arcana": "Minor",
+      "number": 8,
+      "suit": "Wands",
+      "meaning": "Things accelerating — movement, messages, and momentum arriving all at once.",
+      "description": "Eight of Wands is eight staffs arcing through open air, traveling fast toward a destination. The card is pure motion. What has been held or delayed is now in flight. This is not a time to pause — it is a time to direct the speed.",
+      "keywords": {
+        "upright": [
+          "swift movement",
+          "momentum",
+          "things happening fast",
+          "news arriving",
+          "acceleration"
+        ],
+        "reversed": [
+          "delays",
+          "frustration",
+          "blocked momentum",
+          "miscommunication"
+        ]
+      },
+      "themes": [
+        "sudden_change",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_hand_planets_transit"
+      ]
+    },
+    {
+      "id": 72,
+      "name": "Nine of Wands",
+      "arcana": "Minor",
+      "number": 9,
+      "suit": "Wands",
+      "meaning": "Battered but not broken — one more push from someone who knows what it cost to get here.",
+      "description": "Nine of Wands leans on a staff with the eight behind him, wounds visible, watching. He has earned every scar. This card does not promise it will be easy — it confirms that you have already survived what was harder, and that the end is closer than it feels.",
+      "keywords": {
+        "upright": [
+          "resilience",
+          "one more push",
+          "battered but not broken",
+          "guarded perseverance",
+          "close to the end"
+        ],
+        "reversed": [
+          "exhaustion",
+          "paranoia",
+          "refusing help",
+          "giving up at the last mile"
+        ]
+      },
+      "themes": [
+        "tension",
+        "health"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_hand_planets_transit",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 73,
+      "name": "Ten of Wands",
+      "arcana": "Minor",
+      "number": 10,
+      "suit": "Wands",
+      "meaning": "Overloaded — carrying more than belongs to you.",
+      "description": "Ten of Wands staggers forward under all ten staffs, destination in view. The weight is real. This card gives permission to set something down — not abandon it, but recognize that carrying everything yourself was never the only option.",
+      "keywords": {
+        "upright": [
+          "burden",
+          "overloaded",
+          "carrying too much",
+          "responsibility",
+          "near the finish line"
+        ],
+        "reversed": [
+          "relief",
+          "setting something down",
+          "delegating",
+          "releasing what was never yours"
+        ]
+      },
+      "themes": [
+        "tension",
+        "career"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_hand_planets_transit",
+        "dream_jung_symbols",
+        "astro_light_on_life"
+      ]
+    },
+    {
+      "id": 74,
+      "name": "Page of Wands",
+      "arcana": "Minor",
+      "number": "Page",
+      "suit": "Wands",
+      "meaning": "Enthusiasm arriving before the plan — energy looking for a direction.",
+      "description": "The Page of Wands holds the staff and stares at it as if seeing it for the first time, full of something that has not yet found its shape. This card marks creative energy in its most unformed state — joyful, urgent, and not yet organized. That is fine for now.",
+      "keywords": {
+        "upright": [
+          "enthusiasm",
+          "new passion",
+          "creative energy before the plan",
+          "free spirit",
+          "curiosity in motion"
+        ],
+        "reversed": [
+          "scattered",
+          "lack of follow-through",
+          "all spark no fire",
+          "immaturity"
+        ]
+      },
+      "themes": [
+        "new_beginnings",
+        "career"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_hand_planets_transit"
+      ]
+    },
+    {
+      "id": 75,
+      "name": "Knight of Wands",
+      "arcana": "Minor",
+      "number": "Knight",
+      "suit": "Wands",
+      "meaning": "Passion in motion — bold, fast, magnetic, and occasionally reckless.",
+      "description": "The Knight of Wands rides at full gallop, the horse rearing, his posture fearless. He does not stop to ask if this is wise — and sometimes that is exactly what is needed. This card brings energy and momentum; the wisdom is in knowing when to hold the reins.",
+      "keywords": {
+        "upright": [
+          "passion in motion",
+          "bold",
+          "adventurous",
+          "charismatic",
+          "fast and magnetic"
+        ],
+        "reversed": [
+          "reckless",
+          "scattered",
+          "all action no reflection",
+          "burns out fast"
+        ]
+      },
+      "themes": [
+        "sudden_change",
+        "career"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_hand_planets_transit"
+      ]
+    },
+    {
+      "id": 76,
+      "name": "Queen of Wands",
+      "arcana": "Minor",
+      "number": "Queen",
+      "suit": "Wands",
+      "meaning": "Charisma, warmth, and the fierce knowledge of your own creative power.",
+      "description": "The Queen of Wands sits with a sunflower and a black cat, surrounded by lions. She is magnetic without trying to be. This card marks the full expression of creative confidence — not performance, but the natural authority of someone who knows exactly what they are capable of.",
+      "keywords": {
+        "upright": [
+          "charisma",
+          "creative power",
+          "warmth",
+          "confidence",
+          "knowing your own strength"
+        ],
+        "reversed": [
+          "self-doubt",
+          "jealousy",
+          "burned out",
+          "creative energy turned inward as damage"
+        ]
+      },
+      "themes": [
+        "career",
+        "love_interest"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_hand_planets_transit"
+      ]
+    },
+    {
+      "id": 77,
+      "name": "King of Wands",
+      "arcana": "Minor",
+      "number": "King",
+      "suit": "Wands",
+      "meaning": "Visionary leadership — seeing what could be and making it compelling to others.",
+      "description": "The King of Wands leans forward on his throne, ready to stand. He is the one who sees the vision first and has the force of character to carry others toward it. This card marks the energy of the entrepreneur, the pioneer — someone who builds because they cannot imagine not building.",
+      "keywords": {
+        "upright": [
+          "visionary",
+          "entrepreneurial",
+          "bold leadership",
+          "inspiring",
+          "making the vision compelling to others"
+        ],
+        "reversed": [
+          "impulsive",
+          "egotistical",
+          "arrogant",
+          "vision without follow-through"
+        ]
+      },
+      "themes": [
+        "career",
+        "new_beginnings"
+      ],
+      "sourceRefs": [
+        "tarot_waite_pictorial_key",
+        "tarot_pollack_78_degrees",
+        "tarot_greer_taro_for_self",
+        "tarot_arrien_handbook",
+        "astro_forrest_inner_sky",
+        "astro_hand_planets_transit"
+      ]
+    }
+  ]
+}

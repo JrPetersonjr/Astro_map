@@ -5,7 +5,7 @@
   "display": "standalone",
   "background_color": "#101012",
   "theme_color": "#101012",
-  "description": "Installable local astrology workstation with Mage/GGUF bridging and project context indexing.",
+  "description": "Installable local astrology workstation with Mage-first interpretation, offline guide/index downloads, and project context indexing.",
   "icons": [
     {
       "src": "/sky-map-social.png",

@@ -1,0 +1,162 @@
+{
+  "version": 1,
+  "notes": "Curated bibliography for offline interpretation packaging. This file stores source metadata only and does not copy book text or excerpts.",
+  "tarot": [
+    {
+      "id": "tarot_waite_pictorial_key",
+      "title": "The Pictorial Key to the Tarot",
+      "author": "Arthur Edward Waite",
+      "type": "book",
+      "year": 1910,
+      "repute": "classic tarot reference",
+      "url": "https://archive.org/details/pictorialkeytota00wait",
+      "use": "Rider-Waite-Smith symbolic baseline and card family structure."
+    },
+    {
+      "id": "tarot_pollack_78_degrees",
+      "title": "Seventy-Eight Degrees of Wisdom",
+      "author": "Rachel Pollack",
+      "type": "book",
+      "year": 1980,
+      "repute": "highly regarded tarot interpretation text",
+      "url": "https://books.google.com/books?id=7R8QDwAAQBAJ",
+      "use": "Nuanced modern tarot symbolism, evolution, and reading practice."
+    },
+    {
+      "id": "tarot_greer_taro_for_self",
+      "title": "Tarot for Your Self",
+      "author": "Mary K. Greer",
+      "type": "book",
+      "year": 1984,
+      "repute": "respected practical tarot guide",
+      "url": "https://www.llewellyn.com/product.php?ean=9780875425851",
+      "use": "Reflective reading method and question-based interpretation."
+    },
+    {
+      "id": "tarot_arrien_handbook",
+      "title": "The Tarot Handbook",
+      "author": "Angeles Arrien",
+      "type": "book",
+      "year": 1988,
+      "repute": "classic symbolic tarot guide",
+      "url": "https://books.google.com/books?id=tG9xQgAACAAJ",
+      "use": "Archetypal, action-oriented reading frame."
+    }
+  ],
+  "astrology": [
+    {
+      "id": "astro_forrest_inner_sky",
+      "title": "The Inner Sky",
+      "author": "Steven Forrest",
+      "type": "book",
+      "year": 1984,
+      "repute": "well-regarded modern astrology text",
+      "url": "https://www.stevenforrest.com/books/the-inner-sky/",
+      "use": "Psychological astrology framing and planet-sign meaning."
+    },
+    {
+      "id": "astro_hand_planets_transit",
+      "title": "Planets in Transit",
+      "author": "Robert Hand",
+      "type": "book",
+      "year": 1976,
+      "repute": "standard transit reference",
+      "url": "https://www.astrologybyjudithryan.com/products/planets-in-transit-by-robert-hand",
+      "use": "Transit timing and planetary weather language."
+    },
+    {
+      "id": "astro_brady_eagle_lark",
+      "title": "The Eagle and the Lark",
+      "author": "Bernadette Brady",
+      "type": "book",
+      "year": 1999,
+      "repute": "respectable predictive astrology reference",
+      "url": "https://www.fishpond.com/Books/Eagle-and-Lark-Bernadette-Brady/9781902405206",
+      "use": "Narrative timing, cycles, and pattern language."
+    },
+    {
+      "id": "astro_arroyo_elements",
+      "title": "Astrology, Psychology, and the Four Elements",
+      "author": "Stephen Arroyo",
+      "type": "book",
+      "year": 1975,
+      "repute": "classic astrology-psychology bridge text",
+      "url": "https://www.goodreads.com/book/show/414016.Astrology_Psychology_and_the_Four_Elements",
+      "use": "Temperament, balance, and elemental interpretation."
+    },
+    {
+      "id": "astro_light_on_life",
+      "title": "Light on Life",
+      "author": "Hart de Fouw and Robert Svoboda",
+      "type": "book",
+      "year": 1996,
+      "repute": "well-regarded Vedic astrology text",
+      "url": "https://www.goodreads.com/book/show/850024.Light_on_Life",
+      "use": "Sidereal and Vedic astrology grounding."
+    }
+  ],
+  "dream": [
+    {
+      "id": "dream_jung_symbols",
+      "title": "Man and His Symbols",
+      "author": "C. G. Jung",
+      "type": "book",
+      "year": 1964,
+      "repute": "foundational symbolic psychology text",
+      "url": "https://books.google.com/books?id=H8bPAAAAMAAJ",
+      "use": "Archetypal symbolism and image-based dream interpretation."
+    },
+    {
+      "id": "dream_inner_work",
+      "title": "Inner Work",
+      "author": "Robert A. Johnson",
+      "type": "book",
+      "year": 1986,
+      "repute": "highly regarded dreamwork guide",
+      "url": "https://www.goodreads.com/book/show/11029.Inner_Work",
+      "use": "Practical dream journaling and active imagination."
+    },
+    {
+      "id": "dream_interpretation_of_dreams",
+      "title": "The Interpretation of Dreams",
+      "author": "Sigmund Freud",
+      "type": "book",
+      "year": 1899,
+      "repute": "historically important dream theory text",
+      "url": "https://archive.org/details/interpretationof00freu",
+      "use": "Classic dream-association framing, used cautiously and selectively."
+    }
+  ],
+  "repos": [
+    {
+      "id": "repo_astronomy_engine",
+      "title": "Astronomy Engine",
+      "author": "Don Cross / cosinekitty",
+      "type": "repository",
+      "year": 2019,
+      "repute": "widely used astronomy computation library",
+      "url": "https://github.com/cosinekitty/astronomy",
+      "use": "Actual ephemeris and planetary position computation."
+    },
+    {
+      "id": "repo_kerykeion",
+      "title": "Kerykeion",
+      "author": "g-battaglia",
+      "type": "repository",
+      "year": 2020,
+      "repute": "popular astrology chart library",
+      "url": "https://github.com/g-battaglia/Kerykeion",
+      "use": "Charting/reference implementation for astrology computations."
+    },
+    {
+      "id": "repo_vedastro",
+      "title": "VedAstro",
+      "author": "VedAstro contributors",
+      "type": "repository",
+      "year": 2023,
+      "repute": "Vedic astrology tooling and service stack",
+      "url": "https://github.com/VedAstro/VedAstro",
+      "use": "Vedic astrology tooling and MCP-style service patterns."
+    }
+  ]
+}

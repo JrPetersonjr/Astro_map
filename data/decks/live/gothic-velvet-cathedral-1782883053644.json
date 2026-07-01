@@ -1,0 +1,732 @@
+{
+  "styleGuide": {
+    "deckName": "Lumina Synodic - Gothic Velvet Cathedral",
+    "visualTheme": "Gothic Velvet Cathedral",
+    "continuityGoal": "Strict thematic continuity across all 78 cards with recurring character archetypes and unified visual language.",
+    "lighting": "Candlelit chiaroscuro with soft rim lighting",
+    "palette": [
+      "deep violet",
+      "candle amber",
+      "oxidized gold",
+      "obsidian black"
+    ]
+  },
+  "recurringCharacters": [
+    {
+      "archetype": "Seer",
+      "notes": "Calm gaze, lunar sigils, velvet mantle with brass filigree."
+    },
+    {
+      "archetype": "Guardian",
+      "notes": "Angular silhouette, armored brocade, cathedral heraldry motifs."
+    },
+    {
+      "archetype": "Alchemist",
+      "notes": "Layered robes, ritual tools, warm amber practical lights."
+    }
+  ],
+  "cards": [
+    {
+      "name": "Ace Of Cups",
+      "sourceArt": "data/cards/aceofcups.jpeg",
+      "prompt": "Tarot card illustration for 'Ace Of Cups' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Ace Of Pentacles",
+      "sourceArt": "data/cards/aceofpentacles.jpeg",
+      "prompt": "Tarot card illustration for 'Ace Of Pentacles' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Ace Of Swords",
+      "sourceArt": "data/cards/aceofswords.jpeg",
+      "prompt": "Tarot card illustration for 'Ace Of Swords' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Ace Of Wands",
+      "sourceArt": "data/cards/aceofwands.jpeg",
+      "prompt": "Tarot card illustration for 'Ace Of Wands' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Death",
+      "sourceArt": "data/cards/death.jpeg",
+      "prompt": "Tarot card illustration for 'Death' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Eight Of Cups",
+      "sourceArt": "data/cards/eightofcups.jpeg",
+      "prompt": "Tarot card illustration for 'Eight Of Cups' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Eight Of Pentacles",
+      "sourceArt": "data/cards/eightofpentacles.jpeg",
+      "prompt": "Tarot card illustration for 'Eight Of Pentacles' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Eight Of Swords",
+      "sourceArt": "data/cards/eightofswords.jpeg",
+      "prompt": "Tarot card illustration for 'Eight Of Swords' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Eight Of Wands",
+      "sourceArt": "data/cards/eightofwands.jpeg",
+      "prompt": "Tarot card illustration for 'Eight Of Wands' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Five Of Cups",
+      "sourceArt": "data/cards/fiveofcups.jpeg",
+      "prompt": "Tarot card illustration for 'Five Of Cups' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Five Of Pentacles",
+      "sourceArt": "data/cards/fiveofpentacles.jpeg",
+      "prompt": "Tarot card illustration for 'Five Of Pentacles' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Five Of Swords",
+      "sourceArt": "data/cards/fiveofswords.jpeg",
+      "prompt": "Tarot card illustration for 'Five Of Swords' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Five Of Wands",
+      "sourceArt": "data/cards/fiveofwands.jpeg",
+      "prompt": "Tarot card illustration for 'Five Of Wands' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Four Of Cups",
+      "sourceArt": "data/cards/fourofcups.jpeg",
+      "prompt": "Tarot card illustration for 'Four Of Cups' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Four Of Pentacles",
+      "sourceArt": "data/cards/fourofpentacles.jpeg",
+      "prompt": "Tarot card illustration for 'Four Of Pentacles' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Four Of Swords",
+      "sourceArt": "data/cards/fourofswords.jpeg",
+      "prompt": "Tarot card illustration for 'Four Of Swords' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Four Of Wands",
+      "sourceArt": "data/cards/fourofwands.jpeg",
+      "prompt": "Tarot card illustration for 'Four Of Wands' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Judgement",
+      "sourceArt": "data/cards/judgement.jpeg",
+      "prompt": "Tarot card illustration for 'Judgement' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Justice",
+      "sourceArt": "data/cards/justice.jpeg",
+      "prompt": "Tarot card illustration for 'Justice' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "King Of Cups",
+      "sourceArt": "data/cards/kingofcups.jpeg",
+      "prompt": "Tarot card illustration for 'King Of Cups' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "King Of Pentacles",
+      "sourceArt": "data/cards/kingofpentacles.jpeg",
+      "prompt": "Tarot card illustration for 'King Of Pentacles' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "King Of Swords",
+      "sourceArt": "data/cards/kingofswords.jpeg",
+      "prompt": "Tarot card illustration for 'King Of Swords' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "King Of Wands",
+      "sourceArt": "data/cards/kingofwands.jpeg",
+      "prompt": "Tarot card illustration for 'King Of Wands' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Knight Of Cups",
+      "sourceArt": "data/cards/knightofcups.jpeg",
+      "prompt": "Tarot card illustration for 'Knight Of Cups' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Knight Of Pentacles",
+      "sourceArt": "data/cards/knightofpentacles.jpeg",
+      "prompt": "Tarot card illustration for 'Knight Of Pentacles' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Knight Of Swords",
+      "sourceArt": "data/cards/knightofswords.jpeg",
+      "prompt": "Tarot card illustration for 'Knight Of Swords' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Knight Of Wands",
+      "sourceArt": "data/cards/knightofwands.jpeg",
+      "prompt": "Tarot card illustration for 'Knight Of Wands' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Nine Of Cups",
+      "sourceArt": "data/cards/nineofcups.jpeg",
+      "prompt": "Tarot card illustration for 'Nine Of Cups' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Nine Of Pentacles",
+      "sourceArt": "data/cards/nineofpentacles.jpeg",
+      "prompt": "Tarot card illustration for 'Nine Of Pentacles' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Nine Of Swords",
+      "sourceArt": "data/cards/nineofswords.jpeg",
+      "prompt": "Tarot card illustration for 'Nine Of Swords' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Nine Of Wands",
+      "sourceArt": "data/cards/nineofwands.jpeg",
+      "prompt": "Tarot card illustration for 'Nine Of Wands' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Page Of Cups",
+      "sourceArt": "data/cards/pageofcups.jpeg",
+      "prompt": "Tarot card illustration for 'Page Of Cups' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Page Of Pentacles",
+      "sourceArt": "data/cards/pageofpentacles.jpeg",
+      "prompt": "Tarot card illustration for 'Page Of Pentacles' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Page Of Swords",
+      "sourceArt": "data/cards/pageofswords.jpeg",
+      "prompt": "Tarot card illustration for 'Page Of Swords' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Page Of Wands",
+      "sourceArt": "data/cards/pageofwands.jpeg",
+      "prompt": "Tarot card illustration for 'Page Of Wands' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Queen Of Cups",
+      "sourceArt": "data/cards/queenofcups.jpeg",
+      "prompt": "Tarot card illustration for 'Queen Of Cups' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Queen Of Pentacles",
+      "sourceArt": "data/cards/queenofpentacles.jpeg",
+      "prompt": "Tarot card illustration for 'Queen Of Pentacles' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Queen Of Swords",
+      "sourceArt": "data/cards/queenofswords.jpeg",
+      "prompt": "Tarot card illustration for 'Queen Of Swords' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Queen Of Wands",
+      "sourceArt": "data/cards/queenofwands.jpeg",
+      "prompt": "Tarot card illustration for 'Queen Of Wands' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Seven Of Cups",
+      "sourceArt": "data/cards/sevenofcups.jpeg",
+      "prompt": "Tarot card illustration for 'Seven Of Cups' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Seven Of Pentacles",
+      "sourceArt": "data/cards/sevenofpentacles.jpeg",
+      "prompt": "Tarot card illustration for 'Seven Of Pentacles' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Seven Of Swords",
+      "sourceArt": "data/cards/sevenofswords.jpeg",
+      "prompt": "Tarot card illustration for 'Seven Of Swords' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Seven Of Wands",
+      "sourceArt": "data/cards/sevenofwands.jpeg",
+      "prompt": "Tarot card illustration for 'Seven Of Wands' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Six Of Cups",
+      "sourceArt": "data/cards/sixofcups.jpeg",
+      "prompt": "Tarot card illustration for 'Six Of Cups' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Six Of Pentacles",
+      "sourceArt": "data/cards/sixofpentacles.jpeg",
+      "prompt": "Tarot card illustration for 'Six Of Pentacles' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Six Of Swords",
+      "sourceArt": "data/cards/sixofswords.jpeg",
+      "prompt": "Tarot card illustration for 'Six Of Swords' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Six Of Wands",
+      "sourceArt": "data/cards/sixofwands.jpeg",
+      "prompt": "Tarot card illustration for 'Six Of Wands' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Temperance",
+      "sourceArt": "data/cards/temperance.jpeg",
+      "prompt": "Tarot card illustration for 'Temperance' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Ten Of Cups",
+      "sourceArt": "data/cards/tenofcups.jpeg",
+      "prompt": "Tarot card illustration for 'Ten Of Cups' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Ten Of Pentacles",
+      "sourceArt": "data/cards/tenofpentacles.jpeg",
+      "prompt": "Tarot card illustration for 'Ten Of Pentacles' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Ten Of Swords",
+      "sourceArt": "data/cards/tenofswords.jpeg",
+      "prompt": "Tarot card illustration for 'Ten Of Swords' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Ten Of Wands",
+      "sourceArt": "data/cards/tenofwands.jpeg",
+      "prompt": "Tarot card illustration for 'Ten Of Wands' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "The Chariot",
+      "sourceArt": "data/cards/thechariot.jpeg",
+      "prompt": "Tarot card illustration for 'The Chariot' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "The Devil",
+      "sourceArt": "data/cards/thedevil.jpeg",
+      "prompt": "Tarot card illustration for 'The Devil' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "The Emperor",
+      "sourceArt": "data/cards/theemperor.jpeg",
+      "prompt": "Tarot card illustration for 'The Emperor' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "The Empress",
+      "sourceArt": "data/cards/theempress.jpeg",
+      "prompt": "Tarot card illustration for 'The Empress' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "The Fool",
+      "sourceArt": "data/cards/thefool.jpeg",
+      "prompt": "Tarot card illustration for 'The Fool' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "The Hanged Man",
+      "sourceArt": "data/cards/thehangedman.jpeg",
+      "prompt": "Tarot card illustration for 'The Hanged Man' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "The Hermit",
+      "sourceArt": "data/cards/thehermit.jpeg",
+      "prompt": "Tarot card illustration for 'The Hermit' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "The Hierophant",
+      "sourceArt": "data/cards/thehierophant.jpeg",
+      "prompt": "Tarot card illustration for 'The Hierophant' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "The High Priestess",
+      "sourceArt": "data/cards/thehighpriestess.jpeg",
+      "prompt": "Tarot card illustration for 'The High Priestess' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "The Lovers",
+      "sourceArt": "data/cards/TheLovers.jpg",
+      "prompt": "Tarot card illustration for 'The Lovers' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "The Magician",
+      "sourceArt": "data/cards/themagician.jpeg",
+      "prompt": "Tarot card illustration for 'The Magician' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "The Moon",
+      "sourceArt": "data/cards/themoon.jpeg",
+      "prompt": "Tarot card illustration for 'The Moon' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "The Star",
+      "sourceArt": "data/cards/thestar.jpeg",
+      "prompt": "Tarot card illustration for 'The Star' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "The Strength",
+      "sourceArt": "data/cards/thestrength.jpeg",
+      "prompt": "Tarot card illustration for 'The Strength' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "The Sun",
+      "sourceArt": "data/cards/thesun.jpeg",
+      "prompt": "Tarot card illustration for 'The Sun' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "The Tower",
+      "sourceArt": "data/cards/thetower.jpeg",
+      "prompt": "Tarot card illustration for 'The Tower' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "The World",
+      "sourceArt": "data/cards/theworld.jpeg",
+      "prompt": "Tarot card illustration for 'The World' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Three Of Cups",
+      "sourceArt": "data/cards/threeofcups.jpeg",
+      "prompt": "Tarot card illustration for 'Three Of Cups' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Three Of Pentacles",
+      "sourceArt": "data/cards/threeofpentacles.jpeg",
+      "prompt": "Tarot card illustration for 'Three Of Pentacles' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Three Of Swords",
+      "sourceArt": "data/cards/threeofswords.jpeg",
+      "prompt": "Tarot card illustration for 'Three Of Swords' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Three Of Wands",
+      "sourceArt": "data/cards/threeofwands.jpeg",
+      "prompt": "Tarot card illustration for 'Three Of Wands' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Two Of Cups",
+      "sourceArt": "data/cards/twoofcups.jpeg",
+      "prompt": "Tarot card illustration for 'Two Of Cups' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Two Of Pentacles",
+      "sourceArt": "data/cards/twoofpentacles.jpeg",
+      "prompt": "Tarot card illustration for 'Two Of Pentacles' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Two Of Swords",
+      "sourceArt": "data/cards/twoofswords.jpeg",
+      "prompt": "Tarot card illustration for 'Two Of Swords' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Two Of Wands",
+      "sourceArt": "data/cards/twoofwands.jpeg",
+      "prompt": "Tarot card illustration for 'Two Of Wands' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    },
+    {
+      "name": "Wheel of Fortune",
+      "sourceArt": "data/cards/wheeloffortune.jpeg",
+      "prompt": "Tarot card illustration for 'Wheel of Fortune' in Gothic Velvet Cathedral style; preserve tarot symbolism, recurring cast, candlelit chiaroscuro, deep violet and oxidized gold palette, editorial fantasy quality.",
+      "negativePrompt": "generic ai look, inconsistent faces, mismatched costume era, flat lighting, washed colors, low detail, text artifacts, extra limbs",
+      "compositionNotes": "Center-weighted composition with symbolic foreground object and architectural depth.",
+      "paletteNotes": "Obsidian black base, deep violet shadows, candle amber highlights, oxidized gold accents.",
+      "characterContinuityNotes": "Maintain recurring archetypes, facial structure, wardrobe motifs, and sigil language across the full deck."
+    }
+  ]
+}

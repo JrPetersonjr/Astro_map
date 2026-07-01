@@ -3,6 +3,9 @@ const APP_SHELL = [
   '/',
   '/index.html',
   '/data/tarotCards.js',
+  '/standalone/interpretation-sources.json',
+  '/data/interpretation-index.json',
+  '/data/interpretation-guide.md',
   '/vendor/astronomy.browser.min.js',
   '/sky-map-social.png'
 ];

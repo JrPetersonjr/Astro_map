@@ -10,8 +10,8 @@
     "intent": "astrology-reading",
     "launch": {
       "roots": [
-        "H:/airlock/homeplanetstudio",
-        "H:/airlock/flowstate_mage"
+        "H:/AIRLOCK/HomePlanetStudio",
+        "H:/AIRLOCK/FlowState_Mage"
       ],
       "command": "",
       "args": [],
@@ -31,22 +31,26 @@
     {
       "name": "archivist-projects",
       "roots": [
-        "H:/airlock/homeplanetstudio/projects",
-        "H:/airlock/flowstate_mage/projects"
+        "H:/AIRLOCK/HomePlanetStudio/docs",
+        "H:/AIRLOCK/HomePlanetStudio/ROADMAP.md",
+        "H:/AIRLOCK/HomePlanetStudio/SKETCHES.md",
+        "H:/AIRLOCK/HomePlanetStudio/docs/UNIFICATION.md"
       ]
     },
     {
       "name": "mage-system",
       "roots": [
-        "H:/airlock/homeplanetstudio/mage",
-        "H:/airlock/flowstate_mage/mage"
+        "H:/AIRLOCK/HomePlanetStudio/engine",
+        "H:/AIRLOCK/HomePlanetStudio/.mcp.json",
+        "H:/AIRLOCK/FlowState_Mage/mage.cmd"
       ]
     },
     {
       "name": "indra-system",
       "roots": [
-        "H:/airlock/homeplanetstudio/indra",
-        "H:/airlock/flowstate_mage/indra"
+        "H:/AIRLOCK/FlowState_Mage/mage_modules/indra",
+        "H:/AIRLOCK/FlowState_Mage/mage_modules/README.md",
+        "H:/AIRLOCK/HomePlanetStudio/engine/indra.py"
       ]
     }
   ],
