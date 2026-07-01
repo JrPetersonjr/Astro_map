@@ -2,3 +2,4 @@ test_key.js
 *.env
 .env*
 node_modules/
+standalone/.mage-process.json
