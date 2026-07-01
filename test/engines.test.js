@@ -7,7 +7,7 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 
 const { computeSky } = require('../standalone/build-forecast-cache.js');
-const { interpret, renderEffect } = require('../standalone/astro-interpret.js');
+const { interpret, renderEffect, planetMeaning } = require('../standalone/astro-interpret.js');
 const dream = require('../standalone/dream-interpret.js');
 const tarot = require('../standalone/tarot-interpret.js');
 
@@ -42,6 +42,14 @@ test('astro-interpret: rendered effect names no planets and advises caution', ()
   assert.match(prose, /Best move:/);
   assert.match(prose, /do not launch|sit tight/i);
   assert.doesNotMatch(prose, /step forward with courage/i); // the old, wrong read
+});
+
+test('astro-interpret: planet-in-sign lookup and Venus/Mars flavor', () => {
+  assert.match(planetMeaning('Venus', 'Leo'), /adored|romance|warmly/i);
+  assert.equal(planetMeaning('Mars', 'NotASign'), null);
+  const prose = renderEffect(interpret(skyFor(2026, 7, 1))); // Venus Leo, Mars Gemini
+  assert.match(prose, /Venus in Leo/);
+  assert.match(prose, /Mars in Gemini/);
 });
 
 test('astro-interpret: moon mood gives each day distinct texture', () => {

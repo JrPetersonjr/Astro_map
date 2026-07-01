@@ -7,7 +7,52 @@
     "moon": ["astro_forrest_inner_sky", "astro_arroyo_elements"],
     "retrograde": ["astro_hand_planets_transit"],
     "generational": ["astro_brady_eagle_lark"],
-    "polarity": ["astro_hand_planets_transit"]
+    "polarity": ["astro_hand_planets_transit"],
+    "planet": ["astro_forrest_inner_sky", "astro_arroyo_elements"]
+  },
+  "planetInSign": {
+    "Mercury": {
+      "Aries": "thinks and speaks fast and blunt — decisive, but says it before editing it",
+      "Taurus": "thinks slowly and concretely — deliberate, practical, and hard to rush",
+      "Gemini": "thinks quick and curious — versatile, chatty, hungry for information",
+      "Cancer": "thinks through feeling and memory — intuitive, and easily colored by mood",
+      "Leo": "thinks and speaks with flair — confident, warm, big-picture",
+      "Virgo": "thinks precisely — analytical, detail-perfect, quietly critical",
+      "Libra": "thinks in balance — diplomatic, weighing every side before deciding",
+      "Scorpio": "thinks deep and strategic — probing, private, gets to the bottom of things",
+      "Sagittarius": "thinks big and blunt — philosophical, honest, impatient with detail",
+      "Capricorn": "thinks structured and serious — practical, goal-first, no wasted words",
+      "Aquarius": "thinks inventive and detached — original, objective, a step to the side",
+      "Pisces": "thinks in images and associations — imaginative, poetic, feeling-led"
+    },
+    "Venus": {
+      "Aries": "loves boldly and fast — wants pursuit, spark, and the thrill of the chase",
+      "Taurus": "loves steadily and sensually — wants loyalty, comfort, and lasting touch",
+      "Gemini": "loves playfully and in words — wants wit, variety, and lively company",
+      "Cancer": "loves tenderly and protectively — wants closeness, safety, and being cared for",
+      "Leo": "loves grandly and warmly — wants romance, devotion, and to be adored",
+      "Virgo": "loves through care and usefulness — wants to be needed and to quietly tend",
+      "Libra": "loves harmoniously — wants partnership, fairness, and beauty shared",
+      "Scorpio": "loves all-or-nothing — wants depth, honesty, and total merging",
+      "Sagittarius": "loves freely — wants space, adventure, and shared meaning",
+      "Capricorn": "loves seriously and for keeps — wants commitment, respect, and to build",
+      "Aquarius": "loves as friendship first — wants freedom and shared ideals",
+      "Pisces": "loves boundlessly — wants soul-connection, tenderness, and to dissolve into it"
+    },
+    "Mars": {
+      "Aries": "acts fast and direct — raw drive, competitive, first to move",
+      "Taurus": "acts slow and immovable — steady, stubborn, built to endure",
+      "Gemini": "acts through words and ideas — versatile, scattered, quick to pivot",
+      "Cancer": "acts indirectly and protectively — driven by feeling, fierce in defense",
+      "Leo": "acts boldly and proudly — dramatic energy that wants recognition",
+      "Virgo": "acts precisely and efficiently — targeted effort, skill over force",
+      "Libra": "acts through others and negotiation — reluctant to fight alone",
+      "Scorpio": "acts strategic and relentless — controlled intensity that doesn't quit",
+      "Sagittarius": "acts restless and free — chasing the horizon, hard to pin down",
+      "Capricorn": "acts with discipline and ambition — the patient, relentless long climb",
+      "Aquarius": "acts for a cause and on its own terms — unconventional, principled",
+      "Pisces": "acts subtly and indirectly — driven by dream, compassion, or escape"
+    }
   },
   "moonInSign": {
     "Aries": "the mood runs fast and hot — impulse, courage, and a short fuse; move, but don't pick fights",

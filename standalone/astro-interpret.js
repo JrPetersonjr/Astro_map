@@ -47,7 +47,7 @@ function interpret(sky) {
 
   const out = {
     lunation: { phase: sky.moonPhase, sign: moon.sign, tone: lun.tone, core: lun.core, isFull, isNew },
-    axis: null, moonMood: null, mercuryRetro: null, otherRetro: [], generational: null, polarity: null, bestMove: null,
+    axis: null, moonMood: null, venus: null, mars: null, mercuryRetro: null, otherRetro: [], generational: null, polarity: null, bestMove: null,
     sources: []
   };
   const srcMap = RULES._sources || {};
@@ -56,6 +56,13 @@ function interpret(sky) {
   // Daily emotional weather from the Moon's sign (the fastest mover — gives each day its own texture).
   const moonMood = (RULES.moonInSign || {})[moon.sign];
   if (moonMood) { out.moonMood = moonMood; (srcMap.moon || []).forEach((s) => firedSources.add(s)); }
+
+  // Personal-planet flavor: how the period relates (Venus) and pursues (Mars).
+  const pis = RULES.planetInSign || {};
+  const venusB = by('Venus'), marsB = by('Mars');
+  if (pis.Venus && pis.Venus[venusB.sign]) out.venus = { sign: venusB.sign, meaning: pis.Venus[venusB.sign] };
+  if (pis.Mars && pis.Mars[marsB.sign]) out.mars = { sign: marsB.sign, meaning: pis.Mars[marsB.sign] };
+  if (out.venus || out.mars) (srcMap.planet || []).forEach((s) => firedSources.add(s));
 
   if (isFull || isNew) {
     const key = AXIS_OF[sun.sign];
@@ -112,6 +119,10 @@ function renderEffect(interp) {
 
   if (interp.moonMood) parts.push(`Emotionally, ${interp.moonMood}.`);
 
+  if (interp.venus && interp.mars) {
+    parts.push(`In love and drive, Venus in ${interp.venus.sign} ${interp.venus.meaning}, while Mars in ${interp.mars.sign} ${interp.mars.meaning}.`);
+  }
+
   if (lun.isFull && axis) {
     parts.push(`This is a culmination, not a fresh start — the Full Moon lights both ends of the ${axis.key} axis: ${lower1(axis.fullMoon)}`);
   } else if (lun.isNew && axis) {
@@ -138,7 +149,12 @@ function renderEffect(interp) {
   return parts.map((p) => p.trim()).filter(Boolean).map((p) => /[.!?—]$/.test(p) ? p : p + '.').join(' ');
 }
 
-module.exports = { interpret, renderEffect };
+// Direct lookup of a planet-in-sign meaning (for chart tooltips, queries, tests).
+function planetMeaning(planet, sign) {
+  return (RULES.planetInSign && RULES.planetInSign[planet] && RULES.planetInSign[planet][sign]) || null;
+}
+
+module.exports = { interpret, renderEffect, planetMeaning };
 
 if (require.main === module) {
   const { computeSky, ymd } = require(path.join(__dirname, 'build-forecast-cache.js')); // lazy: avoid require cycle
