@@ -47,13 +47,17 @@ function interpret(sky) {
 
   const out = {
     lunation: { phase: sky.moonPhase, sign: moon.sign, tone: lun.tone, core: lun.core, isFull, isNew },
-    axis: null, mercuryRetro: null, otherRetro: [], generational: null, polarity: null, bestMove: null
+    axis: null, mercuryRetro: null, otherRetro: [], generational: null, polarity: null, bestMove: null,
+    sources: []
   };
+  const srcMap = RULES._sources || {};
+  const firedSources = new Set(srcMap.lunation || []); // lunation always fires
 
   if (isFull || isNew) {
     const key = AXIS_OF[sun.sign];
     const a = RULES.axes[key];
     out.axis = { key, tension: a.tension, fullMoon: a.fullMoon || a.tension, poles: a.poles };
+    (srcMap.axis || []).forEach((s) => firedSources.add(s));
   }
 
   for (const p of PERSONAL) {
@@ -71,8 +75,10 @@ function interpret(sky) {
       out.otherRetro.push({ planet: p, sign: b.sign, base: rc?.base || '' });
     }
   }
+  if (out.mercuryRetro || out.otherRetro.length) (srcMap.retrograde || []).forEach((s) => firedSources.add(s));
 
   out.generational = softTriangleAmong(GENERATIONAL, sky.aspects);
+  if (out.generational) (srcMap.generational || []).forEach((s) => firedSources.add(s));
 
   const top = sky.aspects.slice(0, 6);
   const hard = top.filter((a) => HARD.has(a.name)).length;
@@ -84,6 +90,8 @@ function interpret(sky) {
   else tone = 'mixed';
   out.polarity = tone;
   out.bestMove = RULES.polarity[tone].bestMove;
+  (srcMap.polarity || []).forEach((s) => firedSources.add(s));
+  out.sources = [...firedSources];
   return out;
 }
 

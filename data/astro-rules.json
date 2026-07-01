@@ -1,6 +1,13 @@
 {
   "_note": "Original, textbook-anchored interpretation rules authored in-repo (NOT copied passages). Voice: modern psychological astrology for a spoken 'Cosmic Weather' forecast. Citation anchors: Robert Hand 'Planets in Transit', Steven Forrest 'The Inner Sky', Stephen Arroyo, Bernadette Brady 'The Eagle and the Lark'. Edit freely — this is the deterministic knowledge base; the model is only optional polish.",
   "_version": 1,
+  "_sources": {
+    "lunation": ["astro_brady_eagle_lark", "astro_forrest_inner_sky"],
+    "axis": ["astro_forrest_inner_sky", "astro_arroyo_elements"],
+    "retrograde": ["astro_hand_planets_transit"],
+    "generational": ["astro_brady_eagle_lark"],
+    "polarity": ["astro_hand_planets_transit"]
+  },
   "lunation": {
     "New Moon": { "tone": "initiating", "core": "Sun and Moon conjoin — a seed point. Intentions planted now in this sign's domain." },
     "Waxing Crescent": { "tone": "building", "core": "the first push after the seed — commit to the direction." },

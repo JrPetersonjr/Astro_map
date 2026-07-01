@@ -466,6 +466,8 @@
     .mage-launch-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     .forecast-panel .forecast-title { font-size: 0.78rem; color: var(--gold); font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
     .forecast-panel .forecast-source { font-size: 0.7rem; color: var(--soft); }
+    .forecast-panel .forecast-citations { margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.68rem; color: var(--soft); line-height: 1.55; }
+    .forecast-panel .forecast-citations .cite-label { color: var(--gold); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.6rem; display: block; margin-bottom: 3px; }
     .forecast-panel .forecast-body { color: var(--muted); line-height: 1.55; white-space: pre-wrap; font-size: 0.84rem; }
 
     /* ── Tarot Tab ── */
@@ -1886,6 +1888,7 @@
         <div class="accordion-body">
           <div class="forecast-source" id="precomputedForecastSource"></div>
           <div class="forecast-body" id="precomputedForecastBody"></div>
+          <div class="forecast-citations" id="precomputedForecastCitations" style="display:none;"></div>
         </div>
       </details>
 
@@ -2897,6 +2900,17 @@ If the tool supports image output, return the image directly and keep any text r
         panel.style.display = '';
         source.textContent = `Source: ${data.source || 'precomputed'} · Generated: ${data.generatedAt ? new Date(data.generatedAt).toLocaleString() : 'unknown'}`;
         body.textContent = entry.forecast;
+
+        const cites = document.getElementById('precomputedForecastCitations');
+        if (cites) {
+          if (Array.isArray(entry.sources) && entry.sources.length) {
+            const list = entry.sources.map((s) => `${s.author}, ${s.title} (${s.year})`).join(' · ');
+            cites.innerHTML = `<span class="cite-label">Grounded in</span>${list}`;
+            cites.style.display = '';
+          } else {
+            cites.style.display = 'none';
+          }
+        }
       } catch {
         // Keep panel hidden when no precomputed data exists.
       }

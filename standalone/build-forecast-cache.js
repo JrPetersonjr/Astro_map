@@ -3,6 +3,10 @@ const path = require('path');
 const A = require('../vendor/astronomy.browser.min.js');
 
 const { interpret, renderEffect } = require('./astro-interpret.js');
+const SOURCES = require('./interpretation-sources.json');
+const SRC = {};
+for (const cat of ['tarot', 'astrology', 'dream', 'repos']) for (const s of (SOURCES[cat] || [])) SRC[s.id] = s;
+const resolveSources = (ids) => (ids || []).map((id) => SRC[id]).filter(Boolean).map((s) => ({ author: s.author, title: s.title, year: s.year }));
 
 const ROOT = path.resolve(__dirname, '..');
 const OUTPUT = path.join(ROOT, 'data', 'precomputedForecast.json');
@@ -177,6 +181,7 @@ async function run() {
     entries.push({
       date,
       forecast,
+      sources: resolveSources(interp.sources),
       sky: {
         moonPhase: sky.moonPhase,
         positions: sky.bodies.map((b) => ({ planet: b.key, sign: b.sign, retrograde: b.retrograde })),
