@@ -15,7 +15,7 @@ What it does:
 - Highlights major aspects and retrograde status.
 - Adds a "Use My Location" option for local altitude/azimuth horizon context.
 - Includes a local life mapping analyzer for themes like loss, gain, tension, new love, money, career, family/home, health, spiritual confusion, and sudden change. It maps user-entered life themes to the current tropical chart, approximate sidereal/Vedic positions, nakshatras, Moon context, and local astronomy context.
-- Supports a Netlify function proxy for optional AI query integration. Add `QUERY_API_KEY` as an environment variable in Netlify to keep the secret off the client.
+- Supports a Vercel serverless proxy for optional AI query integration. Add `QUERY_API_KEY` as an environment variable in Vercel to keep the secret off the client.
 - Supports a provider bridge for dev-side AI/astrology integrations and the local Mage runtime path.
 
 AI/Astrology integrations:
@@ -24,9 +24,8 @@ AI/Astrology integrations:
 - Providers:
   - `Mage Local` = the only end-user interpretation path; uses the local runtime bridge and repo/context hints.
 - No API key is required for the normal user flow.
-- New bridge functions:
-  - `api/astro-bridge.js` (Vercel)
-  - `netlify/functions/astro-bridge.js` (Netlify)
+- Bridge function (Vercel serverless):
+  - `api/astro-bridge.js`
 
 Standalone local app (Mage MCP / GGUF / Homeplanet):
 

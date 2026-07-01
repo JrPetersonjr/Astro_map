@@ -1011,6 +1011,18 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // Serve the Vercel /api/decks route locally so the tarot deck catalog loads
+  // (and doesn't 404) when running under the standalone runtime.
+  if (parsed.pathname === '/api/decks' && req.method === 'GET') {
+    try {
+      const payload = await buildDeckCatalogPayload();
+      sendJson(res, 200, payload);
+    } catch (error) {
+      sendJson(res, 500, { error: error.message || 'Failed to load deck catalog' });
+    }
+    return;
+  }
+
   await serveStatic(parsed.pathname || '/', res);
 });
 
