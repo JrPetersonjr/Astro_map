@@ -7,7 +7,16 @@
   "mage": {
     "mcpUrl": "http://127.0.0.1:7788/api/mcp",
     "apiKey": "",
-    "intent": "astrology-reading"
+    "intent": "astrology-reading",
+    "launch": {
+      "roots": [
+        "H:/airlock/homeplanetstudio",
+        "H:/airlock/flowstate_mage"
+      ],
+      "command": "",
+      "args": [],
+      "cwd": ""
+    }
   },
   "gguf": {
     "baseUrl": "http://127.0.0.1:1234/v1/chat/completions",

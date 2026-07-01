@@ -3,10 +3,13 @@ const fs = require('fs');
 const fsp = require('fs/promises');
 const path = require('path');
 const url = require('url');
+const { spawn } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
 const CONFIG_PATH = path.join(__dirname, 'contexts.json');
 const INDEX_DIR = path.join(__dirname, '.indexes');
+const MAGE_STATE_PATH = path.join(__dirname, '.mage-process.json');
+const DECK_DIR = path.join(ROOT, 'data', 'decks');
 
 function loadConfig() {
   const raw = fs.readFileSync(CONFIG_PATH, 'utf8');
@@ -14,6 +17,205 @@ function loadConfig() {
 }
 
 let config = loadConfig();
+let mageProcess = null;
+
+function fileExistsSync(target) {
+  try {
+    return fs.existsSync(target);
+  } catch {
+    return false;
+  }
+}
+
+function isPidAlive(pid) {
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function saveMageState(state) {
+  try {
+    fs.writeFileSync(MAGE_STATE_PATH, JSON.stringify(state, null, 2), 'utf8');
+  } catch {
+    // Non-fatal.
+  }
+}
+
+function readMageState() {
+  try {
+    if (!fileExistsSync(MAGE_STATE_PATH)) return null;
+    return JSON.parse(fs.readFileSync(MAGE_STATE_PATH, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+function detectMageLaunch() {
+  const launchCfg = config.mage?.launch || {};
+
+  // Explicit command override in config.
+  if (launchCfg.command && String(launchCfg.command).trim()) {
+    return {
+      command: launchCfg.command,
+      args: Array.isArray(launchCfg.args) ? launchCfg.args : [],
+      cwd: launchCfg.cwd || ROOT,
+      detectedFrom: 'contexts.json command override'
+    };
+  }
+
+  const defaultRoots = [
+    'H:/airlock/homeplanetstudio',
+    'H:/airlock/flowstate_mage'
+  ];
+  const roots = Array.isArray(launchCfg.roots) && launchCfg.roots.length ? launchCfg.roots : defaultRoots;
+
+  for (const root of roots) {
+    const startPs1 = path.join(root, 'start-mage.ps1');
+    const scriptsStartPs1 = path.join(root, 'scripts', 'start-mage.ps1');
+    const runMagePs1 = path.join(root, 'run-mage.ps1');
+    const startCmd = path.join(root, 'start-mage.cmd');
+    const mageServerJs = path.join(root, 'mage-server.js');
+    const packageJson = path.join(root, 'package.json');
+
+    if (fileExistsSync(startPs1)) {
+      return {
+        command: 'powershell',
+        args: ['-ExecutionPolicy', 'Bypass', '-File', startPs1],
+        cwd: root,
+        detectedFrom: startPs1
+      };
+    }
+    if (fileExistsSync(scriptsStartPs1)) {
+      return {
+        command: 'powershell',
+        args: ['-ExecutionPolicy', 'Bypass', '-File', scriptsStartPs1],
+        cwd: root,
+        detectedFrom: scriptsStartPs1
+      };
+    }
+    if (fileExistsSync(runMagePs1)) {
+      return {
+        command: 'powershell',
+        args: ['-ExecutionPolicy', 'Bypass', '-File', runMagePs1],
+        cwd: root,
+        detectedFrom: runMagePs1
+      };
+    }
+    if (fileExistsSync(startCmd)) {
+      return {
+        command: startCmd,
+        args: [],
+        cwd: root,
+        detectedFrom: startCmd
+      };
+    }
+    if (fileExistsSync(mageServerJs)) {
+      return {
+        command: 'node',
+        args: [mageServerJs],
+        cwd: root,
+        detectedFrom: mageServerJs
+      };
+    }
+    if (fileExistsSync(packageJson)) {
+      return {
+        command: 'npm',
+        args: ['run', 'mage'],
+        cwd: root,
+        detectedFrom: packageJson
+      };
+    }
+  }
+
+  return null;
+}
+
+function currentMageStatus() {
+  if (mageProcess?.pid && isPidAlive(mageProcess.pid)) {
+    return {
+      running: true,
+      launchable: true,
+      pid: mageProcess.pid,
+      startedAt: mageProcess.startedAt,
+      cwd: mageProcess.cwd,
+      command: mageProcess.command,
+      args: mageProcess.args,
+      detectedFrom: mageProcess.detectedFrom
+    };
+  }
+
+  const persisted = readMageState();
+  if (persisted?.pid && isPidAlive(persisted.pid)) {
+    return {
+      running: true,
+      launchable: true,
+      pid: persisted.pid,
+      startedAt: persisted.startedAt,
+      cwd: persisted.cwd,
+      command: persisted.command,
+      args: persisted.args,
+      detectedFrom: persisted.detectedFrom
+    };
+  }
+
+  const detected = detectMageLaunch();
+  return {
+    running: false,
+    launchable: Boolean(detected),
+    detectedFrom: detected?.detectedFrom || null,
+    cwd: detected?.cwd || null,
+    command: detected?.command || null,
+    args: detected?.args || []
+  };
+}
+
+function launchMageProcess() {
+  const status = currentMageStatus();
+  if (status.running) return status;
+
+  const launch = detectMageLaunch();
+  if (!launch) {
+    throw new Error('Could not detect Mage launch command. Configure standalone/contexts.json -> mage.launch.');
+  }
+
+  const child = spawn(launch.command, launch.args || [], {
+    cwd: launch.cwd || ROOT,
+    detached: true,
+    stdio: 'ignore',
+    shell: true
+  });
+  child.unref();
+
+  mageProcess = {
+    pid: child.pid,
+    startedAt: new Date().toISOString(),
+    cwd: launch.cwd || ROOT,
+    command: launch.command,
+    args: launch.args || [],
+    detectedFrom: launch.detectedFrom || 'auto-detect'
+  };
+
+  saveMageState(mageProcess);
+  return { running: true, ...mageProcess };
+}
+
+function stopMageProcess() {
+  const status = currentMageStatus();
+  if (!status.running) return { running: false, stopped: false };
+
+  try {
+    process.kill(status.pid);
+  } catch {
+    // Ignore kill errors.
+  }
+
+  mageProcess = null;
+  saveMageState({});
+  return { running: false, stopped: true, pid: status.pid };
+}
 
 function setCors(res) {
   res.setHeader('Access-Control-Allow-Origin', config.server?.corsOrigin || '*');
@@ -260,6 +462,54 @@ function contentTypeFor(filePath) {
   }
 }
 
+function safeDeckSlug(input) {
+  return String(input || 'tarot-deck')
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 48) || 'tarot-deck';
+}
+
+async function saveDeckManifest(payload) {
+  await fsp.mkdir(DECK_DIR, { recursive: true });
+
+  const slug = safeDeckSlug(payload?.slug || 'tarot-deck');
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const fileName = `${slug}-${stamp}.json`;
+  const filePath = path.join(DECK_DIR, fileName);
+
+  const rawManifest = payload?.manifest;
+  if (rawManifest === undefined || rawManifest === null) {
+    throw new Error('Missing manifest');
+  }
+
+  let manifest = rawManifest;
+  if (typeof rawManifest === 'string') {
+    try {
+      manifest = JSON.parse(rawManifest);
+    } catch {
+      manifest = { raw: rawManifest };
+    }
+  }
+
+  const wrapped = {
+    version: 1,
+    savedAt: new Date().toISOString(),
+    slug,
+    source: payload?.source || 'luminasynodic-dev',
+    manifest
+  };
+
+  await fsp.writeFile(filePath, JSON.stringify(wrapped, null, 2), 'utf8');
+
+  return {
+    fileName,
+    filePath: filePath.replace(/\\/g, '/'),
+    slug,
+    savedAt: wrapped.savedAt
+  };
+}
+
 async function serveStatic(reqPath, res) {
   const cleanPath = reqPath === '/' ? '/index.html' : reqPath;
   const fsPath = path.join(ROOT, decodeURIComponent(cleanPath));
@@ -314,6 +564,27 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  if (parsed.pathname === '/local/mage/status' && req.method === 'GET') {
+    sendJson(res, 200, { ok: true, ...currentMageStatus() });
+    return;
+  }
+
+  if (parsed.pathname === '/local/mage/launch' && req.method === 'POST') {
+    try {
+      const result = launchMageProcess();
+      sendJson(res, 200, { ok: true, ...result });
+    } catch (error) {
+      sendJson(res, 500, { error: error.message || 'Failed to launch Mage' });
+    }
+    return;
+  }
+
+  if (parsed.pathname === '/local/mage/stop' && req.method === 'POST') {
+    const result = stopMageProcess();
+    sendJson(res, 200, { ok: true, ...result });
+    return;
+  }
+
   if (parsed.pathname === '/local/context/reindex' && req.method === 'POST') {
     try {
       const indexed = await rebuildIndexes();
@@ -365,6 +636,18 @@ const server = http.createServer(async (req, res) => {
       sendJson(res, 200, { ok: true, provider, data });
     } catch (error) {
       sendJson(res, 502, { error: error.message || 'Bridge failure' });
+    }
+    return;
+  }
+
+  if (parsed.pathname === '/local/decks/save' && req.method === 'POST') {
+    try {
+      const raw = await readBody(req);
+      const body = raw ? JSON.parse(raw) : {};
+      const saved = await saveDeckManifest(body || {});
+      sendJson(res, 200, { ok: true, saved });
+    } catch (error) {
+      sendJson(res, 500, { error: error.message || 'Failed to save deck manifest' });
     }
     return;
   }

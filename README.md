@@ -43,10 +43,26 @@ Standalone local app (Mage MCP / GGUF / Homeplanet):
 - In app settings (`Journal -> Password/Settings`):
   - set provider to `Mage Local`, `GGUF Local`, or `Homeplanet Local`
   - verify `Local runtime URL` (default `http://127.0.0.1:8787`)
+  - use `Launch Mage (Dev)` to auto-detect and start Mage from local roots
+  - use `Mage Status` to confirm local process status
 - Reindex project/system contexts:
   - `POST http://127.0.0.1:8787/local/context/reindex`
 - Search indexes:
   - `GET http://127.0.0.1:8787/local/context/search?q=your+term`
+
+Mage process endpoints:
+
+- `GET http://127.0.0.1:8787/local/mage/status`
+- `POST http://127.0.0.1:8787/local/mage/launch`
+- `POST http://127.0.0.1:8787/local/mage/stop`
+
+Precomputed forecasts (no live tool calls for visitors):
+
+- Build cache from local Mage:
+  - `node standalone/build-forecast-cache.js`
+- Output file:
+  - `data/precomputedForecast.json`
+- The app automatically shows today's precomputed forecast when an entry for today's date exists.
 
 Default indexed context groups:
 
