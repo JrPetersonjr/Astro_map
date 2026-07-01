@@ -1,0 +1,55 @@
+{
+  "_note": "Original, textbook-anchored interpretation rules authored in-repo (NOT copied passages). Voice: modern psychological astrology for a spoken 'Cosmic Weather' forecast. Citation anchors: Robert Hand 'Planets in Transit', Steven Forrest 'The Inner Sky', Stephen Arroyo, Bernadette Brady 'The Eagle and the Lark'. Edit freely — this is the deterministic knowledge base; the model is only optional polish.",
+  "_version": 1,
+  "lunation": {
+    "New Moon": { "tone": "initiating", "core": "Sun and Moon conjoin — a seed point. Intentions planted now in this sign's domain." },
+    "Waxing Crescent": { "tone": "building", "core": "the first push after the seed — commit to the direction." },
+    "First Quarter": { "tone": "effort", "core": "an action crisis — build against resistance or adjust the plan." },
+    "Waxing Gibbous": { "tone": "refining", "core": "refine and pressure-test before the peak." },
+    "Full Moon": { "tone": "reckoning", "core": "the Sun opposes the Moon, lighting both ends of an axis at once. Not a fresh start — a culmination and a forced rebalancing between two opposing needs." },
+    "Waning Gibbous": { "tone": "distributing", "core": "share, teach, give back what the peak revealed." },
+    "Last Quarter": { "tone": "release", "core": "a crisis of consciousness — clear away what the cycle has outgrown." },
+    "Waning Crescent": { "tone": "surrender", "core": "rest, dissolve, and compost before the next seed." }
+  },
+  "axes": {
+    "Aries-Libra": { "poles": { "Aries": "self, initiative, independence", "Libra": "the other, partnership, fairness" }, "tension": "self-assertion versus relationship; acting alone versus meeting halfway." },
+    "Taurus-Scorpio": { "poles": { "Taurus": "stability, worth, what you hold", "Scorpio": "merging, power, what you share and surrender" }, "tension": "security and ownership versus intimacy, depth, and letting go of control." },
+    "Gemini-Sagittarius": { "poles": { "Gemini": "local facts, curiosity, detail", "Sagittarius": "meaning, belief, the big picture" }, "tension": "scattered information versus the search for meaning; data versus wisdom." },
+    "Cancer-Capricorn": { "poles": { "Cancer": "private life, family, roots, emotional security", "Capricorn": "public role, duty, status, structure" }, "tension": "where ambition and rigid structure (Capricorn) are starving your emotional security and home life (Cancer) — or the reverse.", "fullMoon": "a high-pressure checkpoint where public responsibilities collide head-on with private emotional needs. The work is to rebalance the two, not to push harder in one direction." },
+    "Leo-Aquarius": { "poles": { "Leo": "the individual heart, creative self-expression", "Aquarius": "the collective, the group, the ideal" }, "tension": "personal recognition versus the good of the group; the star versus the network." },
+    "Virgo-Pisces": { "poles": { "Virgo": "order, service, the practical fix", "Pisces": "surrender, compassion, the dissolving of boundaries" }, "tension": "the urge to fix and perfect versus the need to accept and let go." }
+  },
+  "retrogradeContext": {
+    "Mercury": {
+      "base": "the mind turns inward — review, revise, and revisit rather than initiate. Double-check details; delay signatures and launches.",
+      "withSign": {
+        "Cancer": "it turns nostalgic, protective, and subjective, colored by past hurts and family memory — so the 'truths' surfacing now read as emotional projection more than objective fact.",
+        "Gemini": "messages cross and facts get scrambled, so confirm everything twice before you trust it.",
+        "default": "communication and plans loop back on themselves; the past asks to be re-read before the future is written."
+      },
+      "withFullMoon": "Mercury retrograde at a Full Moon peak is a textbook signature of crossed wires and disrupted data. Whatever 'comes to light' is easily misread. Do NOT launch, decide, or sign — sit still, let the emotional fog settle, and revisit once Mercury turns direct."
+    },
+    "Venus": { "base": "love and values are reviewed — old feelings, people, and questions of worth return for a second look. Not the time to commit or redecorate; re-evaluate first." },
+    "Mars": { "base": "drive turns inward — energy is better spent refining and regrouping than launching a frontal assault. Patience over force." }
+  },
+  "patterns": {
+    "grand-trine": { "min": 3, "aspect": "trine", "meaning": "a closed circuit of ease and natural talent — flowing, but so comfortable it can breed complacency." },
+    "t-square": { "meaning": "two bodies in opposition both squared by a third — high dynamic tension that demands action through the focal point." },
+    "stellium": { "meaning": "three or more bodies gathered in one sign — an intense concentration of energy in that sign's domain." },
+    "generational-soft-web": { "meaning": "the slow outer planets locked in mutual trines and sextiles form the era's standing architecture: a quiet, subterranean transformation of collective belief, technology, and social structure. Read this as historical backdrop and permission for long-term evolution — NOT as personal daily advice." }
+  },
+  "polarity": {
+    "cautionary": {
+      "triggers": ["mercuryRetrograde+FullMoon", "personalRetrograde", "hardAspectsDominant"],
+      "bestMove": "Sit tight and review. Let the dust settle, revisit the past honestly, and hold major decisions until the wires uncross."
+    },
+    "mixed": {
+      "triggers": ["hardAndSoftBalanced"],
+      "bestMove": "Move deliberately. Act where the ground is solid and wait where it isn't."
+    },
+    "encouraging": {
+      "triggers": ["softAspectsDominant", "waxingMoon"],
+      "bestMove": "Lean in. The current is with you — take the committed next step."
+    }
+  }
+}
