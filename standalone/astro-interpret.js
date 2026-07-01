@@ -47,11 +47,15 @@ function interpret(sky) {
 
   const out = {
     lunation: { phase: sky.moonPhase, sign: moon.sign, tone: lun.tone, core: lun.core, isFull, isNew },
-    axis: null, mercuryRetro: null, otherRetro: [], generational: null, polarity: null, bestMove: null,
+    axis: null, moonMood: null, mercuryRetro: null, otherRetro: [], generational: null, polarity: null, bestMove: null,
     sources: []
   };
   const srcMap = RULES._sources || {};
   const firedSources = new Set(srcMap.lunation || []); // lunation always fires
+
+  // Daily emotional weather from the Moon's sign (the fastest mover — gives each day its own texture).
+  const moonMood = (RULES.moonInSign || {})[moon.sign];
+  if (moonMood) { out.moonMood = moonMood; (srcMap.moon || []).forEach((s) => firedSources.add(s)); }
 
   if (isFull || isNew) {
     const key = AXIS_OF[sun.sign];
@@ -99,6 +103,8 @@ function interpret(sky) {
 function renderEffect(interp) {
   const parts = [];
   const { lunation: lun, axis } = interp;
+
+  if (interp.moonMood) parts.push(`Emotionally, ${interp.moonMood}.`);
 
   if (lun.isFull && axis) {
     parts.push(`This is a culmination, not a fresh start — the Full Moon lights both ends of the ${axis.key} axis: ${lower1(axis.fullMoon)}`);

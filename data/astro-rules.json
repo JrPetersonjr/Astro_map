@@ -4,9 +4,24 @@
   "_sources": {
     "lunation": ["astro_brady_eagle_lark", "astro_forrest_inner_sky"],
     "axis": ["astro_forrest_inner_sky", "astro_arroyo_elements"],
+    "moon": ["astro_forrest_inner_sky", "astro_arroyo_elements"],
     "retrograde": ["astro_hand_planets_transit"],
     "generational": ["astro_brady_eagle_lark"],
     "polarity": ["astro_hand_planets_transit"]
+  },
+  "moonInSign": {
+    "Aries": "the mood runs fast and hot — impulse, courage, and a short fuse; move, but don't pick fights",
+    "Taurus": "the mood slows and steadies — comfort, patience, and the simple pleasures of the body and the day",
+    "Gemini": "the mood turns curious and restless — talk, contact, errands, and a dozen open tabs in the mind",
+    "Cancer": "the mood turns inward and tender — home, memory, and the need to feel safe and held",
+    "Leo": "the mood warms and wants to be seen — play, pride, generosity, and the pull toward the spotlight",
+    "Virgo": "the mood gets practical and precise — sort, fix, refine, and tend the small useful details",
+    "Libra": "the mood seeks balance and company — harmony, fairness, beauty, and the pull toward the other",
+    "Scorpio": "the mood deepens and intensifies — privacy, all-or-nothing feeling, and what lies beneath the surface",
+    "Sagittarius": "the mood expands and roams — optimism, restlessness, and the itch for meaning and open road",
+    "Capricorn": "the mood sobers and focuses — duty, structure, self-control, and the long game",
+    "Aquarius": "the mood cools and steps back — perspective, the group, and unconventional angles on things",
+    "Pisces": "the mood softens and dissolves — dream, empathy, imagination, and porous boundaries"
   },
   "lunation": {
     "New Moon": { "tone": "initiating", "core": "Sun and Moon conjoin — a seed point. Intentions planted now in this sign's domain." },
