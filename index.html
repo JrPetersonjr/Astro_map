@@ -79,13 +79,6 @@
             relating to recurring celestial alignments observed from Earth.
           </div>
         </div>
-        <details class="logo-details">
-          <summary>Etymology Notes</summary>
-          <div class="logo-defs">
-            <div class="logo-def"><span class="def-word">lumina</span> traces to Latin roots for light and sight, grounding the app in perception and clarity.</div>
-            <div class="logo-def"><span class="def-word">synodic</span> comes from periodic conjunction cycles, tying interpretation to orbital timing.</div>
-          </div>
-        </details>
         <div class="eyebrow" id="dateEyebrow">Today</div>
       </div>
       <p class="lede">Live ephemeris positions with date travel, major aspects, retrogrades, and optional local horizon context.</p>
@@ -142,8 +135,17 @@
           <span class="accordion-summary-meta">Optional detail</span>
         </summary>
         <div class="accordion-body">
+          <div class="forecast-nav" id="forecastNav">
+            <button type="button" class="forecast-navbtn" id="forecastPrev" aria-label="Previous day">◀</button>
+            <span class="forecast-date" id="forecastDate"></span>
+            <span class="forecast-nav-right">
+              <button type="button" class="forecast-navbtn forecast-navbtn--today" id="forecastToday">Today</button>
+              <button type="button" class="forecast-navbtn" id="forecastNext" aria-label="Next day">▶</button>
+            </span>
+          </div>
           <div class="forecast-source" id="precomputedForecastSource"></div>
           <div class="forecast-body" id="precomputedForecastBody"></div>
+          <div class="forecast-locked" id="forecastLocked" style="display:none;"></div>
           <div class="forecast-citations" id="precomputedForecastCitations" style="display:none;"></div>
         </div>
       </details>
@@ -357,7 +359,7 @@
       <div id="settingsTab" class="tab-content">
         <div class="settings-subnav" id="settingsSubnav">
           <button type="button" class="settings-subnav-btn active" data-settings-panel="journal">Journal Settings</button>
-          <button type="button" class="settings-subnav-btn" data-settings-panel="tarot">Tarot Settings</button>
+          <button type="button" class="settings-subnav-btn" data-settings-panel="tarot" data-dev-only>Tarot Settings</button>
         </div>
 
         <section class="panel settings-panel active" id="journalSettingsSection" data-settings-panel="journal">
@@ -372,10 +374,10 @@
               <option value="mage-local" selected>Mage Local</option>
             </select>
           </label>
-          <label>Local runtime URL <small class="j-label-hint">(Mage local bridge)</small>
+          <label data-dev-only>Local runtime URL <small class="j-label-hint">(Mage local bridge)</small>
             <input type="url" id="localRuntimeUrlInput" placeholder="http://127.0.0.1:8787" autocomplete="off">
           </label>
-          <div class="mage-launch-row">
+          <div class="mage-launch-row" data-dev-only>
             <button type="button" id="launchMageBtn" class="secondary btn-sm">Launch Mage (Dev)</button>
             <button type="button" id="mageStatusBtn" class="secondary btn-sm">Mage Status</button>
             <button type="button" id="generateBrandLogoBtn" class="secondary btn-sm">Generate Brand Logo</button>
@@ -404,7 +406,7 @@
           </div>
         </section>
 
-        <section class="panel settings-panel hidden tarot-dev-panel" id="tarotSettingsSection" data-settings-panel="tarot">
+        <section class="panel settings-panel hidden tarot-dev-panel" id="tarotSettingsSection" data-settings-panel="tarot" data-dev-only>
           <div class="tarot-dev-meta">
             <div class="tarot-panel-title">
               <h3>Tarot Deck Studio</h3>
@@ -483,7 +485,7 @@
             <div class="tarot-hero-actions">
               <p class="tarot-ghost-note">Gallery and readings are public-facing here. Generation and publish controls now live in Settings under Tarot Settings.</p>
               <div class="actions">
-                <button type="button" class="secondary" id="tarotOpenSettingsBtn">Tarot Settings</button>
+                <button type="button" class="secondary" id="tarotOpenSettingsBtn" data-dev-only>Tarot Settings</button>
                 <button type="button" class="secondary" id="tarotFocusJournalBtn">From Journal</button>
               </div>
             </div>
@@ -663,7 +665,14 @@
 
     const isStandaloneDev = new URLSearchParams(window.location.search).get('standalone') === '1';
     const isLocalHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
-    const devErrorLoggingEnabled = isStandaloneDev || isLocalHost;
+    const devMode = isStandaloneDev || isLocalHost; // standalone app or local dev server
+    const devErrorLoggingEnabled = devMode;         // name kept (logCaughtError + view-smoke test)
+
+    // Dev-only controls (Mage launch, local runtime URL, deck-studio entry) are for
+    // the standalone/local app only — hide them from public visitors.
+    if (!devMode) {
+      document.querySelectorAll('[data-dev-only]').forEach((el) => { el.style.display = 'none'; });
+    }
 
     function logCaughtError(scope, error) {
       if (!devErrorLoggingEnabled) return;

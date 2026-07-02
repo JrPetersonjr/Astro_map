@@ -1,1 +1,7 @@
-{}
+{
+  "functions": {
+    "api/forecast.js": {
+      "includeFiles": "{standalone,vendor,data}/**"
+    }
+  }
+}

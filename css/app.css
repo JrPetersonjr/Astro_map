@@ -457,6 +457,19 @@
     .forecast-panel .forecast-citations { margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.68rem; color: var(--soft); line-height: 1.55; }
     .forecast-panel .forecast-citations .cite-label { color: var(--gold); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.6rem; display: block; margin-bottom: 3px; }
     .forecast-panel .forecast-body { color: var(--muted); line-height: 1.55; white-space: pre-wrap; font-size: 0.84rem; }
+    .forecast-panel .forecast-nav { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+    .forecast-panel .forecast-nav-right { display: flex; align-items: center; gap: 6px; }
+    .forecast-panel .forecast-navbtn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: var(--gold); border-radius: 6px; padding: 3px 10px; cursor: pointer; font-size: 0.78rem; line-height: 1.4; }
+    .forecast-panel .forecast-navbtn:hover { background: rgba(231,187,102,0.15); }
+    .forecast-panel .forecast-navbtn--today { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+    .forecast-panel .forecast-date { font-size: 0.76rem; color: var(--soft); font-weight: 700; letter-spacing: 0.02em; }
+    .forecast-panel .forecast-locked { border: 1px dashed rgba(231,187,102,0.4); border-radius: 8px; padding: 12px; }
+    .forecast-panel .forecast-lock-teaser { color: var(--muted); line-height: 1.55; white-space: pre-wrap; font-size: 0.84rem; opacity: 0.82; }
+    .forecast-panel .forecast-lock-cta { margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .forecast-panel .forecast-lock-cta strong { color: var(--gold); }
+    .forecast-panel .forecast-lock-cta p { font-size: 0.78rem; color: var(--soft); margin: 4px 0 0; }
+    .forecast-panel .forecast-lock-btn { margin-top: 8px; background: var(--gold); color: #1a1206; border: none; border-radius: 6px; padding: 6px 14px; font-weight: 700; cursor: pointer; }
+    .forecast-panel .forecast-lock-btn:hover { filter: brightness(1.08); }
 
     /* ── Tarot Tab ── */
     .tarot-period-section { margin-bottom: 10px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }

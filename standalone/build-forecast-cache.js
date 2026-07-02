@@ -131,6 +131,39 @@ function buildSetup(sky) {
   return { backdrop, today, aspectLine, handoff };
 }
 
+// ── Shared forecast assembly — used by the cache build AND the /api/forecast
+//    endpoint, so the live site and the committed cache read identically. ──
+function forecastParts(d, effectText) {
+  const sky = computeSky(d);
+  const setup = buildSetup(sky);
+  const interp = interpret(sky);
+  const effect = effectText != null ? effectText : renderEffect(interp);
+  return {
+    date: ymd(d),
+    setup,
+    effect,
+    sources: resolveSources(interp.sources),
+    sky: {
+      moonPhase: sky.moonPhase,
+      positions: sky.bodies.map((b) => ({ planet: b.key, sign: b.sign, retrograde: b.retrograde })),
+      aspects: sky.aspects.slice(0, 6).map((a) => ({ a: a.a, b: a.b, aspect: a.name, orb: Number(a.orb.toFixed(1)) })),
+      axis: interp.axis?.key || null,
+      polarity: interp.polarity,
+      generational: interp.generational
+    }
+  };
+}
+
+function assembleForecast(parts) {
+  return [parts.setup.backdrop, parts.setup.today, parts.setup.aspectLine, '',
+    parts.setup.handoff, parts.effect].filter(Boolean).join('\n');
+}
+
+function forecastEntry(d, effectText) {
+  const p = forecastParts(d, effectText);
+  return { date: p.date, forecast: assembleForecast(p), sources: p.sources, sky: p.sky };
+}
+
 async function localBridge(prompt, skyContext) {
   const response = await fetch(`${RUNTIME}/local/bridge`, {
     method: 'POST',
@@ -168,30 +201,14 @@ async function run() {
 
   for (let i = 0; i < DAYS; i++) {
     const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i, 12, 0, 0);
-    const date = ymd(d);
-    const sky = computeSky(d);
-    const setup = buildSetup(sky);
-    const interp = interpret(sky);
-    const rawEffect = renderEffect(interp);
-    const effect = POLISH ? await polishEffect(rawEffect) : rawEffect;
-
-    const forecast = [setup.backdrop, setup.today, setup.aspectLine, '', setup.handoff, effect]
-      .filter(Boolean).join('\n');
-
-    entries.push({
-      date,
-      forecast,
-      sources: resolveSources(interp.sources),
-      sky: {
-        moonPhase: sky.moonPhase,
-        positions: sky.bodies.map((b) => ({ planet: b.key, sign: b.sign, retrograde: b.retrograde })),
-        aspects: sky.aspects.slice(0, 6).map((a) => ({ a: a.a, b: a.b, aspect: a.name, orb: Number(a.orb.toFixed(1)) })),
-        axis: interp.axis?.key || null,
-        polarity: interp.polarity,
-        generational: interp.generational
-      }
-    });
-    console.log(`Built ${date}  ·  ${sky.moonPhase} in ${sky.bodies.find((b) => b.key === 'Moon').sign}  ·  ${interp.polarity}${POLISH ? ' (polished)' : ' (0-token)'}`);
+    let effectText = null;
+    if (POLISH) {
+      effectText = await polishEffect(renderEffect(interpret(computeSky(d))));
+    }
+    const entry = forecastEntry(d, effectText);
+    entries.push(entry);
+    const moon = entry.sky.positions.find((p) => p.planet === 'Moon').sign;
+    console.log(`Built ${entry.date}  ·  ${entry.sky.moonPhase} in ${moon}  ·  ${entry.sky.polarity}${POLISH ? ' (polished)' : ' (0-token)'}`);
   }
 
   const payload = {
@@ -208,4 +225,4 @@ if (require.main === module) {
   run().catch((err) => { console.error(err.message || err); process.exit(1); });
 }
 
-module.exports = { computeSky, buildSetup, ymd };
+module.exports = { computeSky, buildSetup, forecastParts, assembleForecast, forecastEntry, ymd };
