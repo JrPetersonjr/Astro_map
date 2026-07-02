@@ -5,8 +5,11 @@ const path = require('node:path');
 
 const indexPath = path.join(__dirname, '..', 'index.html');
 const html = fs.readFileSync(indexPath, 'utf8');
+const navPath = path.join(__dirname, '..', 'js', 'nav.js');
+const navJs = fs.readFileSync(navPath, 'utf8');
 
 const has = (pattern) => pattern.test(html);
+const hasNav = (pattern) => pattern.test(navJs);
 
 test('view smoke: all primary view nav buttons exist', () => {
   assert.ok(has(/data-view="chart"/));
@@ -25,9 +28,10 @@ test('view smoke: all tab content containers exist', () => {
 });
 
 test('view smoke: navigation uses in-page view switching, not full reload', () => {
-  assert.ok(has(/function\s+setPageView\(/));
-  assert.ok(has(/history\.pushState\(/));
-  assert.ok(has(/window\.addEventListener\('popstate'/));
+  assert.ok(has(/<script src="js\/nav\.js"><\/script>/));
+  assert.ok(hasNav(/function\s+setPageView\(/));
+  assert.ok(hasNav(/history\.pushState\(/));
+  assert.ok(hasNav(/window\.addEventListener\('popstate'/));
   assert.ok(!has(/window\.location\.href\s*=\s*url\.toString\(\)/));
 });
 

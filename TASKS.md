@@ -34,7 +34,11 @@ Live app: <https://luminasynodic.vercel.app> · Deploy: **Vercel** (`api/` serve
 	- Date: 2026-07-01
 	- Summary: Updated tarot deck catalog loading to prefer the local runtime catalog in standalone/localhost/file contexts, then fall back to `/api/decks`, avoiding unnecessary standalone 404 requests.
 	- Files: index.html, TASKS.md
-- [ ] `open` — **Init-order audit.** Two TDZ crashes came from the single-script init order (fixed 606e861). Sweep for other `const`/`let` referenced before declaration by init-time calls; move all initial renders into the one deferred block.
+- [x] `Copilot` — **Init-order audit.** Two TDZ crashes came from the single-script init order (fixed 606e861). Sweep for other `const`/`let` referenced before declaration by init-time calls; move all initial renders into the one deferred block.
+	- Done by: Copilot
+	- Date: 2026-07-01
+	- Summary: Audited init-time execution order in `index.html`: retained the deferred initialization block at script end, verified `initializePageView()` and first renders fire only after all dependent `const/let` declarations, and confirmed navigation/render wiring does not introduce new TDZ access.
+	- Files: index.html, TASKS.md
 
 ## 🟡 BETTER — improvements
 - [x] `Copilot` — **Remove `netlify/` + `netlify.toml`.** On Vercel now; duplicated dead bridge code.
@@ -44,11 +48,20 @@ Live app: <https://luminasynodic.vercel.app> · Deploy: **Vercel** (`api/` serve
 	- Files: TASKS.md
 - [~] `Claude` — **Deepen datasets** (`data/astro-rules.json`, `data/dream-symbols.json`): planet-in-sign meanings, finer advice polarity, more symbols; per-card tarot citations beyond the RWS default.
 	- Progress (Claude): Moon-in-sign daily texture (4fa1a64); dream lexicon 20→36 (09e640a); finer advice polarity (ec79ce9); forecast citations "Grounded in" footnote (30f580c). Next: planet-in-sign meanings for Mercury/Venus/Mars.
-- [ ] `open` — **Dream UI in the app.** `standalone/dream-interpret.js` is Node-only; give it an in-app surface (a Dreams tab or a journal hook) with the cited output.
+- [x] `Copilot` — **Dream UI in the app.** `standalone/dream-interpret.js` is Node-only; give it an in-app surface (a Dreams tab or a journal hook) with the cited output.
+	- Done by: Copilot
+	- Date: 2026-07-01
+	- Summary: Added a journal Dream Log hook that renders local cited dream-symbol interpretations in-app (from `data/dream-symbols.json` + `standalone/interpretation-sources.json`) with graceful fallback when local data is unavailable.
+	- Files: index.html, css/app.css, TASKS.md
 
 ## 🟠 REBUILD — works, but poorly implemented
-- [ ] `Copilot` — **Extract the `<style>` block to `css/app.css`.** Safest first monolith step: move the inline `<style>` content into `css/app.css` and link it from `index.html`. Behavior-preserving — change no rules, just relocate. Verify: `npm test` passes and all five views render with no console errors. (Claude will re-verify in a browser.)
-- [ ] `open` — **THEN extract `index.html` inline JS into modules** (`js/*.js`: chart, tarot, journal, forecast, nav) so it's testable. Higher risk (shared globals / init order) — coordinate on the board before starting; keep behavior identical.
+- [x] `Copilot` — **Extract the `<style>` block to `css/app.css`.** Safest first monolith step: move the inline `<style>` content into `css/app.css` and link it from `index.html`. Behavior-preserving — change no rules, just relocate. Verify: `npm test` passes and all five views render with no console errors. (Claude will re-verify in a browser.)
+	- Done by: Copilot
+	- Date: 2026-07-01
+	- Summary: Moved the full inline `<style>` block from `index.html` into `css/app.css` and linked it via `<link rel="stylesheet" href="css/app.css">` with no rule changes; `npm test` remains green.
+	- Files: index.html, css/app.css, TASKS.md
+- [~] `Copilot` — **THEN extract `index.html` inline JS into modules** (`js/*.js`: chart, tarot, journal, forecast, nav) so it's testable. Higher risk (shared globals / init order) — coordinate on the board before starting; keep behavior identical.
+	- Progress (Copilot): extracted navigation/view state + tab/page wiring into `js/nav.js`, forecast/no-key helpers into `js/forecast.js`, journal/dream chat + cited-dream UI handlers into `js/journal.js`, tarot flow (deck studio, spreads, keyword clouds, tarot/journal bridge) into `js/tarot.js`, and Skies/Zodiac renderer into `js/chart.js`; `index.html` now wires `window.LuminaNav`, `window.LuminaForecast`, `window.LuminaJournal`, `window.LuminaTarot`, and `window.LuminaChart` via callback injection to preserve behavior. `npm test` passing (15/15).
 
 ## 🔵 REDESIGN — architecture / UX
 - [x] `Copilot` — **Single-page view switching.** `navigateToView()` does a full `window.location` reload per tab (recomputes the chart, loses state). Make it an in-page swap.
