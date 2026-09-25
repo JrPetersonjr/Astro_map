@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Your reading</title>
+<style>
+  :root{ --ink:#dfe6f2; --dim:#8b9ab4; --gold:#cbb069; --line:#2b3550;
+         --paper:#141a28; --shell:#0c1018; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--shell);color:var(--ink);
+       font:14px/1.6 Georgia,serif}
+  .bar{position:sticky;top:0;z-index:50;background:var(--shell);
+       border-bottom:1px solid var(--line);padding:10px 14px;
+       display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .bar b{color:var(--gold);font-weight:normal}
+  .clock{margin-left:auto;color:var(--gold);font-variant-numeric:tabular-nums}
+  .clock.low{color:#e2725b}
+  button{background:transparent;color:var(--ink);border:1px solid var(--line);
+         border-radius:999px;padding:5px 12px;cursor:pointer;font:inherit;font-size:12px}
+  button:hover{border-color:var(--gold);color:var(--gold)}
+  .wrap{max-width:900px;margin:0 auto;padding:18px 14px 60px}
+  .msg{max-width:620px;margin:16vh auto;padding:26px 28px;background:var(--paper);
+       border:1px solid var(--line);border-radius:10px}
+  .msg h1{font-size:19px;margin:0 0 10px;color:var(--gold);font-weight:normal}
+  .msg p{color:var(--dim)}
+  .ask{max-width:900px;margin:0 auto 40px;padding:16px;background:var(--paper);
+       border:1px solid var(--line);border-radius:10px}
+  .ask h2{font-size:14px;margin:0 0 4px;color:var(--gold);font-weight:normal}
+  .ask p.hint{color:var(--dim);font-size:12px;margin:0 0 10px}
+  .ask textarea{width:100%;min-height:64px;background:var(--shell);color:var(--ink);
+       border:1px solid var(--line);border-radius:6px;padding:8px;font:inherit}
+  .ask .a{margin-top:10px;white-space:pre-wrap;border-left:2px solid var(--gold);
+       padding-left:10px;color:var(--ink)}
+  iframe{width:100%;height:82vh;border:1px solid var(--line);border-radius:10px;
+       background:#fff}
+  @media print{ .bar,.ask{display:none} iframe{height:auto;border:0} }
+</style>
+</head>
+<body>
+<div id="boot" class="msg"><h1>Opening your reading…</h1>
+  <p>Decrypting in your browser. Nothing is sent anywhere to do this.</p></div>
+
+<div id="app" hidden>
+  <div class="bar">
+    <b>Your reading</b>
+    <button id="save">Save as PDF</button>
+    <span class="clock" id="clock"></span>
+  </div>
+  <div class="wrap"><iframe id="doc" title="Your reading" sandbox="allow-same-origin"></iframe></div>
+  <div class="ask">
+    <h2>Ask about it</h2>
+    <p class="hint">Answers come from the reading above and nothing else. It will say
+      so when something isn't in there. It can't predict, and it can't advise on
+      safety or health.</p>
+    <textarea id="q" placeholder="e.g. what does the Saturn chapter mean for me?"></textarea>
+    <div style="margin-top:8px"><button id="send">Ask</button></div>
+    <div class="a" id="a" hidden></div>
+  </div>
+</div>
+
+<script>
+// The decryption key arrives in the URL FRAGMENT. Browsers never transmit a
+// fragment, so the server that stored this reading genuinely cannot read it.
+// Everything below happens in this tab.
+(function () {
+  var qs = new URLSearchParams(location.search);
+  var token = (qs.get('t') || '').trim();
+  var keyB64 = (location.hash || '').replace(/^#k=/, '').trim();
+
+  function fail(title, detail) {
+    document.getElementById('boot').innerHTML =
+      '<h1>' + title + '</h1><p>' + detail + '</p>';
+    document.getElementById('boot').hidden = false;
+    document.getElementById('app').hidden = true;
+  }
+
+  if (!/^[0-9a-f]{32}$/.test(token) || !keyB64) {
+    return fail('This link is incomplete',
+      'The part after the # is the key, and without it the reading cannot be ' +
+      'opened. Copy the whole link exactly as it was sent.');
+  }
+
+  function b64urlToBytes(s) {
+    s = s.replace(/-/g, '+').replace(/_/g, '/');
+    while (s.length % 4) s += '=';
+    var bin = atob(s), out = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+
+  var remaining = 0, timer = null;
+  function startClock() {
+    var el = document.getElementById('clock');
+    function tick() {
+      if (remaining <= 0) {
+        clearInterval(timer);
+        el.textContent = 'session closed';
+        el.classList.add('low');
+        // The page keeps what is already on screen -- pulling it out from under
+        // her mid-sentence would be hostile. The LINK is what expires.
+        return;
+      }
+      var m = Math.floor(remaining / 60), s = remaining % 60;
+      el.textContent = m + ':' + (s < 10 ? '0' : '') + s + ' left';
+      el.classList.toggle('low', remaining <= 60);
+      remaining--;
+    }
+    tick();
+    timer = setInterval(tick, 1000);
+  }
+
+  fetch('/api/reading?t=' + encodeURIComponent(token), { cache: 'no-store' })
+    .then(function (r) {
+      return r.json().then(function (j) { return { ok: r.ok, status: r.status, j: j }; });
+    })
+    .then(function (res) {
+      if (!res.ok) {
+        if (res.status === 410) {
+          return fail('This reading has closed',
+            'The ten minutes have passed. Ask for a fresh link and it will open again.');
+        }
+        if (res.status === 404) {
+          return fail('This reading is no longer available',
+            'The link has expired or has already been used up.');
+        }
+        return fail('Could not open the reading',
+          (res.j && res.j.error) ? res.j.error : 'Please try the link again.');
+      }
+      remaining = res.j.remaining || 0;
+      var iv = b64urlToBytes(res.j.iv.replace(/\+/g, '-').replace(/\//g, '_'));
+      var ctB = atob(res.j.ct), ct = new Uint8Array(ctB.length);
+      for (var i = 0; i < ctB.length; i++) ct[i] = ctB.charCodeAt(i);
+
+      return crypto.subtle.importKey('raw', b64urlToBytes(keyB64),
+                                     { name: 'AES-GCM' }, false, ['decrypt'])
+        .then(function (k) {
+          return crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, k, ct);
+        })
+        .then(function (plain) {
+          var html = new TextDecoder().decode(plain);
+          document.getElementById('boot').hidden = true;
+          document.getElementById('app').hidden = false;
+          // srcdoc keeps the reading's own stylesheet intact without letting it
+          // restyle this shell.
+          document.getElementById('doc').srcdoc = html;
+          window.__readingText = html.replace(/<[^>]+>/g, ' ')
+                                     .replace(/\s+/g, ' ').trim();
+          startClock();
+        })
+        .catch(function () {
+          fail('That key does not open this reading',
+            'The link may have been truncated in transit. Send it again as plain ' +
+            'text rather than a formatted message.');
+        });
+    })
+    .catch(function () {
+      fail('Could not reach the reading', 'Check the connection and retry.');
+    });
+
+  document.getElementById('save').addEventListener('click', function () {
+    // Her copy, her choice. The session ends either way -- this is the escape
+    // hatch, and it is deliberately manual.
+    window.print();
+  });
+
+  document.getElementById('send').addEventListener('click', function () {
+    var q = document.getElementById('q').value.trim();
+    var out = document.getElementById('a');
+    if (!q) return;
+    if (remaining <= 0) {
+      out.hidden = false;
+      out.textContent = 'The session has closed, so questions are no longer open.';
+      return;
+    }
+    out.hidden = false;
+    out.textContent = 'Reading…';
+    // Only an excerpt leaves the browser, and only when she asks. The server
+    // cannot read the reading, so the context has to come from this side.
+    fetch('/api/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        t: token, question: q,
+        context: (window.__readingText || '').slice(0, 12000),
+      }),
+    })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (res) {
+        if (!res.ok) { out.textContent = res.j.error || 'That did not go through.'; return; }
+        out.textContent = res.j.answer || '(no answer came back)';
+        if (typeof res.j.remaining === 'number') remaining = res.j.remaining;
+      })
+      .catch(function () { out.textContent = 'That did not go through.'; });
+  });
+})();
+</script>
+</body>
+</html>
