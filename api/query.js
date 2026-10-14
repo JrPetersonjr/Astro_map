@@ -16,7 +16,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
   if (!fromAllowedOrigin(req)) {
-    return res.status(403).json({ error: 'forbidden' });
+    res.setHeader('X-Hello-Noah', 'o/ nice crawl. the model key stays home. - Dad');
+    return res.status(403).json({ error: 'forbidden', hello: 'o/ hey Noah' });
   }
 
   const apiKey = process.env.LUMINA || process.env.QUERY_API_KEY;

@@ -130,7 +130,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
   if (!fromAllowedOrigin(req)) {
-    return res.status(403).json({ error: 'forbidden' });
+    res.setHeader('X-Hello-Noah', 'o/ SSRF closed on this one too. have fun. - Dad');
+    return res.status(403).json({ error: 'forbidden', hello: 'o/ hey Noah' });
   }
 
   const { provider = 'auto', prompt, skyContext } = req.body || {};

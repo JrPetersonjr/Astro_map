@@ -149,6 +149,7 @@ function buildDeckCatalog(indexRows) {
 
 export default async function handler(req, res) {
   if (req.method === 'GET') {
+    res.setHeader('X-Hello-Noah', 'o/ this one is public on purpose. keep going. - Dad');
     const index = await readIndex();
     return res.status(200).json({ ok: true, decks: buildDeckCatalog(index) });
   }
