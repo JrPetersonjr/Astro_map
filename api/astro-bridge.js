@@ -52,14 +52,18 @@ async function callGemini(prompt, skyContext, apiKey) {
 }
 
 async function callBridgeProvider(provider, prompt, skyContext, body) {
-  const endpoint = body.bridgeEndpoint ||
+  // SSRF guard: the upstream URL and token are ONLY ever taken from server env,
+  // never from the request body. A caller must not be able to make this function
+  // fetch an arbitrary host (bridgeEndpoint) or attach a chosen token
+  // (bridgeApiKey). Those fields are intentionally ignored.
+  const endpoint =
     (provider === 'vedastro' ? process.env.VEDASTRO_MCP_URL : process.env.KERYKEION_API_URL);
 
   if (!endpoint) {
     throw new Error(`No endpoint configured for provider "${provider}".`);
   }
 
-  const token = body.bridgeApiKey ||
+  const token =
     (provider === 'vedastro' ? (process.env.VEDASTRO_MCP_TOKEN || process.env.VEDASTRO_API_KEY) : process.env.KERYKEION_API_KEY);
 
   const payload = provider === 'vedastro'
@@ -107,15 +111,35 @@ async function callBridgeProvider(provider, prompt, skyContext, body) {
   return text;
 }
 
+// Only let the site's own pages spend the model keys. Browser fetches from the
+// real origin carry Origin/Referer; off-site scripts and bare curl/Burp do not.
+// Not a substitute for a real session gate, but it stops casual quota drain.
+// Configure extra origins with ALLOWED_ORIGINS (comma-separated).
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ||
+  'https://luminasynodic.vercel.app').split(',').map((s) => s.trim()).filter(Boolean);
+
+function fromAllowedOrigin(req) {
+  const origin = req.headers.origin || '';
+  if (origin) return ALLOWED_ORIGINS.includes(origin);
+  const ref = req.headers.referer || '';
+  return Boolean(ref) && ALLOWED_ORIGINS.some((o) => ref.startsWith(o + '/') || ref === o);
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+  if (!fromAllowedOrigin(req)) {
+    return res.status(403).json({ error: 'forbidden' });
   }
 
   const { provider = 'auto', prompt, skyContext } = req.body || {};
 
   if (!prompt || typeof prompt !== 'string') {
     return res.status(400).json({ error: 'Request must include a "prompt" string' });
+  }
+  if (prompt.length > 8000) {
+    return res.status(413).json({ error: 'prompt too long' });
   }
 
   try {

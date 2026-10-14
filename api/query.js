@@ -1,6 +1,22 @@
+// Only the site's own pages may spend the model key. Browser fetches from the
+// real origin carry Origin/Referer; off-site scripts and bare curl/Burp do not.
+// Configure extra origins with ALLOWED_ORIGINS (comma-separated).
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ||
+  'https://luminasynodic.vercel.app').split(',').map((s) => s.trim()).filter(Boolean);
+
+function fromAllowedOrigin(req) {
+  const origin = req.headers.origin || '';
+  if (origin) return ALLOWED_ORIGINS.includes(origin);
+  const ref = req.headers.referer || '';
+  return Boolean(ref) && ALLOWED_ORIGINS.some((o) => ref.startsWith(o + '/') || ref === o);
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+  if (!fromAllowedOrigin(req)) {
+    return res.status(403).json({ error: 'forbidden' });
   }
 
   const apiKey = process.env.LUMINA || process.env.QUERY_API_KEY;
@@ -11,6 +27,9 @@ export default async function handler(req, res) {
   const { prompt, skyContext } = req.body || {};
   if (!prompt || typeof prompt !== 'string') {
     return res.status(400).json({ error: 'Request must include a "prompt" string' });
+  }
+  if (prompt.length > 8000) {
+    return res.status(413).json({ error: 'prompt too long' });
   }
 
   const model = process.env.QUERY_MODEL || 'gemini-2.5-flash';
